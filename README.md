@@ -1,6 +1,6 @@
 # OrbitConvert
 
-OrbitConvert is a Windows desktop application that will provide local file conversion workflows. The current repository contains only the Phase 0 foundation: a launchable WPF shell, basic MVVM binding, shared theme resources, tests, and CI.
+OrbitConvert is a Windows desktop application that will provide local file conversion workflows. The current repository contains the Phase 1.1 Studio UI shell: a responsive WPF interface, preview navigation, session-only appearance choices, a fictional image demo, tests, and CI.
 
 ## Requirements
 
@@ -24,7 +24,7 @@ dotnet test OrbitConvert.slnx -c Release --no-build
 dotnet run --project src/OrbitConvert.App/OrbitConvert.App.csproj
 ```
 
-The startup window displays `OrbitConvert` and `Phase 0 / Foundation ready`. It intentionally contains no file selection or conversion features.
+The startup window opens the Studio workspace. Navigation, theme, accent, and fictional image output controls update presentation state in memory only. It intentionally contains no file selection or conversion features.
 
 ## Structure
 
@@ -33,6 +33,13 @@ The startup window displays `OrbitConvert` and `Phase 0 / Foundation ready`. It 
 - `docs/architecture.md` — architecture and phase-boundary notes
 - `.github/workflows/ci.yml` — Windows restore, Release build, and test workflow
 
+## Phase 1.1 screenshots
+
+- `docs/screenshots/01-dark-workspace.png`
+- `docs/screenshots/02-light-workspace.png`
+- `docs/screenshots/03-images-demo-preview.png`
+- `docs/screenshots/04-settings-theme-accent.png`
+
 ## Scope
 
-Phase 0 establishes a small, maintainable base. File selection, drag-and-drop, converters, Explorer integration, installers, and other later capabilities are explicitly out of scope until approved in separate milestones.
+Phase 1.1 establishes the approved visual shell. File selection, drag-and-drop, filesystem access, converters, Explorer integration, installers, persistence, and other later capabilities are explicitly out of scope until approved in separate milestones.

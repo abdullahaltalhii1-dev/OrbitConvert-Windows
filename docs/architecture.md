@@ -1,6 +1,6 @@
 # Architecture
 
-OrbitConvert Phase 0 is a deliberately small WPF application organized around MVVM.
+OrbitConvert is a deliberately small WPF application organized around MVVM. Phase 1.1 adds the Studio UI shell without adding file or conversion infrastructure.
 
 ## Projects
 
@@ -9,8 +9,12 @@ OrbitConvert Phase 0 is a deliberately small WPF application organized around MV
 
 ## UI composition
 
-`MainWindow.xaml` owns presentation and binds its title and visible application name to `MainViewModel.AppTitle`. The code-behind contains only the generated window initialization required by WPF. Shared colors and styles live in separate resource dictionaries under `Themes` and are merged by `App.xaml`.
+`MainWindow.xaml` owns presentation and binds its title and visible application name to `MainViewModel.AppTitle`. It contains the responsive header, preview navigation, workspace, fictional image demo, coming-soon pages, and settings preview.
+
+`MainViewModel` owns session-only navigation, theme, accent, and fictional image preview state. Small commands update that state without touching the filesystem. Shared colors and reusable control styles live in resource dictionaries under `Themes` and are merged by `App.xaml`.
+
+The window code-behind translates the view model's theme and accent choices into dynamic WPF resources. This is intentionally UI-specific, contains no product logic, and does not persist values.
 
 ## Phase boundary
 
-Phase 0 provides only a launchable shell. It contains no file selection, file inspection, conversion, Explorer integration, installer, updater, telemetry, or network features. Those capabilities require separately approved milestones.
+Phase 1.1 provides only an interactive visual shell. The image shown in the Images page is a vector illustration with fictional metadata. The application contains no file selection, drag-and-drop, file inspection, conversion, Explorer integration, installer, updater, persistence, telemetry, or network features. Those capabilities require separately approved milestones.
