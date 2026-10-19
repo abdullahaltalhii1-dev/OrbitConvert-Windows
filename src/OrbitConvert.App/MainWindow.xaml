@@ -1,36 +1,88 @@
-﻿<Window x:Class="OrbitConvert.App.MainWindow"
+<Window x:Class="OrbitConvert.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:OrbitConvert.App.ViewModels"
+        xmlns:views="clr-namespace:OrbitConvert.App.Views"
         mc:Ignorable="d"
         Title="{Binding AppTitle}"
-        Width="640"
-        Height="360"
-        MinWidth="520"
-        MinHeight="300"
-        Background="{StaticResource WindowBackgroundBrush}"
-        Foreground="{StaticResource PrimaryTextBrush}"
+        Width="1120"
+        Height="720"
+        MinWidth="900"
+        MinHeight="620"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Foreground="{DynamicResource PrimaryTextBrush}"
         FontFamily="Segoe UI"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>
 
-    <Grid Margin="40">
-        <StackPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <TextBlock HorizontalAlignment="Center"
-                       Style="{StaticResource TitleTextStyle}"
-                       Text="{Binding AppTitle}" />
-            <Border Margin="0,20,0,0"
-                    Padding="14,8"
-                    Background="{StaticResource SurfaceBrush}"
-                    CornerRadius="8">
-                <TextBlock Style="{StaticResource StatusTextStyle}"
-                           Text="Phase 0 / Foundation ready" />
-            </Border>
-        </StackPanel>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource WindowBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="78" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Native window chrome is intentionally retained. -->
+        <views:HeaderView Grid.Row="0" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="226" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <views:SidebarView Grid.Column="0" />
+
+            <Grid Grid.Column="1">
+                <views:WorkspaceView Visibility="{Binding IsWorkspaceSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <views:ImagesPreviewView Visibility="{Binding IsImagesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <views:ComingSoonView Eyebrow="VIDEO"
+                                      Title="Video tools are on the horizon."
+                                      Description="This polished placeholder communicates direction without enabling unfinished functionality."
+                                      IconData="M2,2 H48 V42 H2 Z M48,14 L66,5 V39 L48,30 Z M20,13 L34,22 L20,31 Z"
+                                      IconWidth="68"
+                                      IconHeight="54"
+                                      IconFill="{DynamicResource AccentSoftBrush}"
+                                      FormatsHeading="Planned video formats"
+                                      Formats="MP4|MOV|MKV|WebM"
+                                      InformationalText="Informational only · No media is opened or processed"
+                                      Visibility="{Binding IsVideoSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <views:ComingSoonView Eyebrow="AUDIO"
+                                      Title="A quieter way to handle audio."
+                                      Description="Audio conversion is planned for a later approved phase and is not active here."
+                                      IconData="M8,5 V43 A10,10 0 1 1 2,34 H8 V10 L48,3 V36 A10,10 0 1 1 42,27 V8 Z"
+                                      IconWidth="62"
+                                      IconHeight="62"
+                                      IconFill="{DynamicResource AccentSoftBrush}"
+                                      FormatsHeading="Planned audio formats"
+                                      Formats="MP3|WAV|FLAC|M4A"
+                                      InformationalText="Informational only · No audio is opened or processed"
+                                      Visibility="{Binding IsAudioSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <views:ComingSoonView Eyebrow="DOCUMENTS"
+                                      Title="Documents, thoughtfully organized."
+                                      Description="Document workflows remain intentionally disabled until their own implementation phase."
+                                      IconData="M3,2 H34 L51,19 V66 H3 Z M33,3 V21 H50 M12,33 H42 M12,42 H42 M12,51 H34"
+                                      IconWidth="54"
+                                      IconHeight="68"
+                                      FormatsHeading="Planned document formats"
+                                      Formats="PDF|DOCX"
+                                      InformationalText="Informational only · No document is opened or processed"
+                                      Visibility="{Binding IsDocumentsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <views:SettingsView Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
