@@ -171,8 +171,9 @@
     <Style x:Key="FormatRadioStyle"
            BasedOn="{StaticResource SegmentRadioStyle}"
            TargetType="RadioButton">
-        <Setter Property="Padding" Value="15,9" />
+        <Setter Property="Padding" Value="8,9" />
         <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />

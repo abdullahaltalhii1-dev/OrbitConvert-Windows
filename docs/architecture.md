@@ -9,11 +9,11 @@ OrbitConvert is a deliberately small WPF application organized around MVVM. Phas
 
 ## UI composition
 
-`MainWindow.xaml` owns presentation and binds its title and visible application name to `MainViewModel.AppTitle`. It contains the responsive header, preview navigation, workspace, fictional image demo, coming-soon pages, and settings preview.
+`MainWindow.xaml` binds its title to `MainViewModel.AppTitle` and stays focused on shell composition. The `Views` folder contains small `UserControl` components for the header, sidebar, workspace, fictional image demo, settings, and a reusable coming-soon page. These controls inherit the window data context, so navigation and preview commands remain centralized rather than duplicated.
 
 `MainViewModel` owns session-only navigation, theme, accent, and fictional image preview state. Small commands update that state without touching the filesystem. Shared colors and reusable control styles live in resource dictionaries under `Themes` and are merged by `App.xaml`.
 
-The window code-behind translates the view model's theme and accent choices into dynamic WPF resources. This is intentionally UI-specific, contains no product logic, and does not persist values.
+The window code-behind translates the view model's theme and accent choices into dynamic WPF resources. It also asks the supported Windows DWM API to match the native title bar to the selected theme while retaining standard window controls and gracefully keeping the system default when the attribute is unavailable. This code is intentionally UI-specific, contains no product logic, and does not persist values.
 
 ## Phase boundary
 

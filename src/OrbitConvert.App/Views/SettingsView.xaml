@@ -1,0 +1,131 @@
+<UserControl x:Class="OrbitConvert.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:OrbitConvert.App.ViewModels"
+             HorizontalContentAlignment="Stretch"
+             VerticalContentAlignment="Stretch">
+    <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
+        <StackPanel MaxWidth="820">
+            <TextBlock Style="{StaticResource EyebrowTextStyle}" Text="SETTINGS / PREVIEW" />
+            <TextBlock Margin="0,8,0,0"
+                       Style="{StaticResource PageTitleTextStyle}"
+                       Text="Make the studio feel like yours." />
+            <TextBlock Margin="0,7,0,0"
+                       Style="{StaticResource BodyTextStyle}"
+                       Text="Appearance choices apply to this session only and are never written to disk." />
+
+            <Border Margin="0,28,0,0" Style="{StaticResource CardBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="1" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="1" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Margin="0,0,0,22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Theme" />
+                            <TextBlock Margin="0,5,0,0"
+                                       Style="{StaticResource BodyTextStyle}"
+                                       Text="Switch between the dark studio and a bright workspace." />
+                        </StackPanel>
+                        <Border Grid.Column="1"
+                                Padding="3"
+                                VerticalAlignment="Center"
+                                Background="{DynamicResource InputBackgroundBrush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton AutomationProperties.Name="Settings dark theme"
+                                             Command="{Binding SetThemeCommand}"
+                                             CommandParameter="{x:Static viewModels:AppTheme.Dark}"
+                                             Content="Dark"
+                                             GroupName="SettingsTheme"
+                                             IsChecked="{Binding IsDarkTheme, Mode=OneWay}"
+                                             Style="{StaticResource SegmentRadioStyle}" />
+                                <RadioButton AutomationProperties.Name="Settings light theme"
+                                             Command="{Binding SetThemeCommand}"
+                                             CommandParameter="{x:Static viewModels:AppTheme.Light}"
+                                             Content="Light"
+                                             GroupName="SettingsTheme"
+                                             IsChecked="{Binding IsLightTheme, Mode=OneWay}"
+                                             Style="{StaticResource SegmentRadioStyle}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Grid.Row="1" Background="{DynamicResource BorderBrush}" />
+
+                    <Grid Grid.Row="2" Margin="0,22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Accent color" />
+                            <TextBlock Margin="0,5,0,0"
+                                       Style="{StaticResource BodyTextStyle}"
+                                       Text="Choose a preview accent for focus, selection, and highlights." />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <RadioButton AutomationProperties.Name="Blue accent"
+                                         Background="{StaticResource BlueAccentBrush}"
+                                         Command="{Binding SetAccentCommand}"
+                                         CommandParameter="{x:Static viewModels:AccentChoice.Blue}"
+                                         GroupName="AccentSelection"
+                                         IsChecked="{Binding IsBlueAccent, Mode=OneWay}"
+                                         Style="{StaticResource AccentRadioStyle}" />
+                            <RadioButton AutomationProperties.Name="Violet accent"
+                                         Background="{StaticResource VioletAccentBrush}"
+                                         Command="{Binding SetAccentCommand}"
+                                         CommandParameter="{x:Static viewModels:AccentChoice.Violet}"
+                                         GroupName="AccentSelection"
+                                         IsChecked="{Binding IsVioletAccent, Mode=OneWay}"
+                                         Style="{StaticResource AccentRadioStyle}" />
+                            <RadioButton AutomationProperties.Name="Teal accent"
+                                         Background="{StaticResource TealAccentBrush}"
+                                         Command="{Binding SetAccentCommand}"
+                                         CommandParameter="{x:Static viewModels:AccentChoice.Teal}"
+                                         GroupName="AccentSelection"
+                                         IsChecked="{Binding IsTealAccent, Mode=OneWay}"
+                                         Style="{StaticResource AccentRadioStyle}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Grid.Row="3" Background="{DynamicResource BorderBrush}" />
+
+                    <Border Grid.Row="4"
+                            Margin="0,22,0,0"
+                            Padding="15"
+                            Background="{DynamicResource AccentSoftBrush}"
+                            BorderBrush="{DynamicResource AccentBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="11">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="28" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Foreground="{DynamicResource AccentBrush}"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Text="i" />
+                            <TextBlock Grid.Column="1"
+                                       Style="{StaticResource BodyTextStyle}"
+                                       Text="Session-only preview: no settings file, registry entry, account, or cloud service is used." />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
