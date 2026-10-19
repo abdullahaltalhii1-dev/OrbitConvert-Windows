@@ -1,0 +1,32 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+            - feature/phase-0-foundation
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build-and-test:
+        runs-on: windows-latest
+
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v4
+
+            - name: Set up .NET 10
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: 10.0.x
+
+            - name: Restore
+              run: dotnet restore OrbitConvert.slnx
+
+            - name: Build
+              run: dotnet build OrbitConvert.slnx --configuration Release --no-restore
+
+            - name: Test
+              run: dotnet test OrbitConvert.slnx --configuration Release --no-build
