@@ -1,0 +1,36 @@
+﻿<Window x:Class="OrbitConvert.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:OrbitConvert.App.ViewModels"
+        mc:Ignorable="d"
+        Title="{Binding AppTitle}"
+        Width="640"
+        Height="360"
+        MinWidth="520"
+        MinHeight="300"
+        Background="{StaticResource WindowBackgroundBrush}"
+        Foreground="{StaticResource PrimaryTextBrush}"
+        FontFamily="Segoe UI"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <viewModels:MainViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="40">
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center"
+                       Style="{StaticResource TitleTextStyle}"
+                       Text="{Binding AppTitle}" />
+            <Border Margin="0,20,0,0"
+                    Padding="14,8"
+                    Background="{StaticResource SurfaceBrush}"
+                    CornerRadius="8">
+                <TextBlock Style="{StaticResource StatusTextStyle}"
+                           Text="Phase 0 / Foundation ready" />
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>
