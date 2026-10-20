@@ -22,7 +22,7 @@
                     BorderBrush="{DynamicResource AccentBorderBrush}"
                     BorderThickness="1"
                     CornerRadius="12">
-                <Grid Width="26" Height="26">
+                <Grid Width="26" Height="26" FlowDirection="LeftToRight">
                     <Ellipse Width="23"
                              Height="12"
                              Stroke="{DynamicResource AccentBrush}"
@@ -45,11 +45,12 @@
                         Margin="12,0,0,0"
                         VerticalAlignment="Center">
                 <TextBlock FontSize="17"
+                           FlowDirection="LeftToRight"
                            FontWeight="SemiBold"
                            Text="{Binding AppTitle}" />
                 <TextBlock Margin="0,2,0,0"
                            Style="{StaticResource CaptionTextStyle}"
-                           Text="STUDIO / WINDOWS" />
+                           Text="{Binding Localization[HeaderSubtitle]}" />
             </StackPanel>
 
             <Border Grid.Column="2"
@@ -57,7 +58,7 @@
                     VerticalAlignment="Center"
                     Style="{StaticResource BadgeBorderStyle}">
                 <TextBlock Style="{StaticResource BadgeTextStyle}"
-                           Text="UI PREVIEW" />
+                           Text="{Binding Localization[UiPreview]}" />
             </Border>
 
             <Border Grid.Column="3"
@@ -68,17 +69,17 @@
                     BorderThickness="1"
                     CornerRadius="10">
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton AutomationProperties.Name="Use dark theme"
+                    <RadioButton AutomationProperties.Name="{Binding Localization[UseDarkTheme]}"
                                  Command="{Binding SetThemeCommand}"
                                  CommandParameter="{x:Static viewModels:AppTheme.Dark}"
-                                 Content="Dark"
+                                 Content="{Binding Localization[ThemeDark]}"
                                  GroupName="HeaderTheme"
                                  IsChecked="{Binding IsDarkTheme, Mode=OneWay}"
                                  Style="{StaticResource SegmentRadioStyle}" />
-                    <RadioButton AutomationProperties.Name="Use light theme"
+                    <RadioButton AutomationProperties.Name="{Binding Localization[UseLightTheme]}"
                                  Command="{Binding SetThemeCommand}"
                                  CommandParameter="{x:Static viewModels:AppTheme.Light}"
-                                 Content="Light"
+                                 Content="{Binding Localization[ThemeLight]}"
                                  GroupName="HeaderTheme"
                                  IsChecked="{Binding IsLightTheme, Mode=OneWay}"
                                  Style="{StaticResource SegmentRadioStyle}" />

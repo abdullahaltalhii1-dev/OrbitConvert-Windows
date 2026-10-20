@@ -1,3 +1,4 @@
+using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
 using OrbitConvert.App.ViewModels;
 
@@ -130,7 +131,7 @@ public sealed class FileIntakeViewModelTests : IDisposable
     {
         var provider = new StubMetadataProvider(_ =>
             FileMetadataResult.Failure(FileMetadataError.Inaccessible));
-        var viewModel = new FileIntakeViewModel(provider);
+        var viewModel = new FileIntakeViewModel(provider, CreateLocalization());
 
         viewModel.AddFiles([@"C:\protected\private.txt"]);
 
@@ -152,6 +153,36 @@ public sealed class FileIntakeViewModelTests : IDisposable
         Assert.Equal("1 folder was skipped; folders aren’t supported yet.", viewModel.StatusMessage);
     }
 
+    [Fact]
+    public void LanguageChange_LocalizesExistingFileCountAndStatus()
+    {
+        var firstPath = CreateFile("الأول.txt", [1]);
+        var secondPath = CreateFile("الثاني.txt", [2]);
+        var localization = CreateLocalization();
+        var viewModel = new FileIntakeViewModel(new FileMetadataProvider(), localization);
+        viewModel.AddFiles([firstPath, secondPath]);
+
+        localization.ChangeLanguage(AppLanguage.Arabic);
+
+        Assert.Equal("تم تحديد ملفين", viewModel.SelectedFileCountText);
+        Assert.Equal("تمت إضافة ملفين.", viewModel.StatusMessage);
+    }
+
+    [Fact]
+    public void MissingAndDirectoryErrors_AreLocalizedInArabic()
+    {
+        var missingPath = Path.Combine(_temporaryDirectory, "مفقود.txt");
+        var folderPath = Path.Combine(_temporaryDirectory, "مجلد");
+        Directory.CreateDirectory(folderPath);
+        var localization = CreateLocalization();
+        localization.ChangeLanguage(AppLanguage.Arabic);
+        var viewModel = new FileIntakeViewModel(new FileMetadataProvider(), localization);
+
+        viewModel.AddFiles([missingPath, folderPath]);
+
+        Assert.Equal("تم تجاوز مجلد واحد؛ المجلدات غير مدعومة حاليًا. تعذّر العثور على ملف واحد.", viewModel.StatusMessage);
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_temporaryDirectory))
@@ -162,7 +193,12 @@ public sealed class FileIntakeViewModelTests : IDisposable
 
     private FileIntakeViewModel CreateViewModel()
     {
-        return new FileIntakeViewModel(new FileMetadataProvider());
+        return new FileIntakeViewModel(new FileMetadataProvider(), CreateLocalization());
+    }
+
+    private static LocalizationService CreateLocalization()
+    {
+        return new LocalizationService(new TestLanguagePreferenceStore());
     }
 
     private string CreateFile(string relativePath, byte[] contents)

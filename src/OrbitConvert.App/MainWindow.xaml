@@ -25,7 +25,8 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
 
-    <Grid Background="{DynamicResource WindowBackgroundBrush}">
+    <Grid Background="{DynamicResource WindowBackgroundBrush}"
+          FlowDirection="{Binding Localization.FlowDirection}">
         <Grid.RowDefinitions>
             <RowDefinition Height="78" />
             <RowDefinition Height="*" />
@@ -46,39 +47,39 @@
                 <views:WorkspaceView Visibility="{Binding IsWorkspaceSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <views:ImagesPreviewView Visibility="{Binding IsImagesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <views:ComingSoonView Eyebrow="VIDEO"
-                                      Title="Video tools are on the horizon."
-                                      Description="This polished placeholder communicates direction without enabling unfinished functionality."
+                <views:ComingSoonView Eyebrow="{Binding Localization[VideoEyebrow]}"
+                                      Title="{Binding Localization[VideoTitle]}"
+                                      Description="{Binding Localization[VideoDescription]}"
                                       IconData="M2,2 H48 V42 H2 Z M48,14 L66,5 V39 L48,30 Z M20,13 L34,22 L20,31 Z"
                                       IconWidth="68"
                                       IconHeight="54"
                                       IconFill="{DynamicResource AccentSoftBrush}"
-                                      FormatsHeading="Planned video formats"
+                                      FormatsHeading="{Binding Localization[VideoFormatsHeading]}"
                                       Formats="MP4|MOV|MKV|WebM"
-                                      InformationalText="Informational only · No media is opened or processed"
+                                      InformationalText="{Binding Localization[VideoInformationalText]}"
                                       Visibility="{Binding IsVideoSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <views:ComingSoonView Eyebrow="AUDIO"
-                                      Title="A quieter way to handle audio."
-                                      Description="Audio conversion is planned for a later approved phase and is not active here."
+                <views:ComingSoonView Eyebrow="{Binding Localization[AudioEyebrow]}"
+                                      Title="{Binding Localization[AudioTitle]}"
+                                      Description="{Binding Localization[AudioDescription]}"
                                       IconData="M8,5 V43 A10,10 0 1 1 2,34 H8 V10 L48,3 V36 A10,10 0 1 1 42,27 V8 Z"
                                       IconWidth="62"
                                       IconHeight="62"
                                       IconFill="{DynamicResource AccentSoftBrush}"
-                                      FormatsHeading="Planned audio formats"
+                                      FormatsHeading="{Binding Localization[AudioFormatsHeading]}"
                                       Formats="MP3|WAV|FLAC|M4A"
-                                      InformationalText="Informational only · No audio is opened or processed"
+                                      InformationalText="{Binding Localization[AudioInformationalText]}"
                                       Visibility="{Binding IsAudioSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <views:ComingSoonView Eyebrow="DOCUMENTS"
-                                      Title="Documents, thoughtfully organized."
-                                      Description="Document workflows remain intentionally disabled until their own implementation phase."
+                <views:ComingSoonView Eyebrow="{Binding Localization[DocumentsEyebrow]}"
+                                      Title="{Binding Localization[DocumentsTitle]}"
+                                      Description="{Binding Localization[DocumentsDescription]}"
                                       IconData="M3,2 H34 L51,19 V66 H3 Z M33,3 V21 H50 M12,33 H42 M12,42 H42 M12,51 H34"
                                       IconWidth="54"
                                       IconHeight="68"
-                                      FormatsHeading="Planned document formats"
+                                      FormatsHeading="{Binding Localization[DocumentsFormatsHeading]}"
                                       Formats="PDF|DOCX"
-                                      InformationalText="Informational only · No document is opened or processed"
+                                      InformationalText="{Binding Localization[DocumentsInformationalText]}"
                                       Visibility="{Binding IsDocumentsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <views:SettingsView Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />

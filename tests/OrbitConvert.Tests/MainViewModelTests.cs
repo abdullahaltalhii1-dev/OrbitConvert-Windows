@@ -1,3 +1,5 @@
+using OrbitConvert.App.Localization;
+using OrbitConvert.App.Services;
 using OrbitConvert.App.ViewModels;
 
 namespace OrbitConvert.Tests;
@@ -7,7 +9,7 @@ public sealed class MainViewModelTests
     [Fact]
     public void AppTitle_ReturnsProductName()
     {
-        var viewModel = new MainViewModel();
+        var viewModel = CreateViewModel();
 
         Assert.Equal("OrbitConvert", viewModel.AppTitle);
     }
@@ -15,7 +17,7 @@ public sealed class MainViewModelTests
     [Fact]
     public void Defaults_DescribeDarkWorkspacePreview()
     {
-        var viewModel = new MainViewModel();
+        var viewModel = CreateViewModel();
 
         Assert.Equal(AppSection.Workspace, viewModel.CurrentSection);
         Assert.Equal(AppTheme.Dark, viewModel.SelectedTheme);
@@ -28,7 +30,7 @@ public sealed class MainViewModelTests
     [Fact]
     public void NavigateCommand_ChangesSelectedPreviewSection()
     {
-        var viewModel = new MainViewModel();
+        var viewModel = CreateViewModel();
 
         viewModel.NavigateCommand.Execute(AppSection.Images);
 
@@ -40,7 +42,7 @@ public sealed class MainViewModelTests
     [Fact]
     public void AppearanceCommands_UpdateSessionState()
     {
-        var viewModel = new MainViewModel();
+        var viewModel = CreateViewModel();
 
         viewModel.SetThemeCommand.Execute(AppTheme.Light);
         viewModel.SetAccentCommand.Execute(AccentChoice.Teal);
@@ -54,7 +56,7 @@ public sealed class MainViewModelTests
     [Fact]
     public void ImagePreviewSettings_UpdateTextOnlyOutputPreview()
     {
-        var viewModel = new MainViewModel();
+        var viewModel = CreateViewModel();
 
         viewModel.SetOutputFormatCommand.Execute(ImageOutputFormat.Jpg);
         viewModel.PreviewQuality = 75;
@@ -68,5 +70,31 @@ public sealed class MainViewModelTests
         Assert.Equal("landscape_demo.png", viewModel.OutputPreviewFileName);
         Assert.Equal("Lossless preview · Quality control not applicable", viewModel.OutputPreviewSummary);
         Assert.False(viewModel.IsQualityEnabled);
+    }
+
+    [Fact]
+    public void SetLanguageCommand_SwitchesDirectionAndPreviewText()
+    {
+        var viewModel = CreateViewModel();
+        viewModel.SetOutputFormatCommand.Execute(ImageOutputFormat.Jpg);
+
+        viewModel.SetLanguageCommand.Execute(AppLanguage.Arabic);
+
+        Assert.True(viewModel.IsArabicLanguage);
+        Assert.False(viewModel.IsEnglishLanguage);
+        Assert.Equal(System.Windows.FlowDirection.RightToLeft, viewModel.Localization.FlowDirection);
+        Assert.Equal("معاينة فقط · الجودة 82%", viewModel.OutputPreviewSummary);
+
+        viewModel.SetLanguageCommand.Execute(AppLanguage.English);
+
+        Assert.True(viewModel.IsEnglishLanguage);
+        Assert.Equal(System.Windows.FlowDirection.LeftToRight, viewModel.Localization.FlowDirection);
+    }
+
+    private static MainViewModel CreateViewModel()
+    {
+        return new MainViewModel(
+            new FileMetadataProvider(),
+            new LocalizationService(new TestLanguagePreferenceStore()));
     }
 }

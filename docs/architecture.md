@@ -1,6 +1,6 @@
 # Architecture
 
-OrbitConvert is a deliberately small WPF application organized around MVVM. Phase 1.2 adds safe file intake to the approved Studio UI shell without adding conversion infrastructure.
+OrbitConvert is a deliberately small WPF application organized around MVVM. Phase 1.3 adds maintainable English and Arabic localization to the safe file-intake Studio shell without adding conversion infrastructure.
 
 ## Projects
 
@@ -11,7 +11,11 @@ OrbitConvert is a deliberately small WPF application organized around MVVM. Phas
 
 `MainWindow.xaml` binds its title to `MainViewModel.AppTitle` and stays focused on shell composition. The `Views` folder contains small `UserControl` components for the header, sidebar, workspace, fictional image demo, settings, and a reusable coming-soon page. These controls inherit the window data context, so navigation and preview commands remain centralized rather than duplicated.
 
-`MainViewModel` owns session-only navigation, theme, accent, and fictional image preview state. It exposes a focused `FileIntakeViewModel`, which owns the observable selection, Windows-style duplicate prevention, status messages, and add/remove/clear commands.
+`MainViewModel` owns session-only navigation, theme, accent, fictional image preview state, and language selection. It exposes a focused `FileIntakeViewModel`, which owns the observable selection, Windows-style duplicate prevention, logical status state, and add/remove/clear commands. Dynamic status text is resolved at display time, so an existing message updates when the language changes.
+
+`LocalizationService` resolves stable keys from `Resources/Strings.resx` and `Resources/Strings.ar.resx`, publishes the current culture and flow direction, and falls back to English when an Arabic key is missing. Views bind to the service indexer, allowing one XAML tree to refresh at runtime. The root content grid follows LTR or RTL direction; paths, filenames, format labels, and vector icons opt into LTR where mirroring would be incorrect.
+
+`FileLanguagePreferenceStore` persists only the `en` or `ar` code in `%LOCALAPPDATA%\OrbitConvert\language.txt`. A missing, unreadable, or invalid value safely falls back to English. Selected files, theme, and accent remain in memory only.
 
 `FileMetadataProvider` uses filesystem metadata APIs to obtain only the normalized path, name, extension, and byte length. It never opens or parses file content. Its small interface keeps missing, inaccessible, invalid, and directory cases testable without coupling the view model to Windows dialogs.
 
@@ -21,4 +25,4 @@ The window code-behind translates the view model's theme and accent choices into
 
 ## Phase boundary
 
-Phase 1.2 accepts individual files and reads basic filesystem metadata. Folders are rejected without scanning. The Images page remains a fictional, isolated demo. The application contains no file-content parsing, conversion, output generation, persistence, Explorer integration, installer, updater, telemetry, or network features. Those capabilities require separately approved milestones.
+Phase 1.3 localizes the existing shell and persists only the chosen language. It continues to accept individual files and read basic filesystem metadata; folders are rejected without scanning. The Images page remains a fictional, isolated demo. The application contains no file-content parsing, conversion, output generation, selected-file persistence, Explorer integration, installer, updater, telemetry, or network features. Those capabilities require separately approved milestones.

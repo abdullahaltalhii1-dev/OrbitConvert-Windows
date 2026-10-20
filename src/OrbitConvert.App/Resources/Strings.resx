@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="HeaderSubtitle" xml:space="preserve"><value>STUDIO / WINDOWS</value></data>
+  <data name="UiPreview" xml:space="preserve"><value>UI PREVIEW</value></data>
+  <data name="ThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="ThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="UseDarkTheme" xml:space="preserve"><value>Use dark theme</value></data>
+  <data name="UseLightTheme" xml:space="preserve"><value>Use light theme</value></data>
+  <data name="StudioSections" xml:space="preserve"><value>STUDIO SECTIONS</value></data>
+  <data name="NavWorkspace" xml:space="preserve"><value>Workspace</value></data>
+  <data name="NavImages" xml:space="preserve"><value>Images</value></data>
+  <data name="NavVideo" xml:space="preserve"><value>Video</value></data>
+  <data name="NavAudio" xml:space="preserve"><value>Audio</value></data>
+  <data name="NavDocuments" xml:space="preserve"><value>Documents</value></data>
+  <data name="NavSettings" xml:space="preserve"><value>Settings</value></data>
+  <data name="NavWorkspaceAutomation" xml:space="preserve"><value>Workspace</value></data>
+  <data name="NavImagesAutomation" xml:space="preserve"><value>Images demo preview</value></data>
+  <data name="NavVideoAutomation" xml:space="preserve"><value>Video coming soon</value></data>
+  <data name="NavAudioAutomation" xml:space="preserve"><value>Audio coming soon</value></data>
+  <data name="NavDocumentsAutomation" xml:space="preserve"><value>Documents coming soon</value></data>
+  <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
+  <data name="BadgeDemo" xml:space="preserve"><value>DEMO</value></data>
+  <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 1.3</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Localization · No conversion</value></data>
+  <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
+  <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Choose real files now. Conversion remains disabled until a later approved phase.</value></data>
+  <data name="DropZoneTitle" xml:space="preserve"><value>Choose files or drop them here.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported yet, and no file content is opened.</value></data>
+  <data name="BrowseFiles" xml:space="preserve"><value>Browse Files</value></data>
+  <data name="BrowseFilesHelp" xml:space="preserve"><value>Open the Windows file picker</value></data>
+  <data name="SelectedFiles" xml:space="preserve"><value>Selected files</value></data>
+  <data name="ClearAll" xml:space="preserve"><value>Clear All</value></data>
+  <data name="ClearAllHelp" xml:space="preserve"><value>Remove every file from the current selection</value></data>
+  <data name="EmptySelectionTitle" xml:space="preserve"><value>No files selected</value></data>
+  <data name="EmptySelectionDescription" xml:space="preserve"><value>Use Browse Files or drop individual files into the area above.</value></data>
+  <data name="Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="RemoveHelp" xml:space="preserve"><value>Remove this file from the selection</value></data>
+  <data name="PrivateProcessingTitle" xml:space="preserve"><value>Private Processing</value></data>
+  <data name="PrivateProcessingDescription" xml:space="preserve"><value>Only basic file details are read locally. Files are never uploaded or modified.</value></data>
+  <data name="MultipleFormatsTitle" xml:space="preserve"><value>Multiple Formats</value></data>
+  <data name="MultipleFormatsDescription" xml:space="preserve"><value>Select any file type now. Format support will be introduced in later approved phases.</value></data>
+  <data name="FileDialogTitle" xml:space="preserve"><value>Select files for OrbitConvert</value></data>
+  <data name="FileDialogFilter" xml:space="preserve"><value>All files (*.*)|*.*</value></data>
+  <data name="FileCountNone" xml:space="preserve"><value>No files selected</value></data>
+  <data name="FileCountOne" xml:space="preserve"><value>1 file selected</value></data>
+  <data name="FileCountTwo" xml:space="preserve"><value>2 files selected</value></data>
+  <data name="FileCountMany" xml:space="preserve"><value>{0} files selected</value></data>
+  <data name="IntakeAddedOne" xml:space="preserve"><value>Added 1 file.</value></data>
+  <data name="IntakeAddedTwo" xml:space="preserve"><value>Added 2 files.</value></data>
+  <data name="IntakeAddedMany" xml:space="preserve"><value>Added {0} files.</value></data>
+  <data name="IntakeDuplicateOne" xml:space="preserve"><value>1 duplicate was already selected.</value></data>
+  <data name="IntakeDuplicateTwo" xml:space="preserve"><value>2 duplicates were already selected.</value></data>
+  <data name="IntakeDuplicateMany" xml:space="preserve"><value>{0} duplicates were already selected.</value></data>
+  <data name="IntakeFolderOne" xml:space="preserve"><value>1 folder was skipped; folders aren’t supported yet.</value></data>
+  <data name="IntakeFolderTwo" xml:space="preserve"><value>2 folders were skipped; folders aren’t supported yet.</value></data>
+  <data name="IntakeFolderMany" xml:space="preserve"><value>{0} folders were skipped; folders aren’t supported yet.</value></data>
+  <data name="IntakeMissingOne" xml:space="preserve"><value>1 file could not be found.</value></data>
+  <data name="IntakeMissingTwo" xml:space="preserve"><value>2 files could not be found.</value></data>
+  <data name="IntakeMissingMany" xml:space="preserve"><value>{0} files could not be found.</value></data>
+  <data name="IntakeInaccessibleOne" xml:space="preserve"><value>1 file could not be accessed.</value></data>
+  <data name="IntakeInaccessibleTwo" xml:space="preserve"><value>2 files could not be accessed.</value></data>
+  <data name="IntakeInaccessibleMany" xml:space="preserve"><value>{0} files could not be accessed.</value></data>
+  <data name="IntakeInvalidOne" xml:space="preserve"><value>1 file path was not valid.</value></data>
+  <data name="IntakeInvalidTwo" xml:space="preserve"><value>2 file paths were not valid.</value></data>
+  <data name="IntakeInvalidMany" xml:space="preserve"><value>{0} file paths were not valid.</value></data>
+  <data name="IntakeRemoved" xml:space="preserve"><value>Removed {0}.</value></data>
+  <data name="IntakeSelectionCleared" xml:space="preserve"><value>Selection cleared.</value></data>
+  <data name="IntakeFolderDropRejected" xml:space="preserve"><value>Folders aren’t supported yet. Drop individual files instead.</value></data>
+  <data name="ImagesEyebrow" xml:space="preserve"><value>IMAGES</value></data>
+  <data name="FictionalDemo" xml:space="preserve"><value>FICTIONAL DEMO</value></data>
+  <data name="ImagesTitle" xml:space="preserve"><value>Shape the output before it exists.</value></data>
+  <data name="ImagesDescription" xml:space="preserve"><value>Explore a sample conversion layout. No file is loaded, read, or created.</value></data>
+  <data name="DemoImage" xml:space="preserve"><value>DEMO IMAGE</value></data>
+  <data name="FictionalSample" xml:space="preserve"><value>Fictional in-memory sample</value></data>
+  <data name="SampleSize" xml:space="preserve"><value>SAMPLE SIZE</value></data>
+  <data name="Dimensions" xml:space="preserve"><value>DIMENSIONS</value></data>
+  <data name="OutputPreview" xml:space="preserve"><value>Output Preview</value></data>
+  <data name="OutputPreviewDescription" xml:space="preserve"><value>Controls update preview text only.</value></data>
+  <data name="ExampleFormat" xml:space="preserve"><value>EXAMPLE FORMAT</value></data>
+  <data name="PreviewWebPAutomation" xml:space="preserve"><value>Preview WebP output</value></data>
+  <data name="PreviewJpgAutomation" xml:space="preserve"><value>Preview JPG output</value></data>
+  <data name="PreviewPngAutomation" xml:space="preserve"><value>Preview PNG output</value></data>
+  <data name="ExampleQuality" xml:space="preserve"><value>EXAMPLE QUALITY</value></data>
+  <data name="ExampleQualityAutomation" xml:space="preserve"><value>Example output quality</value></data>
+  <data name="OutputFilenamePreview" xml:space="preserve"><value>OUTPUT FILENAME PREVIEW</value></data>
+  <data name="OutputPreviewLossless" xml:space="preserve"><value>Lossless preview · Quality control not applicable</value></data>
+  <data name="OutputPreviewQuality" xml:space="preserve"><value>Preview only · Quality {0}%</value></data>
+  <data name="ConversionUnavailableHelp" xml:space="preserve"><value>Conversion is not available in Phase 1.3</value></data>
+  <data name="ConvertComingSoon" xml:space="preserve"><value>Convert · Coming soon</value></data>
+  <data name="NoPreviewFileCreated" xml:space="preserve"><value>No file will be created in this preview.</value></data>
+  <data name="ComingSoon" xml:space="preserve"><value>COMING SOON</value></data>
+  <data name="VideoEyebrow" xml:space="preserve"><value>VIDEO</value></data>
+  <data name="VideoTitle" xml:space="preserve"><value>Video tools are on the horizon.</value></data>
+  <data name="VideoDescription" xml:space="preserve"><value>This polished placeholder communicates direction without enabling unfinished functionality.</value></data>
+  <data name="VideoFormatsHeading" xml:space="preserve"><value>Planned video formats</value></data>
+  <data name="VideoInformationalText" xml:space="preserve"><value>Informational only · No media is opened or processed</value></data>
+  <data name="AudioEyebrow" xml:space="preserve"><value>AUDIO</value></data>
+  <data name="AudioTitle" xml:space="preserve"><value>A quieter way to handle audio.</value></data>
+  <data name="AudioDescription" xml:space="preserve"><value>Audio conversion is planned for a later approved phase and is not active here.</value></data>
+  <data name="AudioFormatsHeading" xml:space="preserve"><value>Planned audio formats</value></data>
+  <data name="AudioInformationalText" xml:space="preserve"><value>Informational only · No audio is opened or processed</value></data>
+  <data name="DocumentsEyebrow" xml:space="preserve"><value>DOCUMENTS</value></data>
+  <data name="DocumentsTitle" xml:space="preserve"><value>Documents, thoughtfully organized.</value></data>
+  <data name="DocumentsDescription" xml:space="preserve"><value>Document workflows remain intentionally disabled until their own implementation phase.</value></data>
+  <data name="DocumentsFormatsHeading" xml:space="preserve"><value>Planned document formats</value></data>
+  <data name="DocumentsInformationalText" xml:space="preserve"><value>Informational only · No document is opened or processed</value></data>
+  <data name="SettingsEyebrow" xml:space="preserve"><value>SETTINGS</value></data>
+  <data name="SettingsTitle" xml:space="preserve"><value>Make the studio feel like yours.</value></data>
+  <data name="SettingsDescription" xml:space="preserve"><value>Language is saved locally. Theme and accent choices remain session-only.</value></data>
+  <data name="Theme" xml:space="preserve"><value>Theme</value></data>
+  <data name="ThemeDescription" xml:space="preserve"><value>Switch between the dark studio and a bright workspace.</value></data>
+  <data name="SettingsDarkAutomation" xml:space="preserve"><value>Settings dark theme</value></data>
+  <data name="SettingsLightAutomation" xml:space="preserve"><value>Settings light theme</value></data>
+  <data name="AccentColor" xml:space="preserve"><value>Accent color</value></data>
+  <data name="AccentDescription" xml:space="preserve"><value>Choose a preview accent for focus, selection, and highlights.</value></data>
+  <data name="AccentBlueAutomation" xml:space="preserve"><value>Blue accent</value></data>
+  <data name="AccentVioletAutomation" xml:space="preserve"><value>Violet accent</value></data>
+  <data name="AccentTealAutomation" xml:space="preserve"><value>Teal accent</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="LanguageDescription" xml:space="preserve"><value>Choose the interface language. This preference is saved locally.</value></data>
+  <data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="LanguageArabic" xml:space="preserve"><value>العربية</value></data>
+  <data name="LanguageEnglishAutomation" xml:space="preserve"><value>Use English interface</value></data>
+  <data name="LanguageArabicAutomation" xml:space="preserve"><value>استخدام الواجهة العربية</value></data>
+  <data name="SettingsInfo" xml:space="preserve"><value>Only the language preference is stored locally. No registry entry, account, cloud sync, or telemetry is used.</value></data>
+  <data name="FallbackProbe" xml:space="preserve"><value>English fallback text</value></data>
+</root>

@@ -26,14 +26,21 @@ public partial class WorkspaceView : UserControl
         set => SetValue(IsDragActiveProperty, value);
     }
 
-    private FileIntakeViewModel? FileIntake => (DataContext as MainViewModel)?.FileIntake;
+    private MainViewModel? ViewModel => DataContext as MainViewModel;
+
+    private FileIntakeViewModel? FileIntake => ViewModel?.FileIntake;
 
     private void BrowseFiles_Click(object sender, RoutedEventArgs e)
     {
+        if (ViewModel is not { } viewModel)
+        {
+            return;
+        }
+
         var dialog = new OpenFileDialog
         {
-            Title = "Select files for OrbitConvert",
-            Filter = "All files (*.*)|*.*",
+            Title = viewModel.Localization["FileDialogTitle"],
+            Filter = viewModel.Localization["FileDialogFilter"],
             Multiselect = true,
             CheckFileExists = true,
             CheckPathExists = true,
@@ -41,7 +48,7 @@ public partial class WorkspaceView : UserControl
 
         if (dialog.ShowDialog(Window.GetWindow(this)) == true)
         {
-            FileIntake?.AddFilesCommand.Execute(dialog.FileNames);
+            viewModel.FileIntake.AddFilesCommand.Execute(dialog.FileNames);
         }
     }
 

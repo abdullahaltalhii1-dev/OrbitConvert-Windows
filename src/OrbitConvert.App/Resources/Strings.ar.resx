@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="HeaderSubtitle" xml:space="preserve"><value>الاستوديو / WINDOWS</value></data>
+  <data name="UiPreview" xml:space="preserve"><value>معاينة الواجهة</value></data>
+  <data name="ThemeDark" xml:space="preserve"><value>داكن</value></data>
+  <data name="ThemeLight" xml:space="preserve"><value>فاتح</value></data>
+  <data name="UseDarkTheme" xml:space="preserve"><value>استخدام السمة الداكنة</value></data>
+  <data name="UseLightTheme" xml:space="preserve"><value>استخدام السمة الفاتحة</value></data>
+  <data name="StudioSections" xml:space="preserve"><value>أقسام الاستوديو</value></data>
+  <data name="NavWorkspace" xml:space="preserve"><value>مساحة العمل</value></data>
+  <data name="NavImages" xml:space="preserve"><value>الصور</value></data>
+  <data name="NavVideo" xml:space="preserve"><value>الفيديو</value></data>
+  <data name="NavAudio" xml:space="preserve"><value>الصوت</value></data>
+  <data name="NavDocuments" xml:space="preserve"><value>المستندات</value></data>
+  <data name="NavSettings" xml:space="preserve"><value>الإعدادات</value></data>
+  <data name="NavWorkspaceAutomation" xml:space="preserve"><value>مساحة العمل</value></data>
+  <data name="NavImagesAutomation" xml:space="preserve"><value>معاينة الصور التجريبية</value></data>
+  <data name="NavVideoAutomation" xml:space="preserve"><value>الفيديو، قريبًا</value></data>
+  <data name="NavAudioAutomation" xml:space="preserve"><value>الصوت، قريبًا</value></data>
+  <data name="NavDocumentsAutomation" xml:space="preserve"><value>المستندات، قريبًا</value></data>
+  <data name="NavSettingsAutomation" xml:space="preserve"><value>الإعدادات</value></data>
+  <data name="BadgeDemo" xml:space="preserve"><value>تجريبي</value></data>
+  <data name="BadgeSoon" xml:space="preserve"><value>قريبًا</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 1.3</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>تعريب الواجهة · بلا تحويل</value></data>
+  <data name="WorkspaceEyebrow" xml:space="preserve"><value>مساحة العمل</value></data>
+  <data name="WorkspaceTitle" xml:space="preserve"><value>حوّل ملفاتك بلا تعقيد.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>اختر ملفات حقيقية الآن. سيبقى التحويل معطّلًا حتى مرحلة لاحقة معتمدة.</value></data>
+  <data name="DropZoneTitle" xml:space="preserve"><value>اختر الملفات أو أفلتها هنا.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>حدّد ملفًا واحدًا أو عدة ملفات. المجلدات غير مدعومة حاليًا، ولا يتم فتح محتوى الملفات.</value></data>
+  <data name="BrowseFiles" xml:space="preserve"><value>استعراض الملفات</value></data>
+  <data name="BrowseFilesHelp" xml:space="preserve"><value>فتح منتقي ملفات Windows</value></data>
+  <data name="SelectedFiles" xml:space="preserve"><value>الملفات المحددة</value></data>
+  <data name="ClearAll" xml:space="preserve"><value>مسح الكل</value></data>
+  <data name="ClearAllHelp" xml:space="preserve"><value>إزالة جميع الملفات من التحديد الحالي</value></data>
+  <data name="EmptySelectionTitle" xml:space="preserve"><value>لا توجد ملفات محددة</value></data>
+  <data name="EmptySelectionDescription" xml:space="preserve"><value>استخدم استعراض الملفات أو أفلت ملفات منفردة في المنطقة أعلاه.</value></data>
+  <data name="Remove" xml:space="preserve"><value>إزالة</value></data>
+  <data name="RemoveHelp" xml:space="preserve"><value>إزالة هذا الملف من التحديد</value></data>
+  <data name="PrivateProcessingTitle" xml:space="preserve"><value>معالجة خاصة</value></data>
+  <data name="PrivateProcessingDescription" xml:space="preserve"><value>تُقرأ تفاصيل الملف الأساسية محليًا فقط. لا تُرفع الملفات ولا تُعدّل.</value></data>
+  <data name="MultipleFormatsTitle" xml:space="preserve"><value>صيغ متعددة</value></data>
+  <data name="MultipleFormatsDescription" xml:space="preserve"><value>يمكنك تحديد أي نوع ملف الآن. سيُضاف دعم الصيغ في مراحل لاحقة معتمدة.</value></data>
+  <data name="FileDialogTitle" xml:space="preserve"><value>اختر ملفات لـ OrbitConvert</value></data>
+  <data name="FileDialogFilter" xml:space="preserve"><value>كل الملفات (*.*)|*.*</value></data>
+  <data name="FileCountNone" xml:space="preserve"><value>لم يتم تحديد ملفات</value></data>
+  <data name="FileCountOne" xml:space="preserve"><value>تم تحديد ملف واحد</value></data>
+  <data name="FileCountTwo" xml:space="preserve"><value>تم تحديد ملفين</value></data>
+  <data name="FileCountMany" xml:space="preserve"><value>تم تحديد {0} ملفات</value></data>
+  <data name="IntakeAddedOne" xml:space="preserve"><value>تمت إضافة ملف واحد.</value></data>
+  <data name="IntakeAddedTwo" xml:space="preserve"><value>تمت إضافة ملفين.</value></data>
+  <data name="IntakeAddedMany" xml:space="preserve"><value>تمت إضافة {0} ملفات.</value></data>
+  <data name="IntakeDuplicateOne" xml:space="preserve"><value>هذا الملف محدد مسبقًا.</value></data>
+  <data name="IntakeDuplicateTwo" xml:space="preserve"><value>تم تجاهل ملفين مكررين لأنهما محددان مسبقًا.</value></data>
+  <data name="IntakeDuplicateMany" xml:space="preserve"><value>تم تجاهل {0} ملفات مكررة لأنها محددة مسبقًا.</value></data>
+  <data name="IntakeFolderOne" xml:space="preserve"><value>تم تجاوز مجلد واحد؛ المجلدات غير مدعومة حاليًا.</value></data>
+  <data name="IntakeFolderTwo" xml:space="preserve"><value>تم تجاوز مجلدين؛ المجلدات غير مدعومة حاليًا.</value></data>
+  <data name="IntakeFolderMany" xml:space="preserve"><value>تم تجاوز {0} مجلدات؛ المجلدات غير مدعومة حاليًا.</value></data>
+  <data name="IntakeMissingOne" xml:space="preserve"><value>تعذّر العثور على ملف واحد.</value></data>
+  <data name="IntakeMissingTwo" xml:space="preserve"><value>تعذّر العثور على ملفين.</value></data>
+  <data name="IntakeMissingMany" xml:space="preserve"><value>تعذّر العثور على {0} ملفات.</value></data>
+  <data name="IntakeInaccessibleOne" xml:space="preserve"><value>تعذّر الوصول إلى ملف واحد.</value></data>
+  <data name="IntakeInaccessibleTwo" xml:space="preserve"><value>تعذّر الوصول إلى ملفين.</value></data>
+  <data name="IntakeInaccessibleMany" xml:space="preserve"><value>تعذّر الوصول إلى {0} ملفات.</value></data>
+  <data name="IntakeInvalidOne" xml:space="preserve"><value>مسار ملف واحد غير صالح.</value></data>
+  <data name="IntakeInvalidTwo" xml:space="preserve"><value>مسارا ملفين غير صالحين.</value></data>
+  <data name="IntakeInvalidMany" xml:space="preserve"><value>{0} مسارات ملفات غير صالحة.</value></data>
+  <data name="IntakeRemoved" xml:space="preserve"><value>تمت إزالة {0}.</value></data>
+  <data name="IntakeSelectionCleared" xml:space="preserve"><value>تم مسح التحديد.</value></data>
+  <data name="IntakeFolderDropRejected" xml:space="preserve"><value>المجلدات غير مدعومة حاليًا. أفلت ملفات منفردة بدلًا منها.</value></data>
+  <data name="ImagesEyebrow" xml:space="preserve"><value>الصور</value></data>
+  <data name="FictionalDemo" xml:space="preserve"><value>عرض تجريبي افتراضي</value></data>
+  <data name="ImagesTitle" xml:space="preserve"><value>حدّد المخرجات قبل إنشائها.</value></data>
+  <data name="ImagesDescription" xml:space="preserve"><value>استكشف نموذجًا لواجهة التحويل. لا يتم تحميل أي ملف أو قراءته أو إنشاؤه.</value></data>
+  <data name="DemoImage" xml:space="preserve"><value>صورة تجريبية</value></data>
+  <data name="FictionalSample" xml:space="preserve"><value>عينة افتراضية داخل الذاكرة</value></data>
+  <data name="SampleSize" xml:space="preserve"><value>حجم العينة</value></data>
+  <data name="Dimensions" xml:space="preserve"><value>الأبعاد</value></data>
+  <data name="OutputPreview" xml:space="preserve"><value>معاينة المخرجات</value></data>
+  <data name="OutputPreviewDescription" xml:space="preserve"><value>تحدّث عناصر التحكم نص المعاينة فقط.</value></data>
+  <data name="ExampleFormat" xml:space="preserve"><value>صيغة المثال</value></data>
+  <data name="PreviewWebPAutomation" xml:space="preserve"><value>معاينة مخرجات WebP</value></data>
+  <data name="PreviewJpgAutomation" xml:space="preserve"><value>معاينة مخرجات JPG</value></data>
+  <data name="PreviewPngAutomation" xml:space="preserve"><value>معاينة مخرجات PNG</value></data>
+  <data name="ExampleQuality" xml:space="preserve"><value>جودة المثال</value></data>
+  <data name="ExampleQualityAutomation" xml:space="preserve"><value>جودة المخرجات التجريبية</value></data>
+  <data name="OutputFilenamePreview" xml:space="preserve"><value>معاينة اسم ملف الإخراج</value></data>
+  <data name="OutputPreviewLossless" xml:space="preserve"><value>معاينة دون فقدان · التحكم في الجودة غير مطلوب</value></data>
+  <data name="OutputPreviewQuality" xml:space="preserve"><value>معاينة فقط · الجودة {0}%</value></data>
+  <data name="ConversionUnavailableHelp" xml:space="preserve"><value>التحويل غير متاح في المرحلة 1.3</value></data>
+  <data name="ConvertComingSoon" xml:space="preserve"><value>تحويل · قريبًا</value></data>
+  <data name="NoPreviewFileCreated" xml:space="preserve"><value>لن يُنشأ أي ملف في هذه المعاينة.</value></data>
+  <data name="ComingSoon" xml:space="preserve"><value>قريبًا</value></data>
+  <data name="VideoEyebrow" xml:space="preserve"><value>الفيديو</value></data>
+  <data name="VideoTitle" xml:space="preserve"><value>أدوات الفيديو في الطريق.</value></data>
+  <data name="VideoDescription" xml:space="preserve"><value>توضح هذه الصفحة الاتجاه المخطط له من دون تفعيل وظائف غير مكتملة.</value></data>
+  <data name="VideoFormatsHeading" xml:space="preserve"><value>صيغ الفيديو المخطط لها</value></data>
+  <data name="VideoInformationalText" xml:space="preserve"><value>للمعلومات فقط · لا يتم فتح الوسائط أو معالجتها</value></data>
+  <data name="AudioEyebrow" xml:space="preserve"><value>الصوت</value></data>
+  <data name="AudioTitle" xml:space="preserve"><value>طريقة أبسط للتعامل مع الصوت.</value></data>
+  <data name="AudioDescription" xml:space="preserve"><value>تحويل الصوت مخطط لمرحلة لاحقة معتمدة، وهو غير مفعّل هنا.</value></data>
+  <data name="AudioFormatsHeading" xml:space="preserve"><value>صيغ الصوت المخطط لها</value></data>
+  <data name="AudioInformationalText" xml:space="preserve"><value>للمعلومات فقط · لا يتم فتح الصوت أو معالجته</value></data>
+  <data name="DocumentsEyebrow" xml:space="preserve"><value>المستندات</value></data>
+  <data name="DocumentsTitle" xml:space="preserve"><value>مستندات منظّمة بعناية.</value></data>
+  <data name="DocumentsDescription" xml:space="preserve"><value>تظل مهام المستندات معطّلة عمدًا حتى مرحلة تنفيذها الخاصة.</value></data>
+  <data name="DocumentsFormatsHeading" xml:space="preserve"><value>صيغ المستندات المخطط لها</value></data>
+  <data name="DocumentsInformationalText" xml:space="preserve"><value>للمعلومات فقط · لا يتم فتح المستندات أو معالجتها</value></data>
+  <data name="SettingsEyebrow" xml:space="preserve"><value>الإعدادات</value></data>
+  <data name="SettingsTitle" xml:space="preserve"><value>اجعل الاستوديو مناسبًا لك.</value></data>
+  <data name="SettingsDescription" xml:space="preserve"><value>تُحفظ اللغة محليًا، بينما تبقى تغييرات السمة واللون المميّز لهذه الجلسة فقط.</value></data>
+  <data name="Theme" xml:space="preserve"><value>السمة</value></data>
+  <data name="ThemeDescription" xml:space="preserve"><value>بدّل بين الاستوديو الداكن ومساحة العمل الفاتحة.</value></data>
+  <data name="SettingsDarkAutomation" xml:space="preserve"><value>السمة الداكنة في الإعدادات</value></data>
+  <data name="SettingsLightAutomation" xml:space="preserve"><value>السمة الفاتحة في الإعدادات</value></data>
+  <data name="AccentColor" xml:space="preserve"><value>اللون المميّز</value></data>
+  <data name="AccentDescription" xml:space="preserve"><value>اختر لونًا للتركيز والتحديد وإبراز العناصر.</value></data>
+  <data name="AccentBlueAutomation" xml:space="preserve"><value>اللون الأزرق</value></data>
+  <data name="AccentVioletAutomation" xml:space="preserve"><value>اللون البنفسجي</value></data>
+  <data name="AccentTealAutomation" xml:space="preserve"><value>اللون الفيروزي</value></data>
+  <data name="Language" xml:space="preserve"><value>اللغة</value></data>
+  <data name="LanguageDescription" xml:space="preserve"><value>اختر لغة الواجهة. يُحفظ هذا التفضيل محليًا.</value></data>
+  <data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="LanguageArabic" xml:space="preserve"><value>العربية</value></data>
+  <data name="LanguageEnglishAutomation" xml:space="preserve"><value>استخدام الواجهة الإنجليزية</value></data>
+  <data name="LanguageArabicAutomation" xml:space="preserve"><value>استخدام الواجهة العربية</value></data>
+  <data name="SettingsInfo" xml:space="preserve"><value>يُحفظ تفضيل اللغة محليًا فقط. لا يُستخدم سجل Windows أو حساب أو مزامنة سحابية أو قياس عن بُعد.</value></data>
+</root>
