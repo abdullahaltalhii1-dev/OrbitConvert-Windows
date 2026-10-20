@@ -45,6 +45,8 @@ View-model tests cover option state, format switching, and validation messages.
 
 ## Windows GUI smoke checks
 
+### Initial checks (before the opaque-alpha fix)
+
 Screenshots taken from the running WPF app:
 
 - [Arabic, dark: PNG → WebP with quality 73 and resize 48 × 48 (expected 48 × 32)](screenshots/16-phase-2c-arabic-resize.jpg)
@@ -53,10 +55,49 @@ Screenshots taken from the running WPF app:
 
 These screenshots show RTL/LTR layout, the quality control appearing only for lossy targets, the expected size preview, and Arabic folder paths.
 
+### Post-fix validation on `4ab0cf3` (2026-10-20)
+
+**Method.** The Release build was driven through Windows UI Automation and real mouse clicks, using the native Open and Save dialogs. Every output was decoded independently by Magick.NET and by Windows WIC, and pixel values were sampled.
+
+**Fixtures.** The fixtures were written byte-exact; each one is a PNG with color type 6:
+
+- An opaque RGBA image, alpha 255 everywhere.
+- A transparent image with three bands: alpha 0, alpha 128, alpha 255.
+- A noisy 400 × 300 image used for the quality tests.
+
+They were saved in a folder with an Arabic name.
+
+| Case | Result |
+|---|---|
+| Opaque RGBA PNG → WebP | Saved and verified. Alpha dropped (VP8, no ALPH). Pixels within lossy tolerance. |
+| Opaque RGBA PNG → PNG | Saved and verified. Pixel-identical to the source (RMSE 0). |
+| Transparent PNG → WebP | Alpha kept exactly (0 / 128 / 255). |
+| Transparent PNG → JPEG | Transparent area becomes white (255,255,255). Half-transparent blue is blended onto white (128,127,255). |
+| Transparent PNG → BMP | Same white composite as JPEG. Output is a 24-bit BMP3. |
+| Resize 200 × 200, aspect ratio kept | Output 200 × 150, matching the expected size shown in the UI. |
+| Resize 200 × 200, aspect ratio off | Output 200 × 200 (intentional stretch). |
+| JPEG quality 20 vs 95 | Estimated encoded quality 20 / 95. Size 9 KB / 165 KB. RMSE 0.127 / 0.016. |
+| WebP quality 20 vs 95 | Size 18 KB / 82 KB. RMSE 0.113 / 0.097. The RMSE gain is small because lossy WebP always uses 4:2:0 chroma, and the fixture has per-pixel color noise. |
+| Existing destination | Rejected with the localized message. Existing file content and hash unchanged, source unchanged, no `.orbitconvert-*.tmp` left. |
+| Arabic + Light | RTL layout, LTR paths and numbers. WebP resize 60 × 60 with ratio kept gives 60 × 40. Transparent → BMP correct. |
+| English + Dark and English + Light | Correct. Switching language live also updated an already displayed success message. |
+
+**Native warning behavior**, checked through Inspect in the GUI:
+
+| Input | Result |
+|---|---|
+| Truncated JPEG (scan data cut, EOI kept) | Rejected (`MagickCorruptImageWarningException`). |
+| PNG with an unknown private ancillary chunk | Accepted. |
+| PNG with an empty tEXt keyword | Accepted (only `MagickOptionWarningException`, which is not treated as corruption). |
+| PNG whose only fault is a bad CRC on a tEXt chunk | Rejected (`MagickCoderWarningException`). See known limitations. |
+
+Review fixtures, outputs, and screenshots stay under the gitignored `artifacts/phase-2c-review/` folder.
+
+**Not covered by the GUI pass.** The automation could not type a custom filename into the Save dialog, so default `<name>_converted.<ext>` names were used. Destination collisions were exercised through those defaults.
+
 ## Unverified and residual limitations
 
-- The GUI was not re-run after the opaque-alpha fix; that fix is covered by automated tests only.
-- Treating every native coder warning as a failure is conservative and may reject some technically recoverable real-world files.
+- **Known limitation (by design):** every `MagickCoderWarningException` is treated as corruption. As a result, a PNG whose pixels are intact but whose ancillary metadata chunk has a bad CRC (for example tEXt) is rejected, although Phase 2B accepted it. This conservative behavior is kept intentionally; such files are uncommon.
 - Not checked: 125%/150% DPI, a full screen-reader pass, a broad malicious-image corpus, peak-memory measurements, disk-full behavior, and forced-crash recovery.
 - Color management is limited to unprofiled sRGB/RGB/grayscale. ICC, CMYK, and sources above 8 bits remain rejected. Metadata other than orientation is not preserved by design.
 - In-process native limits are not a sandbox or a hard cancellation deadline.

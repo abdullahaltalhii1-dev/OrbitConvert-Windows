@@ -4,6 +4,63 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 
 ---
 
+## 2026-10-20 — Claude: Phase 2C final validation (review only)
+
+### State
+
+- **Branch:** `feature/phase-2c-extended-images`, reviewed at `4ab0cf3`.
+- **PR #8:** Draft, open, mergeable. CI `build-and-test` passed (2 runs).
+- **Changes from this review:** documentation only. This entry plus `docs/phase-2c-validation.md`. No source or test changes.
+
+### Local gate
+
+Run on `4ab0cf3` with the app closed:
+
+- restore: passed
+- Release build: passed, 0 warnings, 0 errors
+- tests: 114/114 passed
+- format: passed
+
+### Windows GUI validation
+
+- **Method:** the real Release app was driven via UI Automation and real mouse clicks, with the native Open and Save dialogs.
+- **Verification:** outputs were decoded independently with Magick and WIC.
+- **Fixtures:** verified RGBA (color type 6) with exact alpha values, in `artifacts/phase-2c-review/` (gitignored).
+
+Results:
+
+- **Opaque RGBA PNG:** → WebP passed (alpha dropped). → PNG passed (pixel-identical).
+- **Transparent PNG:** → WebP passed (alpha 0/128/255 kept). → JPEG and → BMP passed (white composite, correct blend).
+- **Resize 200×200:** ratio kept gives 200×150, passed. Ratio off gives 200×200, passed.
+- **JPEG q20 vs q95:** estimated quality 20/95; size 9 KB vs 165 KB; RMSE 0.127 vs 0.016. Passed.
+- **WebP q20 vs q95:** 18 KB vs 82 KB. Passed. The RMSE gain is small because lossy WebP always uses 4:2:0 chroma.
+- **Existing destination:** rejected. Content, hash, and source unchanged; no temp files left. Passed.
+- **Localization and themes:** Arabic + Light passed (RTL, LTR paths). English + Dark and English + Light passed. Live language switch updates the status message.
+
+### Native warning behavior
+
+- Truncated JPEG: rejected. Passed.
+- Unknown ancillary chunk: accepted. Passed.
+- Empty tEXt keyword: accepted (OptionWarning). Passed.
+- tEXt with a bad CRC: rejected via `MagickCoderWarningException`.
+  - **Owner decision:** keep this strict handling unchanged. It is documented as a known limitation.
+
+### Findings
+
+- No defects found.
+
+### Not verified
+
+- 125%/150% DPI, screen reader, malicious corpus, memory use, disk-full behavior.
+- Typing a custom filename in the Save dialog (automation limit; default names were used).
+
+### Next
+
+- The owner decides on merging PR #8.
+- No Phase 2D without explicit approval.
+
+---
+
 ## 2026-10-20 — Claude → next agent (Codex or Claude)
 
 ### State at handoff
