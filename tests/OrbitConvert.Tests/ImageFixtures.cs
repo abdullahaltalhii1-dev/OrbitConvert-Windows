@@ -66,6 +66,53 @@ internal static class ImageFixtures
         return file.ToArray();
     });
 
+    // Real files written by the Windows (WIC) encoders in less common but valid pixel formats.
+    internal static byte[] Wic(string container, PixelFormat format) => OnSta(() =>
+    {
+        const int width = 37, height = 23; // Odd sizes exercise row padding.
+        var pixels = new byte[96 * 64 * 4];
+        for (var i = 0; i < pixels.Length; i++) { pixels[i] = (byte)(i * 31 % 251); }
+        BitmapSource source = BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, pixels, width * 4);
+        if (format != PixelFormats.Bgra32)
+        {
+            var palette = format.BitsPerPixel <= 8 && format.ToString().StartsWith("Indexed", StringComparison.Ordinal)
+                ? new BitmapPalette(source, 1 << format.BitsPerPixel) : null;
+            source = new FormatConvertedBitmap(source, format, palette, 0);
+        }
+        BitmapEncoder encoder = container switch
+        {
+            "png" => new PngBitmapEncoder(),
+            "bmp" => new BmpBitmapEncoder(),
+            _ => new JpegBitmapEncoder { QualityLevel = 90 },
+        };
+        encoder.Frames.Add(BitmapFrame.Create(source));
+        using var file = new MemoryStream();
+        encoder.Save(file);
+        return file.ToArray();
+    });
+
+    // Large smooth RGB image; compresses well enough to stay far below the 25 MiB input limit.
+    internal static byte[] GradientPng(int width, int height) => OnSta(() =>
+    {
+        var stride = width * 3;
+        var pixels = new byte[stride * height];
+        for (var y = 0; y < height; y++)
+        {
+            for (var x = 0; x < width; x++)
+            {
+                var offset = y * stride + x * 3;
+                pixels[offset] = (byte)(x * 255 / width);
+                pixels[offset + 1] = (byte)(y * 255 / height);
+                pixels[offset + 2] = (byte)((x + y) % 256);
+            }
+        }
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(BitmapSource.Create(width, height, 96, 96, PixelFormats.Rgb24, null, pixels, stride)));
+        using var file = new MemoryStream();
+        encoder.Save(file);
+        return file.ToArray();
+    });
+
     internal static byte[] WithoutJpegScanData(byte[] jpeg)
     {
         // Keep the real encoder's headers, including SOS, but replace all compressed pixels with EOI.

@@ -53,6 +53,15 @@ The UI uses a focused ImageConversionViewModel and ImageConversionService. The s
 
 See phase-2c-validation.md for container rules and evidence.
 
+## Phase 2D hardening
+
+- BMP output is written uncompressed (`CompressionMethod.NoCompression`). BMP3 otherwise writes palette and grayscale images as RLE8, which the input guard rejects, so palette or grayscale sources could not be converted to BMP.
+- The bounded input and output snapshot reads seekable streams into one exact-size buffer. This lowered the measured peak working set for a 16 MP BMP output from 478 MiB to 282 MiB, and for a 16 MP PNG output from 421 MiB to 193 MiB.
+- The limits are unchanged and are now tested at their exact boundaries. A deterministic corruption corpus of about 3,600 mutated inputs confirms that no exception escapes the engine.
+- ImageMagick's `Progress` cancellation is honored only by the WebP encoder. JPEG decoding, resizing, and PNG encoding ignore it, so cooperative cancellation is not implemented.
+
+See phase-2d-validation.md for measurements and evidence.
+
 ## References
 
 - https://github.com/dlemstra/Magick.NET/blob/main/docs/Readme.md
