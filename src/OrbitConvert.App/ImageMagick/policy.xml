@@ -2,7 +2,9 @@
   <policy domain="delegate" rights="none" pattern="*" />
   <policy domain="filter" rights="none" pattern="*" />
   <policy domain="coder" rights="none" pattern="*" />
-  <policy domain="coder" rights="read|write" pattern="{PNG,JPEG}" />
+  <policy domain="coder" rights="read|write" pattern="{PNG,JPEG,WEBP}" />
+  <policy domain="coder" rights="read" pattern="BMP" />
+  <policy domain="coder" rights="write" pattern="BMP3" />
   <policy domain="resource" name="memory" value="256MiB" />
   <policy domain="resource" name="map" value="0" />
   <policy domain="resource" name="disk" value="0" />

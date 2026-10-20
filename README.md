@@ -1,6 +1,6 @@
 # OrbitConvert
 
-OrbitConvert is a bilingual Windows desktop application for local file conversion. Phase 2B adds real single-image PNG ↔ JPEG conversion to the Studio shell, with safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
+OrbitConvert is a bilingual Windows desktop application for local file conversion. Phase 2C extends real single-image conversion to PNG, JPEG, WebP, and BMP, with quality and resize options, with safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
 
 ## Requirements
 
@@ -38,15 +38,22 @@ The startup window opens the Studio workspace. Browse Files uses the native Wind
 
 1. Add files through Workspace using Browse Files or drag-and-drop.
 2. Open Images, select one file, and choose Inspect image.
-3. PNG selects JPEG output automatically; JPEG selects PNG.
-4. Choose a new output location, then select Convert image.
-5. Wait for the saved-and-verified message. Original files and existing destination files are never overwritten.
+3. Choose the output format: PNG, JPEG, WebP, or BMP. PNG suggests JPEG; other sources suggest PNG.
+4. Optionally set quality (JPEG/WebP, 1–100, default 90) and resize. Aspect ratio is preserved by default, and the expected output size is shown.
+5. Choose a new output location, then select Convert image.
+6. Wait for the saved-and-verified message. Original files and existing destination files are never overwritten.
 
-PNG transparency is composited onto white (#FFFFFF) for JPEG. JPEG quality is fixed at 90 and PNG output uses 8 bits per component. JPEG → PNG does not restore details already lost to JPEG compression.
+Transparency is preserved in PNG and WebP and composited onto white (#FFFFFF) for JPEG and BMP. Output uses 8 bits per component. Lossy sources do not regain detail when converted to lossless formats.
 
-Inputs are limited to 25 MiB, 8192 pixels per side, and 16 million pixels. PNG above 8 bits, animation, multi-frame images, CMYK, embedded ICC profiles, and nonstandard PNG color configurations are rejected. EXIF orientation is applied to pixels; the EXIF profile is then removed to prevent repeated rotation. Unprofiled RGB/sRGB/grayscale and standard sRGB PNG color information are supported. This phase does not promise general color-managed or metadata-preserving conversion.
+Inputs are limited to 25 MiB, 8192 pixels per side, and 16 million pixels; resize targets use the same limits. Sources above 8 bits, animation (including animated WebP), multi-frame images, CMYK, embedded ICC profiles, compressed/embedded BMP variants, and nonstandard PNG color configurations are rejected. EXIF orientation is applied to pixels; the EXIF profile is then removed to prevent repeated rotation. Unprofiled RGB/sRGB/grayscale and standard sRGB PNG color information are supported. This phase does not promise general color-managed or metadata-preserving conversion.
 
-See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dependency and protection limits, and [phase-2b-validation.md](docs/phase-2b-validation.md) for verification evidence.
+See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dependency and protection limits, and [phase-2b-validation.md](docs/phase-2b-validation.md) and [phase-2c-validation.md](docs/phase-2c-validation.md) for verification evidence.
+
+## Phase 2C screenshots
+
+- [Arabic — dark, WebP with resize](docs/screenshots/16-phase-2c-arabic-resize.jpg)
+- [Arabic — dark, WebP saved and verified](docs/screenshots/17-phase-2c-webp-success.jpg)
+- [English — light, BMP saved and verified](docs/screenshots/18-phase-2c-english-light.jpg)
 
 ## Phase 2B screenshots
 
@@ -71,4 +78,4 @@ See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dep
 
 ## Scope
 
-Phase 2B supports one PNG or JPEG per operation. File intake can contain multiple files, but only the explicitly selected image is processed. WebP, BMP, HEIC/AVIF, batch conversion, advanced settings, other engines, Explorer integration, and installers remain unavailable. No new dependencies were added; Magick.NET-Q8-AnyCPU remains pinned to 15.0.0.
+Phase 2C supports one PNG, JPEG, WebP, or BMP image per operation. File intake can contain multiple files, but only the explicitly selected image is processed. HEIC/AVIF, batch conversion, color management, metadata preservation, other engines, Explorer integration, and installers remain unavailable. No new dependencies were added; Magick.NET-Q8-AnyCPU remains pinned to 15.0.0.

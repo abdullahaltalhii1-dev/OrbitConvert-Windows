@@ -42,6 +42,17 @@ EXIF orientation is normalized into pixels and EXIF removed afterward. Other sup
 
 The UI uses a focused ImageConversionViewModel and ImageConversionService. The service owns read-only source access, exclusive temporary creation, validation, no-overwrite finalization, and owned-file cleanup. No output is reported as successful before those steps finish.
 
+## Phase 2C additions
+
+- The package remains pinned to 15.0.0; no new NuGet dependency was added.
+- Policy coders: PNG, JPEG, and WebP read+write; BMP read; BMP3 write. BMP3 (Windows 3 header) is written for broad compatibility. All other coders, delegates, and filters stay denied.
+- WebP is encoded lossy at the selected quality with alpha quality 100. JPEG uses the selected quality. PNG and BMP are lossless and take no quality setting.
+- Resize happens after orientation normalization, within the same 8192-per-side and 16 MP limits.
+- Native corrupt-image and coder warnings during ping, read, or write reject the operation.
+- Embedded ICC/ICM profiles are rejected for every format. This is still not a color-managed or metadata-preserving pipeline.
+
+See phase-2c-validation.md for container rules and evidence.
+
 ## References
 
 - https://github.com/dlemstra/Magick.NET/blob/main/docs/Readme.md

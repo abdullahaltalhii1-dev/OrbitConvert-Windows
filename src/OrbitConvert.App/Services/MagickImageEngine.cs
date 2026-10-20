@@ -12,11 +12,12 @@ public sealed class MagickImageEngine : IImageEngine
 
     public ImageInspectionResult Inspect(Stream input) => Process(input, null, null, false);
 
-    public ImageInspectionResult Convert(Stream input, Stream output, string outputFormat)
+    public ImageInspectionResult Convert(Stream input, Stream output, string outputFormat, ImageConversionOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(output);
-        return outputFormat is "PNG" or "JPEG"
-            ? Process(input, output, outputFormat, false)
+        if (options is { IsValid: false }) { return ImageInspectionResult.Failure(ImageInspectionError.InvalidSettings); }
+        return ImageConversionOptions.Formats.Contains(outputFormat)
+            ? Process(input, output, outputFormat, false, options ?? new())
             : ImageInspectionResult.Failure(ImageInspectionError.UnsupportedFormat);
     }
 
@@ -29,7 +30,7 @@ public sealed class MagickImageEngine : IImageEngine
             ? result : ImageInspectionResult.Failure(ImageInspectionError.OutputValidationFailed);
     }
 
-    private static ImageInspectionResult Process(Stream input, Stream? output, string? outputFormat, bool validation)
+    private static ImageInspectionResult Process(Stream input, Stream? output, string? outputFormat, bool validation, ImageConversionOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(input);
         try
@@ -37,10 +38,6 @@ public sealed class MagickImageEngine : IImageEngine
             // Bounded snapshot prevents a changing stream between header inspection and decoding.
             var data = ImageInputGuard.ReadBounded(input, validation ? ImageInputGuard.MaximumOutputBytes : ImageInputGuard.MaximumInputBytes);
             var format = ImageInputGuard.Check(data);
-            if (outputFormat == format.ToString().ToUpperInvariant())
-            {
-                return ImageInspectionResult.Failure(ImageInspectionError.UnsupportedFormat);
-            }
             lock (NativeLock)
             {
                 if (!_initialized)
@@ -62,7 +59,7 @@ public sealed class MagickImageEngine : IImageEngine
                 var corruptWarning = 0;
                 void TrackWarning(object? sender, WarningEventArgs warning)
                 {
-                    if (warning.Exception is MagickCorruptImageWarningException)
+                    if (warning.Exception is MagickCorruptImageWarningException or MagickCoderWarningException)
                     {
                         Interlocked.Exchange(ref corruptWarning, 1);
                     }
@@ -82,24 +79,48 @@ public sealed class MagickImageEngine : IImageEngine
                 {
                     return ImageInspectionResult.Failure(ImageInspectionError.UnsupportedColor);
                 }
+                if (image.GetProfile("icc") is not null || image.GetProfile("icm") is not null)
+                {
+                    return ImageInspectionResult.Failure(ImageInspectionError.UnsupportedColor);
+                }
                 // Normalize into pixels and remove EXIF to avoid applying orientation twice.
                 image.AutoOrient();
                 image.RemoveProfile("exif");
                 if (output is not null)
                 {
-                    if (outputFormat == "JPEG")
+                    var size = options!.OutputSize(image.Width, image.Height);
+                    ImageInputGuard.CheckDimensions(size.Width, size.Height);
+                    if (options.ResizeEnabled)
+                    {
+                        image.Resize(new MagickGeometry(size.Width, size.Height) { IgnoreAspectRatio = true });
+                    }
+                    // Encoders drop an unused alpha channel; normalize first so output validation stays exact.
+                    if (image.HasAlpha && image.IsOpaque) { image.Alpha(AlphaAction.Off); }
+                    if (outputFormat is "JPEG" or "BMP")
                     {
                         image.BackgroundColor = MagickColors.White;
                         image.Alpha(AlphaAction.Remove);
-                        image.Quality = 90;
                     }
+                    if (outputFormat is "JPEG" or "WebP") { image.Quality = (uint)options.Quality; }
                     image.Depth = 8;
                     if (outputFormat == "PNG") { image.Settings.SetDefine(MagickFormat.Png, "bit-depth", "8"); }
-                    image.Format = outputFormat == "PNG" ? MagickFormat.Png : MagickFormat.Jpeg;
+                    if (outputFormat == "WebP")
+                    {
+                        image.Settings.SetDefine(MagickFormat.WebP, "lossless", "false");
+                        image.Settings.SetDefine(MagickFormat.WebP, "alpha-quality", "100");
+                    }
+                    image.Format = outputFormat switch
+                    {
+                        "PNG" => MagickFormat.Png,
+                        "JPEG" => MagickFormat.Jpeg,
+                        "WebP" => MagickFormat.WebP,
+                        _ => MagickFormat.Bmp3,
+                    };
                     image.Write(output);
+                    if (Volatile.Read(ref corruptWarning) != 0) { return ImageInspectionResult.Failure(ImageInspectionError.OutputFailure); }
                 }
                 return ImageInspectionResult.Success(new ImageInspection(image.Width, image.Height, image.Depth,
-                    image.Format == MagickFormat.Png ? "PNG" : "JPEG", image.HasAlpha));
+                    outputFormat ?? (format switch { MagickFormat.Png => "PNG", MagickFormat.Jpeg => "JPEG", MagickFormat.WebP => "WebP", _ => "BMP" }), image.HasAlpha));
             }
         }
         catch (ImageInputException error)
