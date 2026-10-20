@@ -24,13 +24,13 @@
     <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
         <StackPanel MaxWidth="980">
             <TextBlock Style="{StaticResource EyebrowTextStyle}"
-                       Text="WORKSPACE" />
+                       Text="{Binding Localization[WorkspaceEyebrow]}" />
             <TextBlock Margin="0,8,0,0"
                        Style="{StaticResource PageTitleTextStyle}"
-                       Text="Convert without the clutter." />
+                       Text="{Binding Localization[WorkspaceTitle]}" />
             <TextBlock Margin="0,7,0,0"
                        Style="{StaticResource BodyTextStyle}"
-                       Text="Choose real files now. Conversion remains disabled until a later approved phase." />
+                       Text="{Binding Localization[WorkspaceSubtitle]}" />
 
             <Border x:Name="DropZone"
                     Height="226"
@@ -73,17 +73,17 @@
                                    HorizontalAlignment="Center"
                                    FontSize="19"
                                    FontWeight="SemiBold"
-                                   Text="Choose files or drop them here." />
+                                   Text="{Binding Localization[DropZoneTitle]}" />
                         <TextBlock MaxWidth="480"
                                    Margin="0,6,0,0"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    Style="{StaticResource BodyTextStyle}"
-                                   Text="Select one or more files. Folders are not supported yet, and no file content is opened." />
+                                   Text="{Binding Localization[DropZoneDescription]}" />
                         <Button Margin="0,13,0,0"
-                                AutomationProperties.HelpText="Open the Windows file picker"
+                                AutomationProperties.HelpText="{Binding Localization[BrowseFilesHelp]}"
                                 Click="BrowseFiles_Click"
-                                Content="Browse Files"
+                                Content="{Binding Localization[BrowseFiles]}"
                                 Style="{StaticResource PrimaryButtonStyle}" />
                     </StackPanel>
                 </Grid>
@@ -108,16 +108,16 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Style="{StaticResource SectionTitleTextStyle}"
-                               Text="Selected files" />
+                               Text="{Binding Localization[SelectedFiles]}" />
                     <TextBlock Margin="0,3,0,0"
                                Style="{StaticResource CaptionTextStyle}"
                                Text="{Binding FileIntake.SelectedFileCountText}" />
                 </StackPanel>
                 <Button Grid.Column="1"
                         Padding="13,7"
-                        AutomationProperties.HelpText="Remove every file from the current selection"
+                        AutomationProperties.HelpText="{Binding Localization[ClearAllHelp]}"
                         Command="{Binding FileIntake.ClearFilesCommand}"
-                        Content="Clear All"
+                        Content="{Binding Localization[ClearAll]}"
                         IsEnabled="{Binding FileIntake.HasSelectedFiles}"
                         Style="{StaticResource SecondaryButtonStyle}" />
             </Grid>
@@ -138,12 +138,12 @@
                     <TextBlock HorizontalAlignment="Center"
                                FontSize="15"
                                FontWeight="SemiBold"
-                               Text="No files selected" />
+                               Text="{Binding Localization[EmptySelectionTitle]}" />
                     <TextBlock Margin="0,4,0,0"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
                                Style="{StaticResource CaptionTextStyle}"
-                               Text="Use Browse Files or drop individual files into the area above." />
+                               Text="{Binding Localization[EmptySelectionDescription]}" />
                 </StackPanel>
             </Border>
 
@@ -187,17 +187,23 @@
                                             Margin="0,1,14,0"
                                             VerticalAlignment="Center">
                                     <TextBlock AutomationProperties.Name="{Binding FileName}"
+                                               FlowDirection="LeftToRight"
                                                FontSize="14"
                                                FontWeight="SemiBold"
                                                Text="{Binding FileName}"
-                                               TextTrimming="CharacterEllipsis"
-                                               ToolTip="{Binding FullPath}" />
+                                               TextTrimming="CharacterEllipsis">
+                                        <TextBlock.ToolTip>
+                                            <TextBlock FlowDirection="LeftToRight" Text="{Binding FullPath}" />
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
                                     <StackPanel Margin="0,4,0,0" Orientation="Horizontal">
                                         <Border Margin="0,0,8,0" Style="{StaticResource BadgeBorderStyle}">
-                                            <TextBlock Style="{StaticResource BadgeTextStyle}"
+                                            <TextBlock FlowDirection="LeftToRight"
+                                                       Style="{StaticResource BadgeTextStyle}"
                                                        Text="{Binding FileType}" />
                                         </Border>
                                         <TextBlock VerticalAlignment="Center"
+                                                   FlowDirection="LeftToRight"
                                                    Style="{StaticResource CaptionTextStyle}"
                                                    Text="{Binding DisplaySize}" />
                                     </StackPanel>
@@ -206,10 +212,10 @@
                                         MinWidth="76"
                                         Padding="12,7"
                                         VerticalAlignment="Center"
-                                        AutomationProperties.HelpText="Remove this file from the selection"
+                                        AutomationProperties.HelpText="{Binding DataContext.Localization[RemoveHelp], RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                         Command="{Binding DataContext.FileIntake.RemoveFileCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                         CommandParameter="{Binding}"
-                                        Content="Remove"
+                                        Content="{Binding DataContext.Localization[Remove], RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                         Style="{StaticResource SecondaryButtonStyle}" />
                             </Grid>
                         </Border>
@@ -243,10 +249,10 @@
                         </Border>
                         <StackPanel Grid.Column="1">
                             <TextBlock Style="{StaticResource SectionTitleTextStyle}"
-                                       Text="Private Processing" />
+                                       Text="{Binding Localization[PrivateProcessingTitle]}" />
                             <TextBlock Margin="0,5,0,0"
                                        Style="{StaticResource BodyTextStyle}"
-                                       Text="Only basic file details are read locally. Files are never uploaded or modified." />
+                                       Text="{Binding Localization[PrivateProcessingDescription]}" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -269,10 +275,10 @@
                         </Border>
                         <StackPanel Grid.Column="1">
                             <TextBlock Style="{StaticResource SectionTitleTextStyle}"
-                                       Text="Multiple Formats" />
+                                       Text="{Binding Localization[MultipleFormatsTitle]}" />
                             <TextBlock Margin="0,5,0,0"
                                        Style="{StaticResource BodyTextStyle}"
-                                       Text="Select any file type now. Format support will be introduced in later approved phases." />
+                                       Text="{Binding Localization[MultipleFormatsDescription]}" />
                         </StackPanel>
                     </Grid>
                 </Border>

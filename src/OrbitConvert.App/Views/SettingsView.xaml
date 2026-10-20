@@ -1,22 +1,26 @@
 <UserControl x:Class="OrbitConvert.App.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:localization="clr-namespace:OrbitConvert.App.Localization"
              xmlns:viewModels="clr-namespace:OrbitConvert.App.ViewModels"
              HorizontalContentAlignment="Stretch"
              VerticalContentAlignment="Stretch">
     <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
         <StackPanel MaxWidth="820">
-            <TextBlock Style="{StaticResource EyebrowTextStyle}" Text="SETTINGS / PREVIEW" />
+            <TextBlock Style="{StaticResource EyebrowTextStyle}"
+                       Text="{Binding Localization[SettingsEyebrow]}" />
             <TextBlock Margin="0,8,0,0"
                        Style="{StaticResource PageTitleTextStyle}"
-                       Text="Make the studio feel like yours." />
+                       Text="{Binding Localization[SettingsTitle]}" />
             <TextBlock Margin="0,7,0,0"
                        Style="{StaticResource BodyTextStyle}"
-                       Text="Appearance choices apply to this session only and are never written to disk." />
+                       Text="{Binding Localization[SettingsDescription]}" />
 
             <Border Margin="0,28,0,0" Style="{StaticResource CardBorderStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="1" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="1" />
                         <RowDefinition Height="Auto" />
@@ -30,10 +34,11 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Theme" />
+                            <TextBlock Style="{StaticResource SectionTitleTextStyle}"
+                                       Text="{Binding Localization[Theme]}" />
                             <TextBlock Margin="0,5,0,0"
                                        Style="{StaticResource BodyTextStyle}"
-                                       Text="Switch between the dark studio and a bright workspace." />
+                                       Text="{Binding Localization[ThemeDescription]}" />
                         </StackPanel>
                         <Border Grid.Column="1"
                                 Padding="3"
@@ -43,17 +48,17 @@
                                 BorderThickness="1"
                                 CornerRadius="10">
                             <StackPanel Orientation="Horizontal">
-                                <RadioButton AutomationProperties.Name="Settings dark theme"
+                                <RadioButton AutomationProperties.Name="{Binding Localization[SettingsDarkAutomation]}"
                                              Command="{Binding SetThemeCommand}"
                                              CommandParameter="{x:Static viewModels:AppTheme.Dark}"
-                                             Content="Dark"
+                                             Content="{Binding Localization[ThemeDark]}"
                                              GroupName="SettingsTheme"
                                              IsChecked="{Binding IsDarkTheme, Mode=OneWay}"
                                              Style="{StaticResource SegmentRadioStyle}" />
-                                <RadioButton AutomationProperties.Name="Settings light theme"
+                                <RadioButton AutomationProperties.Name="{Binding Localization[SettingsLightAutomation]}"
                                              Command="{Binding SetThemeCommand}"
                                              CommandParameter="{x:Static viewModels:AppTheme.Light}"
-                                             Content="Light"
+                                             Content="{Binding Localization[ThemeLight]}"
                                              GroupName="SettingsTheme"
                                              IsChecked="{Binding IsLightTheme, Mode=OneWay}"
                                              Style="{StaticResource SegmentRadioStyle}" />
@@ -69,29 +74,30 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Accent color" />
+                            <TextBlock Style="{StaticResource SectionTitleTextStyle}"
+                                       Text="{Binding Localization[AccentColor]}" />
                             <TextBlock Margin="0,5,0,0"
                                        Style="{StaticResource BodyTextStyle}"
-                                       Text="Choose a preview accent for focus, selection, and highlights." />
+                                       Text="{Binding Localization[AccentDescription]}" />
                         </StackPanel>
                         <StackPanel Grid.Column="1"
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal">
-                            <RadioButton AutomationProperties.Name="Blue accent"
+                            <RadioButton AutomationProperties.Name="{Binding Localization[AccentBlueAutomation]}"
                                          Background="{StaticResource BlueAccentBrush}"
                                          Command="{Binding SetAccentCommand}"
                                          CommandParameter="{x:Static viewModels:AccentChoice.Blue}"
                                          GroupName="AccentSelection"
                                          IsChecked="{Binding IsBlueAccent, Mode=OneWay}"
                                          Style="{StaticResource AccentRadioStyle}" />
-                            <RadioButton AutomationProperties.Name="Violet accent"
+                            <RadioButton AutomationProperties.Name="{Binding Localization[AccentVioletAutomation]}"
                                          Background="{StaticResource VioletAccentBrush}"
                                          Command="{Binding SetAccentCommand}"
                                          CommandParameter="{x:Static viewModels:AccentChoice.Violet}"
                                          GroupName="AccentSelection"
                                          IsChecked="{Binding IsVioletAccent, Mode=OneWay}"
                                          Style="{StaticResource AccentRadioStyle}" />
-                            <RadioButton AutomationProperties.Name="Teal accent"
+                            <RadioButton AutomationProperties.Name="{Binding Localization[AccentTealAutomation]}"
                                          Background="{StaticResource TealAccentBrush}"
                                          Command="{Binding SetAccentCommand}"
                                          CommandParameter="{x:Static viewModels:AccentChoice.Teal}"
@@ -103,7 +109,49 @@
 
                     <Border Grid.Row="3" Background="{DynamicResource BorderBrush}" />
 
-                    <Border Grid.Row="4"
+                    <Grid Grid.Row="4" Margin="0,22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitleTextStyle}"
+                                       Text="{Binding Localization[Language]}" />
+                            <TextBlock Margin="0,5,0,0"
+                                       Style="{StaticResource BodyTextStyle}"
+                                       Text="{Binding Localization[LanguageDescription]}" />
+                        </StackPanel>
+                        <Border Grid.Column="1"
+                                Padding="3"
+                                VerticalAlignment="Center"
+                                Background="{DynamicResource InputBackgroundBrush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton AutomationProperties.Name="{Binding Localization[LanguageEnglishAutomation]}"
+                                             Command="{Binding SetLanguageCommand}"
+                                             CommandParameter="{x:Static localization:AppLanguage.English}"
+                                             Content="{Binding Localization[LanguageEnglish]}"
+                                             FlowDirection="LeftToRight"
+                                             GroupName="LanguageSelection"
+                                             IsChecked="{Binding IsEnglishLanguage, Mode=OneWay}"
+                                             Style="{StaticResource SegmentRadioStyle}" />
+                                <RadioButton AutomationProperties.Name="{Binding Localization[LanguageArabicAutomation]}"
+                                             Command="{Binding SetLanguageCommand}"
+                                             CommandParameter="{x:Static localization:AppLanguage.Arabic}"
+                                             Content="{Binding Localization[LanguageArabic]}"
+                                             FlowDirection="RightToLeft"
+                                             GroupName="LanguageSelection"
+                                             IsChecked="{Binding IsArabicLanguage, Mode=OneWay}"
+                                             Style="{StaticResource SegmentRadioStyle}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Grid.Row="5" Background="{DynamicResource BorderBrush}" />
+
+                    <Border Grid.Row="6"
                             Margin="0,22,0,0"
                             Padding="15"
                             Background="{DynamicResource AccentSoftBrush}"
@@ -121,7 +169,7 @@
                                        Text="i" />
                             <TextBlock Grid.Column="1"
                                        Style="{StaticResource BodyTextStyle}"
-                                       Text="Session-only preview: no settings file, registry entry, account, or cloud service is used." />
+                                       Text="{Binding Localization[SettingsInfo]}" />
                         </Grid>
                     </Border>
                 </Grid>

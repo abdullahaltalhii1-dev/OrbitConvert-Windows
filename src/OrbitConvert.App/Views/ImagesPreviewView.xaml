@@ -9,18 +9,18 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center"
                            Style="{StaticResource EyebrowTextStyle}"
-                           Text="IMAGES" />
+                           Text="{Binding Localization[ImagesEyebrow]}" />
                 <Border Margin="10,0,0,0" Style="{StaticResource BadgeBorderStyle}">
                     <TextBlock Style="{StaticResource BadgeTextStyle}"
-                               Text="FICTIONAL DEMO" />
+                               Text="{Binding Localization[FictionalDemo]}" />
                 </Border>
             </StackPanel>
             <TextBlock Margin="0,8,0,0"
                        Style="{StaticResource PageTitleTextStyle}"
-                       Text="Shape the output before it exists." />
+                       Text="{Binding Localization[ImagesTitle]}" />
             <TextBlock Margin="0,7,0,0"
                        Style="{StaticResource BodyTextStyle}"
-                       Text="Explore a sample conversion layout. No file is loaded, read, or created." />
+                       Text="{Binding Localization[ImagesDescription]}" />
 
             <Grid Margin="0,26,0,0">
                 <Grid.ColumnDefinitions>
@@ -64,17 +64,18 @@
                                     VerticalAlignment="Top"
                                     Style="{StaticResource BadgeBorderStyle}">
                                 <TextBlock Style="{StaticResource BadgeTextStyle}"
-                                           Text="DEMO IMAGE" />
+                                           Text="{Binding Localization[DemoImage]}" />
                             </Border>
                         </Grid>
 
                         <TextBlock Margin="0,18,0,0"
+                                   FlowDirection="LeftToRight"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Text="landscape_demo.png" />
                         <TextBlock Margin="0,4,0,0"
                                    Style="{StaticResource CaptionTextStyle}"
-                                   Text="Fictional in-memory sample" />
+                                   Text="{Binding Localization[FictionalSample]}" />
 
                         <Grid Margin="0,18,0,0">
                             <Grid.ColumnDefinitions>
@@ -88,8 +89,9 @@
                                     CornerRadius="9">
                                 <StackPanel>
                                     <TextBlock Style="{StaticResource CaptionTextStyle}"
-                                               Text="SAMPLE SIZE" />
+                                               Text="{Binding Localization[SampleSize]}" />
                                     <TextBlock Margin="0,3,0,0"
+                                               FlowDirection="LeftToRight"
                                                FontWeight="SemiBold"
                                                Text="4.8 MB" />
                                 </StackPanel>
@@ -101,8 +103,9 @@
                                     CornerRadius="9">
                                 <StackPanel>
                                     <TextBlock Style="{StaticResource CaptionTextStyle}"
-                                               Text="DIMENSIONS" />
+                                               Text="{Binding Localization[Dimensions]}" />
                                     <TextBlock Margin="0,3,0,0"
+                                               FlowDirection="LeftToRight"
                                                FontWeight="SemiBold"
                                                Text="3840 × 2160" />
                                 </StackPanel>
@@ -114,35 +117,36 @@
                 <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
                     <StackPanel>
                         <TextBlock Style="{StaticResource SectionTitleTextStyle}"
-                                   Text="Output Preview" />
+                                   Text="{Binding Localization[OutputPreview]}" />
                         <TextBlock Margin="0,5,0,0"
                                    Style="{StaticResource BodyTextStyle}"
-                                   Text="Controls update preview text only." />
+                                   Text="{Binding Localization[OutputPreviewDescription]}" />
 
                         <TextBlock Margin="0,22,0,8"
                                    Style="{StaticResource CaptionTextStyle}"
-                                   Text="EXAMPLE FORMAT" />
+                                   Text="{Binding Localization[ExampleFormat]}" />
                         <Border Padding="3"
                                 Background="{DynamicResource InputBackgroundBrush}"
                                 BorderBrush="{DynamicResource BorderBrush}"
                                 BorderThickness="1"
-                                CornerRadius="10">
+                                CornerRadius="10"
+                                FlowDirection="LeftToRight">
                             <UniformGrid Columns="3">
-                                <RadioButton AutomationProperties.Name="Preview WebP output"
+                                <RadioButton AutomationProperties.Name="{Binding Localization[PreviewWebPAutomation]}"
                                              Command="{Binding SetOutputFormatCommand}"
                                              CommandParameter="{x:Static viewModels:ImageOutputFormat.WebP}"
                                              Content="WebP"
                                              GroupName="OutputFormat"
                                              IsChecked="{Binding IsWebPSelected, Mode=OneWay}"
                                              Style="{StaticResource FormatRadioStyle}" />
-                                <RadioButton AutomationProperties.Name="Preview JPG output"
+                                <RadioButton AutomationProperties.Name="{Binding Localization[PreviewJpgAutomation]}"
                                              Command="{Binding SetOutputFormatCommand}"
                                              CommandParameter="{x:Static viewModels:ImageOutputFormat.Jpg}"
                                              Content="JPG"
                                              GroupName="OutputFormat"
                                              IsChecked="{Binding IsJpgSelected, Mode=OneWay}"
                                              Style="{StaticResource FormatRadioStyle}" />
-                                <RadioButton AutomationProperties.Name="Preview PNG output"
+                                <RadioButton AutomationProperties.Name="{Binding Localization[PreviewPngAutomation]}"
                                              Command="{Binding SetOutputFormatCommand}"
                                              CommandParameter="{x:Static viewModels:ImageOutputFormat.Png}"
                                              Content="PNG"
@@ -158,14 +162,15 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Style="{StaticResource CaptionTextStyle}"
-                                       Text="EXAMPLE QUALITY" />
+                                       Text="{Binding Localization[ExampleQuality]}" />
                             <TextBlock Grid.Column="1"
+                                       FlowDirection="LeftToRight"
                                        Foreground="{DynamicResource AccentBrush}"
                                        FontSize="12"
                                        FontWeight="SemiBold"
                                        Text="{Binding PreviewQualityText}" />
                         </Grid>
-                        <Slider AutomationProperties.Name="Example output quality"
+                        <Slider AutomationProperties.Name="{Binding Localization[ExampleQualityAutomation]}"
                                 IsEnabled="{Binding IsQualityEnabled}"
                                 IsMoveToPointEnabled="True"
                                 IsSnapToTickEnabled="True"
@@ -182,8 +187,9 @@
                                 CornerRadius="11">
                             <StackPanel>
                                 <TextBlock Style="{StaticResource CaptionTextStyle}"
-                                           Text="OUTPUT FILENAME PREVIEW" />
+                                           Text="{Binding Localization[OutputFilenamePreview]}" />
                                 <TextBlock Margin="0,6,0,0"
+                                           FlowDirection="LeftToRight"
                                            Foreground="{DynamicResource AccentBrush}"
                                            FontFamily="Consolas"
                                            FontSize="14"
@@ -196,15 +202,15 @@
                         </Border>
 
                         <Button Margin="0,20,0,0"
-                                AutomationProperties.HelpText="Conversion is not available in Phase 1.2"
-                                Content="Convert · Coming soon"
+                                AutomationProperties.HelpText="{Binding Localization[ConversionUnavailableHelp]}"
+                                Content="{Binding Localization[ConvertComingSoon]}"
                                 IsEnabled="False"
                                 Style="{StaticResource PrimaryButtonStyle}" />
                         <TextBlock Margin="0,10,0,0"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    Style="{StaticResource CaptionTextStyle}"
-                                   Text="No file will be created in this preview." />
+                                   Text="{Binding Localization[NoPreviewFileCreated]}" />
                     </StackPanel>
                 </Border>
             </Grid>

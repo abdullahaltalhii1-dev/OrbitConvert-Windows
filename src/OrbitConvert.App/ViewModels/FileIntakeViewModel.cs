@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using OrbitConvert.App.Localization;
 using OrbitConvert.App.Models;
 using OrbitConvert.App.Services;
 
@@ -10,12 +11,17 @@ namespace OrbitConvert.App.ViewModels;
 public sealed class FileIntakeViewModel : INotifyPropertyChanged
 {
     private readonly IFileMetadataProvider _metadataProvider;
+    private readonly LocalizationService _localization;
     private readonly HashSet<string> _selectedPaths = new(StringComparer.OrdinalIgnoreCase);
-    private string _statusMessage = string.Empty;
+    private FileIntakeStatus _status;
 
-    public FileIntakeViewModel(IFileMetadataProvider metadataProvider)
+    public FileIntakeViewModel(
+        IFileMetadataProvider metadataProvider,
+        LocalizationService localization)
     {
         _metadataProvider = metadataProvider ?? throw new ArgumentNullException(nameof(metadataProvider));
+        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
+        _localization.LanguageChanged += Localization_LanguageChanged;
         AddFilesCommand = new RelayCommand(AddFilesFromParameter);
         RemoveFileCommand = new RelayCommand(parameter =>
         {
@@ -41,30 +47,17 @@ public sealed class FileIntakeViewModel : INotifyPropertyChanged
 
     public bool HasSelectedFiles => SelectedFiles.Count > 0;
 
-    public bool HasStatusMessage => !string.IsNullOrWhiteSpace(StatusMessage);
+    public bool HasStatusMessage => _status.Kind != FileIntakeStatusKind.None;
 
     public string SelectedFileCountText => SelectedFileCount switch
     {
-        0 => "No files selected",
-        1 => "1 file selected",
-        _ => $"{SelectedFileCount} files selected",
+        0 => _localization[LocalizationKeys.FileCountNone],
+        1 => _localization[LocalizationKeys.FileCountOne],
+        2 => _localization[LocalizationKeys.FileCountTwo],
+        _ => _localization.Format(LocalizationKeys.FileCountMany, SelectedFileCount),
     };
 
-    public string StatusMessage
-    {
-        get => _statusMessage;
-        private set
-        {
-            if (_statusMessage == value)
-            {
-                return;
-            }
-
-            _statusMessage = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(HasStatusMessage));
-        }
-    }
+    public string StatusMessage => BuildStatusMessage(_status);
 
     public void AddFiles(IEnumerable<string> paths)
     {
@@ -123,7 +116,14 @@ public sealed class FileIntakeViewModel : INotifyPropertyChanged
             NotifySelectionChanged();
         }
 
-        StatusMessage = BuildStatusMessage(added, duplicates, directories, missing, inaccessible, invalid);
+        SetStatus(new FileIntakeStatus(
+            FileIntakeStatusKind.AddResult,
+            Added: added,
+            Duplicates: duplicates,
+            Directories: directories,
+            Missing: missing,
+            Inaccessible: inaccessible,
+            Invalid: invalid));
     }
 
     public void RemoveFile(SelectedFileItem file)
@@ -137,7 +137,7 @@ public sealed class FileIntakeViewModel : INotifyPropertyChanged
 
         _selectedPaths.Remove(file.FullPath);
         NotifySelectionChanged();
-        StatusMessage = $"Removed {file.FileName}.";
+        SetStatus(new FileIntakeStatus(FileIntakeStatusKind.Removed, FileName: file.FileName));
     }
 
     public void ClearFiles()
@@ -150,12 +150,12 @@ public sealed class FileIntakeViewModel : INotifyPropertyChanged
         SelectedFiles.Clear();
         _selectedPaths.Clear();
         NotifySelectionChanged();
-        StatusMessage = "Selection cleared.";
+        SetStatus(new FileIntakeStatus(FileIntakeStatusKind.SelectionCleared));
     }
 
     public void ReportFolderDropRejected()
     {
-        StatusMessage = "Folders aren’t supported yet. Drop individual files instead.";
+        SetStatus(new FileIntakeStatus(FileIntakeStatusKind.FolderDropRejected));
     }
 
     private void AddFilesFromParameter(object? parameter)
@@ -171,53 +171,108 @@ public sealed class FileIntakeViewModel : INotifyPropertyChanged
         }
     }
 
-    private static string BuildStatusMessage(
-        int added,
-        int duplicates,
-        int directories,
-        int missing,
-        int inaccessible,
-        int invalid)
+    private string BuildStatusMessage(FileIntakeStatus status)
     {
+        if (status.Kind == FileIntakeStatusKind.None)
+        {
+            return string.Empty;
+        }
+
+        if (status.Kind == FileIntakeStatusKind.Removed)
+        {
+            return _localization.Format(LocalizationKeys.IntakeRemoved, status.FileName ?? string.Empty);
+        }
+
+        if (status.Kind == FileIntakeStatusKind.SelectionCleared)
+        {
+            return _localization[LocalizationKeys.IntakeSelectionCleared];
+        }
+
+        if (status.Kind == FileIntakeStatusKind.FolderDropRejected)
+        {
+            return _localization[LocalizationKeys.IntakeFolderDropRejected];
+        }
+
         var messages = new List<string>();
 
-        if (added > 0)
+        if (status.Added > 0)
         {
-            messages.Add(added == 1 ? "Added 1 file." : $"Added {added} files.");
+            messages.Add(BuildCountMessage(
+                status.Added,
+                LocalizationKeys.IntakeAddedOne,
+                LocalizationKeys.IntakeAddedTwo,
+                LocalizationKeys.IntakeAddedMany));
         }
 
-        if (duplicates > 0)
+        if (status.Duplicates > 0)
         {
-            messages.Add(duplicates == 1
-                ? "1 duplicate was already selected."
-                : $"{duplicates} duplicates were already selected.");
+            messages.Add(BuildCountMessage(
+                status.Duplicates,
+                LocalizationKeys.IntakeDuplicateOne,
+                LocalizationKeys.IntakeDuplicateTwo,
+                LocalizationKeys.IntakeDuplicateMany));
         }
 
-        if (directories > 0)
+        if (status.Directories > 0)
         {
-            messages.Add(directories == 1
-                ? "1 folder was skipped; folders aren’t supported yet."
-                : $"{directories} folders were skipped; folders aren’t supported yet.");
+            messages.Add(BuildCountMessage(
+                status.Directories,
+                LocalizationKeys.IntakeFolderOne,
+                LocalizationKeys.IntakeFolderTwo,
+                LocalizationKeys.IntakeFolderMany));
         }
 
-        if (missing > 0)
+        if (status.Missing > 0)
         {
-            messages.Add(missing == 1 ? "1 file could not be found." : $"{missing} files could not be found.");
+            messages.Add(BuildCountMessage(
+                status.Missing,
+                LocalizationKeys.IntakeMissingOne,
+                LocalizationKeys.IntakeMissingTwo,
+                LocalizationKeys.IntakeMissingMany));
         }
 
-        if (inaccessible > 0)
+        if (status.Inaccessible > 0)
         {
-            messages.Add(inaccessible == 1
-                ? "1 file could not be accessed."
-                : $"{inaccessible} files could not be accessed.");
+            messages.Add(BuildCountMessage(
+                status.Inaccessible,
+                LocalizationKeys.IntakeInaccessibleOne,
+                LocalizationKeys.IntakeInaccessibleTwo,
+                LocalizationKeys.IntakeInaccessibleMany));
         }
 
-        if (invalid > 0)
+        if (status.Invalid > 0)
         {
-            messages.Add(invalid == 1 ? "1 file path was not valid." : $"{invalid} file paths were not valid.");
+            messages.Add(BuildCountMessage(
+                status.Invalid,
+                LocalizationKeys.IntakeInvalidOne,
+                LocalizationKeys.IntakeInvalidTwo,
+                LocalizationKeys.IntakeInvalidMany));
         }
 
         return string.Join(" ", messages);
+    }
+
+    private string BuildCountMessage(int count, string oneKey, string twoKey, string manyKey)
+    {
+        return count switch
+        {
+            1 => _localization[oneKey],
+            2 => _localization[twoKey],
+            _ => _localization.Format(manyKey, count),
+        };
+    }
+
+    private void SetStatus(FileIntakeStatus status)
+    {
+        _status = status;
+        OnPropertyChanged(nameof(StatusMessage));
+        OnPropertyChanged(nameof(HasStatusMessage));
+    }
+
+    private void Localization_LanguageChanged(object? sender, EventArgs e)
+    {
+        OnPropertyChanged(nameof(SelectedFileCountText));
+        OnPropertyChanged(nameof(StatusMessage));
     }
 
     private void NotifySelectionChanged()
@@ -231,4 +286,23 @@ public sealed class FileIntakeViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    private enum FileIntakeStatusKind
+    {
+        None,
+        AddResult,
+        Removed,
+        SelectionCleared,
+        FolderDropRejected,
+    }
+
+    private readonly record struct FileIntakeStatus(
+        FileIntakeStatusKind Kind,
+        int Added = 0,
+        int Duplicates = 0,
+        int Directories = 0,
+        int Missing = 0,
+        int Inaccessible = 0,
+        int Invalid = 0,
+        string? FileName = null);
 }

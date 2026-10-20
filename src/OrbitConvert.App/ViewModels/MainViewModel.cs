@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
 
 namespace OrbitConvert.App.ViewModels;
@@ -36,7 +37,7 @@ public enum ImageOutputFormat
 }
 
 /// <summary>
-/// Provides presentation state for the application shell and Phase 1.2 file intake.
+/// Provides presentation state for the application shell, file intake, and Phase 1.3 localization.
 /// </summary>
 public sealed class MainViewModel : INotifyPropertyChanged
 {
@@ -47,13 +48,26 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private double _previewQuality = 82;
 
     public MainViewModel()
-        : this(new FileMetadataProvider())
+        : this(
+            new FileMetadataProvider(),
+            new LocalizationService(new FileLanguagePreferenceStore()))
     {
     }
 
     public MainViewModel(IFileMetadataProvider metadataProvider)
+        : this(
+            metadataProvider,
+            new LocalizationService(new FileLanguagePreferenceStore()))
     {
-        FileIntake = new FileIntakeViewModel(metadataProvider);
+    }
+
+    public MainViewModel(
+        IFileMetadataProvider metadataProvider,
+        LocalizationService localization)
+    {
+        Localization = localization ?? throw new ArgumentNullException(nameof(localization));
+        Localization.LanguageChanged += Localization_LanguageChanged;
+        FileIntake = new FileIntakeViewModel(metadataProvider, Localization);
 
         NavigateCommand = new RelayCommand(parameter =>
         {
@@ -76,6 +90,14 @@ public sealed class MainViewModel : INotifyPropertyChanged
             if (parameter is AccentChoice accent)
             {
                 SelectedAccent = accent;
+            }
+        });
+
+        SetLanguageCommand = new RelayCommand(parameter =>
+        {
+            if (parameter is AppLanguage language)
+            {
+                Localization.ChangeLanguage(language);
             }
         });
 
@@ -185,6 +207,10 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public ICommand SetOutputFormatCommand { get; }
 
+    public ICommand SetLanguageCommand { get; }
+
+    public LocalizationService Localization { get; }
+
     public FileIntakeViewModel FileIntake { get; }
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
@@ -209,6 +235,10 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public bool IsTealAccent => SelectedAccent == AccentChoice.Teal;
 
+    public bool IsEnglishLanguage => Localization.CurrentLanguage == AppLanguage.English;
+
+    public bool IsArabicLanguage => Localization.CurrentLanguage == AppLanguage.Arabic;
+
     public bool IsWebPSelected => SelectedOutputFormat == ImageOutputFormat.WebP;
 
     public bool IsJpgSelected => SelectedOutputFormat == ImageOutputFormat.Jpg;
@@ -228,8 +258,15 @@ public sealed class MainViewModel : INotifyPropertyChanged
     };
 
     public string OutputPreviewSummary => SelectedOutputFormat == ImageOutputFormat.Png
-        ? "Lossless preview · Quality control not applicable"
-        : $"Preview only · Quality {Math.Round(PreviewQuality):0}%";
+        ? Localization[LocalizationKeys.OutputPreviewLossless]
+        : Localization.Format(LocalizationKeys.OutputPreviewQuality, Math.Round(PreviewQuality));
+
+    private void Localization_LanguageChanged(object? sender, EventArgs e)
+    {
+        OnPropertyChanged(nameof(IsEnglishLanguage));
+        OnPropertyChanged(nameof(IsArabicLanguage));
+        OnPropertyChanged(nameof(OutputPreviewSummary));
+    }
 
     private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

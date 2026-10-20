@@ -16,10 +16,10 @@
 
             <TextBlock Margin="12,0,0,10"
                        Style="{StaticResource CaptionTextStyle}"
-                       Text="STUDIO SECTIONS" />
+                       Text="{Binding Localization[StudioSections]}" />
 
             <StackPanel Grid.Row="1">
-                <RadioButton AutomationProperties.Name="Workspace"
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavWorkspaceAutomation]}"
                              Command="{Binding NavigateCommand}"
                              CommandParameter="{x:Static viewModels:AppSection.Workspace}"
                              GroupName="MainNavigation"
@@ -39,11 +39,11 @@
                                    VerticalAlignment="Center"
                                    FontSize="13"
                                    FontWeight="SemiBold"
-                                   Text="Workspace" />
+                                   Text="{Binding Localization[NavWorkspace]}" />
                     </Grid>
                 </RadioButton>
 
-                <RadioButton AutomationProperties.Name="Images demo preview"
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavImagesAutomation]}"
                              Command="{Binding NavigateCommand}"
                              CommandParameter="{x:Static viewModels:AppSection.Images}"
                              GroupName="MainNavigation"
@@ -64,17 +64,17 @@
                                    VerticalAlignment="Center"
                                    FontSize="13"
                                    FontWeight="SemiBold"
-                                   Text="Images" />
+                                   Text="{Binding Localization[NavImages]}" />
                         <TextBlock Grid.Column="2"
                                    VerticalAlignment="Center"
                                    FontSize="9"
                                    FontWeight="SemiBold"
                                    Foreground="{DynamicResource AccentBrush}"
-                                   Text="DEMO" />
+                                   Text="{Binding Localization[BadgeDemo]}" />
                     </Grid>
                 </RadioButton>
 
-                <RadioButton AutomationProperties.Name="Video coming soon"
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavVideoAutomation]}"
                              Command="{Binding NavigateCommand}"
                              CommandParameter="{x:Static viewModels:AppSection.Video}"
                              GroupName="MainNavigation"
@@ -95,16 +95,16 @@
                                    VerticalAlignment="Center"
                                    FontSize="13"
                                    FontWeight="SemiBold"
-                                   Text="Video" />
+                                   Text="{Binding Localization[NavVideo]}" />
                         <TextBlock Grid.Column="2"
                                    VerticalAlignment="Center"
                                    FontSize="9"
                                    Foreground="{DynamicResource MutedTextBrush}"
-                                   Text="SOON" />
+                                   Text="{Binding Localization[BadgeSoon]}" />
                     </Grid>
                 </RadioButton>
 
-                <RadioButton AutomationProperties.Name="Audio coming soon"
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavAudioAutomation]}"
                              Command="{Binding NavigateCommand}"
                              CommandParameter="{x:Static viewModels:AppSection.Audio}"
                              GroupName="MainNavigation"
@@ -125,16 +125,16 @@
                                    VerticalAlignment="Center"
                                    FontSize="13"
                                    FontWeight="SemiBold"
-                                   Text="Audio" />
+                                   Text="{Binding Localization[NavAudio]}" />
                         <TextBlock Grid.Column="2"
                                    VerticalAlignment="Center"
                                    FontSize="9"
                                    Foreground="{DynamicResource MutedTextBrush}"
-                                   Text="SOON" />
+                                   Text="{Binding Localization[BadgeSoon]}" />
                     </Grid>
                 </RadioButton>
 
-                <RadioButton AutomationProperties.Name="Documents coming soon"
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavDocumentsAutomation]}"
                              Command="{Binding NavigateCommand}"
                              CommandParameter="{x:Static viewModels:AppSection.Documents}"
                              GroupName="MainNavigation"
@@ -156,12 +156,12 @@
                                    VerticalAlignment="Center"
                                    FontSize="13"
                                    FontWeight="SemiBold"
-                                   Text="Documents" />
+                                   Text="{Binding Localization[NavDocuments]}" />
                         <TextBlock Grid.Column="2"
                                    VerticalAlignment="Center"
                                    FontSize="9"
                                    Foreground="{DynamicResource MutedTextBrush}"
-                                   Text="SOON" />
+                                   Text="{Binding Localization[BadgeSoon]}" />
                     </Grid>
                 </RadioButton>
 
@@ -169,7 +169,7 @@
                         Margin="12,13"
                         Background="{DynamicResource BorderBrush}" />
 
-                <RadioButton AutomationProperties.Name="Settings preview"
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavSettingsAutomation]}"
                              Command="{Binding NavigateCommand}"
                              CommandParameter="{x:Static viewModels:AppSection.Settings}"
                              GroupName="MainNavigation"
@@ -189,7 +189,7 @@
                                    VerticalAlignment="Center"
                                    FontSize="13"
                                    FontWeight="SemiBold"
-                                   Text="Settings" />
+                                   Text="{Binding Localization[NavSettings]}" />
                     </Grid>
                 </RadioButton>
             </StackPanel>
@@ -203,10 +203,10 @@
                 <StackPanel>
                     <TextBlock FontSize="11"
                                FontWeight="SemiBold"
-                               Text="PHASE 1.2" />
+                               Text="{Binding Localization[PhaseLabel]}" />
                     <TextBlock Margin="0,3,0,0"
                                Style="{StaticResource CaptionTextStyle}"
-                               Text="File intake · No conversion" />
+                               Text="{Binding Localization[PhaseDescription]}" />
                 </StackPanel>
             </Border>
         </Grid>

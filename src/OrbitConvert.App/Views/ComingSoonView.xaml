@@ -18,7 +18,8 @@
             <Border Margin="0,30,0,0" Style="{StaticResource CardBorderStyle}">
                 <StackPanel HorizontalAlignment="Center">
                     <Border Padding="10,5" Style="{StaticResource BadgeBorderStyle}">
-                        <TextBlock Style="{StaticResource BadgeTextStyle}" Text="COMING SOON" />
+                        <TextBlock Style="{StaticResource BadgeTextStyle}"
+                                   Text="{Binding DataContext.Localization[ComingSoon], ElementName=Root}" />
                     </Border>
                     <Path Width="{Binding IconWidth, ElementName=Root}"
                           Height="{Binding IconHeight, ElementName=Root}"
@@ -32,7 +33,9 @@
                     <TextBlock Margin="0,24,0,0"
                                Style="{StaticResource SectionTitleTextStyle}"
                                Text="{Binding FormatsHeading, ElementName=Root}" />
-                    <ItemsControl x:Name="FormatItems" Margin="0,14,0,6">
+                    <ItemsControl x:Name="FormatItems"
+                                  Margin="0,14,0,6"
+                                  FlowDirection="LeftToRight">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal" />
