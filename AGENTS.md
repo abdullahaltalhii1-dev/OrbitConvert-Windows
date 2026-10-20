@@ -17,6 +17,10 @@ OrbitConvert is an incremental Windows desktop application built with C#, .NET 1
 9. Use original OrbitConvert design and branding. Do not copy Tangerine code, assets, screenshots, or trademarks.
 10. Favor accessible controls, keyboard navigation, robust error handling, and straightforward documentation.
 
+## Handoffs between assistants
+
+Before starting work, read the newest entry in `docs/AGENT_HANDOFF.md` and verify it against live Git/GitHub state. Only one assistant writes to a branch at a time. When you stop, add a new entry at the top with branch, commit, PR, tests actually run, open issues, and next steps.
+
 ## Historical Phase 1.1 scope
 
 The following restrictions applied only to Phase 1.1 and are retained as history. Later owner-approved tasks supersede this section; the repository-wide development and safety rules above always apply.
