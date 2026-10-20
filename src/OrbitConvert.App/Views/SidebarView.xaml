@@ -203,10 +203,10 @@
                 <StackPanel>
                     <TextBlock FontSize="11"
                                FontWeight="SemiBold"
-                               Text="PHASE 1.1" />
+                               Text="PHASE 1.2" />
                     <TextBlock Margin="0,3,0,0"
                                Style="{StaticResource CaptionTextStyle}"
-                               Text="UI shell · No file access" />
+                               Text="File intake · No conversion" />
                 </StackPanel>
             </Border>
         </Grid>
