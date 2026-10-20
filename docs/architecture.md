@@ -1,6 +1,6 @@
 # Architecture
 
-OrbitConvert is a deliberately small WPF application organized around MVVM. Phase 1.3 adds maintainable English and Arabic localization to the safe file-intake Studio shell without adding conversion infrastructure.
+OrbitConvert is a deliberately small WPF application organized around MVVM. Phase 1.3 adds maintainable English and Arabic localization to the safe file-intake Studio shell. The first Phase 2A checkpoint adds only an isolated, non-UI image inspection boundary.
 
 ## Projects
 
@@ -19,10 +19,12 @@ OrbitConvert is a deliberately small WPF application organized around MVVM. Phas
 
 `FileMetadataProvider` uses filesystem metadata APIs to obtain only the normalized path, name, extension, and byte length. It never opens or parses file content. Its small interface keeps missing, inaccessible, invalid, and directory cases testable without coupling the view model to Windows dialogs.
 
+`IImageEngine` is the narrow boundary for the Phase 2A image foundation. `MagickImageEngine` uses the pinned Magick.NET Q8 package to decode a caller-provided stream and report its format, dimensions, bit depth, and alpha presence. Expected empty, corrupt, and unreadable inputs return explicit failures. The service is not connected to file intake or WPF and has no output or conversion API.
+
 `WorkspaceView` code-behind contains only the native `OpenFileDialog` boundary and WPF drag/drop event translation. It forwards paths to the file-intake commands; all selection behavior remains outside the view.
 
 The window code-behind translates the view model's theme and accent choices into dynamic WPF resources. It also asks the supported Windows DWM API to match the native title bar to the selected theme while retaining standard window controls and gracefully keeping the system default when the attribute is unavailable. This code is intentionally UI-specific, contains no product logic, and does not persist values.
 
 ## Phase boundary
 
-Phase 1.3 localizes the existing shell and persists only the chosen language. It continues to accept individual files and read basic filesystem metadata; folders are rejected without scanning. The Images page remains a fictional, isolated demo. The application contains no file-content parsing, conversion, output generation, selected-file persistence, Explorer integration, installer, updater, telemetry, or network features. Those capabilities require separately approved milestones.
+Phase 2A preserves the localized shell and adds image inspection only behind an isolated service. File intake still reads basic filesystem metadata; folders are rejected without scanning. The Images page remains a fictional, isolated demo and Convert remains disabled. The application contains no user-file image decoding, conversion, output generation, selected-file persistence, Explorer integration, installer, updater, telemetry, or network features. Those capabilities require separately approved milestones.
