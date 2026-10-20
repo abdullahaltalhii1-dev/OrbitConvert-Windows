@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using OrbitConvert.App.Services;
 
 namespace OrbitConvert.App.ViewModels;
 
@@ -35,7 +36,7 @@ public enum ImageOutputFormat
 }
 
 /// <summary>
-/// Provides in-memory presentation state for the Phase 1.1 UI preview.
+/// Provides presentation state for the application shell and Phase 1.2 file intake.
 /// </summary>
 public sealed class MainViewModel : INotifyPropertyChanged
 {
@@ -46,7 +47,14 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private double _previewQuality = 82;
 
     public MainViewModel()
+        : this(new FileMetadataProvider())
     {
+    }
+
+    public MainViewModel(IFileMetadataProvider metadataProvider)
+    {
+        FileIntake = new FileIntakeViewModel(metadataProvider);
+
         NavigateCommand = new RelayCommand(parameter =>
         {
             if (parameter is AppSection section)
@@ -176,6 +184,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand SetAccentCommand { get; }
 
     public ICommand SetOutputFormatCommand { get; }
+
+    public FileIntakeViewModel FileIntake { get; }
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 
