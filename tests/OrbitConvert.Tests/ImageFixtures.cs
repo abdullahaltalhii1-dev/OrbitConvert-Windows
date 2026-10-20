@@ -45,6 +45,21 @@ internal static class ImageFixtures
 
     internal static byte[] Jpeg(bool orientation = false) => OnSta(() => JpegCore(orientation));
 
+    internal static byte[] WithoutJpegScanData(byte[] jpeg)
+    {
+        // Keep the real encoder's headers, including SOS, but replace all compressed pixels with EOI.
+        var offset = 2;
+        while (offset <= jpeg.Length - 4 && jpeg[offset] == 0xFF)
+        {
+            var marker = jpeg[offset + 1];
+            var length = BinaryPrimitives.ReadUInt16BigEndian(jpeg.AsSpan(offset + 2, 2));
+            offset += 2 + length;
+            if (length < 2 || offset > jpeg.Length) { break; }
+            if (marker == 0xDA) { return jpeg[..offset].Concat(new byte[] { 0xFF, 0xD9 }).ToArray(); }
+        }
+        throw new InvalidOperationException("JPEG fixture has no complete scan header.");
+    }
+
     private static byte[] JpegCore(bool orientation)
     {
         var bitmap = BitmapSource.Create(2, 3, 96, 96, PixelFormats.Rgb24, null,

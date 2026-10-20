@@ -58,12 +58,26 @@ public sealed class MagickImageEngine : IImageEngine
                     };
                     _initialized = true;
                 }
+                // Native decoders can recover damaged pixels and report only a warning, not an exception.
+                var corruptWarning = 0;
+                void TrackWarning(object? sender, WarningEventArgs warning)
+                {
+                    if (warning.Exception is MagickCorruptImageWarningException)
+                    {
+                        Interlocked.Exchange(ref corruptWarning, 1);
+                    }
+                }
                 var settings = new MagickReadSettings { Format = format };
                 using var headers = new MagickImageCollection();
+                headers.Warning += TrackWarning;
                 headers.Ping(data, settings);
+                if (Volatile.Read(ref corruptWarning) != 0) { return ImageInspectionResult.Failure(ImageInspectionError.InvalidOrCorruptImage); }
                 if (headers.Count != 1) { return ImageInspectionResult.Failure(ImageInspectionError.MultipleFrames); }
                 ImageInputGuard.CheckDimensions(headers[0].Width, headers[0].Height);
-                using var image = new MagickImage(data, settings);
+                using var image = new MagickImage();
+                image.Warning += TrackWarning;
+                image.Read(data, settings);
+                if (Volatile.Read(ref corruptWarning) != 0) { return ImageInspectionResult.Failure(ImageInspectionError.InvalidOrCorruptImage); }
                 if (image.ColorSpace is not (ColorSpace.sRGB or ColorSpace.RGB or ColorSpace.Gray))
                 {
                     return ImageInspectionResult.Failure(ImageInspectionError.UnsupportedColor);
