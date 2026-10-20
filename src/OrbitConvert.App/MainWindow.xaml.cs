@@ -24,6 +24,14 @@ public partial class MainWindow : Window
             ApplyVisualTheme(viewModel);
         }
 
+        Closing += (_, e) =>
+        {
+            if (DataContext is MainViewModel model && model.ImageConversion.IsBusy)
+            {
+                e.Cancel = true;
+                MessageBox.Show(this, model.Localization["ImageWaitToClose"], model.AppTitle);
+            }
+        };
         Closed += MainWindow_Closed;
     }
 

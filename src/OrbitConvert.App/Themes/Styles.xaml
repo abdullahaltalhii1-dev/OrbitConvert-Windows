@@ -280,6 +280,67 @@
         <Setter Property="Background" Value="{DynamicResource SurfaceHoverBrush}" />
     </Style>
 
+    <Style x:Key="ImageSourceComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Padding" Value="12,8" />
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource SurfaceHoverBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <Border x:Name="Outline" CornerRadius="8" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                            <Grid>
+                                <TextBlock Margin="12,8,32,8" VerticalAlignment="Center" IsHitTestVisible="False"
+                                           TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                           Text="{Binding SelectedItem.FileName, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Path Margin="0,0,12,0" Width="8" Height="4" HorizontalAlignment="Right"
+                                      VerticalAlignment="Center" Data="M0,0 L4,4 L8,0"
+                                      Stroke="{DynamicResource SecondaryTextBrush}" StrokeThickness="1.5" />
+                                <ToggleButton Focusable="False" ClickMode="Press"
+                                              IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton"><Border Background="Transparent" /></ControlTemplate>
+                                    </ToggleButton.Template>
+                                </ToggleButton>
+                            </Grid>
+                        </Border>
+                        <Popup x:Name="PART_Popup" Placement="Bottom" AllowsTransparency="True" Focusable="False"
+                               IsOpen="{TemplateBinding IsDropDownOpen}">
+                            <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Margin="0,4,0,0" Background="{DynamicResource InputBackgroundBrush}"
+                                    BorderBrush="{DynamicResource AccentBorderBrush}" BorderThickness="1" CornerRadius="8">
+                                <ScrollViewer MaxHeight="240" HorizontalScrollBarVisibility="Disabled">
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter TargetName="Outline" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.6" /></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="PageScrollViewerStyle" TargetType="ScrollViewer">
         <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />

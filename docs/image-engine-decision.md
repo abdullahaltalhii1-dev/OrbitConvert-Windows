@@ -17,11 +17,30 @@ The Q8 and Q16 AnyCPU NuGet packages are both approximately 84 MB compressed at 
 
 No Q8/Q16 runtime benchmark was performed in this checkpoint. Loading both quantum variants into one application is not a representative production configuration, and building separate benchmark applications would expand this deliberately small integration task. Before OrbitConvert claims 16-bit preservation, measure Q8 and Q16 in isolated, equivalent processes using 8-bit and 16-bit PNG fixtures and record elapsed time, peak working set, decoded pixel values, and output fidelity.
 
-## Integration boundary
+## Phase 2B integration and protection
 
-`IImageEngine` currently exposes inspection of a caller-provided readable stream. `MagickImageEngine` decodes the image, returns only format, dimensions, bit depth, and alpha presence, and converts expected corrupt/unreadable input failures into explicit result values. It does not accept output paths, create files, convert formats, or connect to the WPF UI.
+The package remains pinned to 15.0.0; no new NuGet dependency was added.
 
-Resource limits for untrusted or very large images, background execution, file-path handling, output validation, and conversion policy remain required future work. They must be addressed before this adapter is connected to user-selected files in Phase 2B.
+- Input limits: 25 MiB encoded bytes, 8192 pixels per side, 16,000,000 total pixels.
+- The stream is read into a bounded snapshot; source size and dimensions are checked before full decoding.
+- PNG IHDR bit depth is read directly from container bytes. A valid synthetic 16-bit PNG is independently decoded by WPF as 64-bit RGBA and rejected before Magick.NET reads it. Q8-reported decoded depth is not used to detect source precision.
+- Only explicit PNG/JPEG coders are used. The local ImageMagick/policy.xml denies all other coders, delegates, and filters.
+- Native policy: 256 MiB pixel-cache memory, zero mapped/disk cache, width/height 8192, list-length 8, at most 2 threads, and native time limit 30 seconds. The installed native build reports 1 thread on the development host. List-length 8 allows internal images; business validation still rejects more than one source frame.
+- Verified 15.0.0 properties additionally set maximum single native allocation to 128 MiB and maximum profile size to 1 MiB.
+- Magick.NET requires the complete bundled configuration. ConfigurationFiles.Default is initialized with the app policy; its generated temporary configuration directory is deleted on normal process exit. No machine-wide configuration is changed.
+- Output verification allows up to 96 MiB encoded bytes to accommodate a PNG larger than its JPEG source, while retaining dimension/pixel guards.
+- The native policy is process-global; operations are serialized. Its time setting is not an OS-enforced kill deadline or managed cancellation guarantee. These are provisional safety limits, not a benchmark or a sandbox. Total process memory includes managed snapshots and native allocations beyond pixel-cache memory.
+- In-process native failures remain a residual risk. Forced process termination can leave owned temporary output/configuration files; the app does not sweep folders or delete files from earlier operations.
+
+## Supported quality and color boundary
+
+PNG → JPEG uses quality 90 and composites full/partial transparency onto white (#FFFFFF). JPEG → PNG forces 8 bits per component. Unsupported directions are rejected.
+
+PNG sources above 8 bits, APNG, MPO/multiple frames, concatenated JPEGs, CMYK, ICC profiles, PNG cICP, and nonstandard gAMA/cHRM are rejected. Unprofiled sRGB/RGB/grayscale and standard sRGB PNG information are accepted. The native decoder validates remaining structure and data; the container guard is not a replacement decoder.
+
+EXIF orientation is normalized into pixels and EXIF removed afterward. Other supported native color information is retained; this is not a general metadata/color-management feature. JPEG decoding cannot restore lost detail. JPEG files with trailing data are conservatively rejected. Other formats, quality controls, resize, and profile management remain deferred.
+
+The UI uses a focused ImageConversionViewModel and ImageConversionService. The service owns read-only source access, exclusive temporary creation, validation, no-overwrite finalization, and owned-file cleanup. No output is reported as successful before those steps finish.
 
 ## References
 

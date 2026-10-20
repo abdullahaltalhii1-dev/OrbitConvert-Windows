@@ -54,36 +54,16 @@ public sealed class MainViewModelTests
     }
 
     [Fact]
-    public void ImagePreviewSettings_UpdateTextOnlyOutputPreview()
-    {
-        var viewModel = CreateViewModel();
-
-        viewModel.SetOutputFormatCommand.Execute(ImageOutputFormat.Jpg);
-        viewModel.PreviewQuality = 75;
-
-        Assert.Equal("landscape_demo.jpg", viewModel.OutputPreviewFileName);
-        Assert.Equal("Preview only · Quality 75%", viewModel.OutputPreviewSummary);
-        Assert.True(viewModel.IsQualityEnabled);
-
-        viewModel.SetOutputFormatCommand.Execute(ImageOutputFormat.Png);
-
-        Assert.Equal("landscape_demo.png", viewModel.OutputPreviewFileName);
-        Assert.Equal("Lossless preview · Quality control not applicable", viewModel.OutputPreviewSummary);
-        Assert.False(viewModel.IsQualityEnabled);
-    }
-
-    [Fact]
     public void SetLanguageCommand_SwitchesDirectionAndPreviewText()
     {
         var viewModel = CreateViewModel();
-        viewModel.SetOutputFormatCommand.Execute(ImageOutputFormat.Jpg);
 
         viewModel.SetLanguageCommand.Execute(AppLanguage.Arabic);
 
         Assert.True(viewModel.IsArabicLanguage);
         Assert.False(viewModel.IsEnglishLanguage);
         Assert.Equal(System.Windows.FlowDirection.RightToLeft, viewModel.Localization.FlowDirection);
-        Assert.Equal("معاينة فقط · الجودة 82%", viewModel.OutputPreviewSummary);
+        Assert.Equal("اختر ملفًا وافحصه للبدء.", viewModel.ImageConversion.StatusMessage);
 
         viewModel.SetLanguageCommand.Execute(AppLanguage.English);
 

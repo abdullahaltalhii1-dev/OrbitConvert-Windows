@@ -1,0 +1,59 @@
+<UserControl x:Class="OrbitConvert.App.Views.ImagesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
+        <StackPanel MaxWidth="980">
+            <TextBlock Style="{StaticResource EyebrowTextStyle}" Text="{Binding Localization[ImagesEyebrow]}" />
+            <TextBlock Margin="0,8,0,0" Style="{StaticResource PageTitleTextStyle}" Text="{Binding Localization[ImagesTitle]}" />
+            <TextBlock Margin="0,7,0,22" Style="{StaticResource BodyTextStyle}" Text="{Binding Localization[ImagesDescription]}" />
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[ImageSelectSource]}" />
+                    <TextBlock Margin="0,6,0,12" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[ImageSelectionHelp]}" />
+                    <ComboBox ItemsSource="{Binding FileIntake.SelectedFiles}" DisplayMemberPath="FileName"
+                              Style="{StaticResource ImageSourceComboBoxStyle}"
+                              SelectedItem="{Binding ImageConversion.SelectedFile, Mode=TwoWay}"
+                              IsEnabled="{Binding ImageConversion.IsIdle}" FlowDirection="LeftToRight"
+                              MaxDropDownHeight="240" MinHeight="36"
+                              AutomationProperties.Name="{Binding Localization[ImageSelectSource]}" />
+                    <Button Margin="0,12,0,0" HorizontalAlignment="Left" Style="{StaticResource SecondaryButtonStyle}"
+                            Content="{Binding Localization[ImageInspect]}" Command="{Binding ImageConversion.InspectCommand}" />
+                    <UniformGrid Columns="3" Margin="0,20,0,0">
+                        <StackPanel Margin="0,0,8,0">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[ImageSourceFormat]}" />
+                            <TextBlock Margin="0,6,0,0" FlowDirection="LeftToRight" FontWeight="SemiBold" Text="{Binding ImageConversion.SourceFormat}" />
+                        </StackPanel>
+                        <StackPanel Margin="8,0">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[Dimensions]}" />
+                            <TextBlock Margin="0,6,0,0" FlowDirection="LeftToRight" FontWeight="SemiBold" Text="{Binding ImageConversion.Dimensions}" />
+                        </StackPanel>
+                        <StackPanel Margin="8,0,0,0">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[ImageOutputFormat]}" />
+                            <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource AccentBrush}" FlowDirection="LeftToRight" FontWeight="SemiBold" Text="{Binding ImageConversion.OutputFormat}" />
+                        </StackPanel>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+            <Border Margin="0,18,0,0" Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[ImageDestination]}" />
+                    <TextBlock Margin="0,8,0,0" Style="{StaticResource BodyTextStyle}" Text="{Binding Localization[ImageWhiteBackground]}" />
+                    <TextBlock Margin="0,6,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[ImageFixedSettings]}" />
+                    <Button Margin="0,16,0,0" HorizontalAlignment="Left" Click="ChooseDestination_Click"
+                            Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[ImageChooseDestination]}"
+                            IsEnabled="{Binding ImageConversion.CanChooseDestination}" />
+                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" FlowDirection="LeftToRight"
+                               Foreground="{DynamicResource SecondaryTextBrush}" Text="{Binding ImageConversion.DestinationPath}" />
+                    <Button Margin="0,16,0,0" HorizontalAlignment="Left" Style="{StaticResource PrimaryButtonStyle}"
+                            Content="{Binding Localization[ImageConvert]}" Command="{Binding ImageConversion.ConvertCommand}" />
+                    <TextBlock Margin="0,16,0,0" Style="{StaticResource BodyTextStyle}" AutomationProperties.LiveSetting="Polite"
+                               Text="{Binding ImageConversion.StatusMessage}" />
+                    <TextBlock Margin="0,6,0,0" Style="{StaticResource CaptionTextStyle}" FlowDirection="LeftToRight"
+                               Text="{Binding ImageConversion.CompletedPath}" />
+                    <TextBlock Margin="0,12,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[ImageUnsupportedHelp]}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
