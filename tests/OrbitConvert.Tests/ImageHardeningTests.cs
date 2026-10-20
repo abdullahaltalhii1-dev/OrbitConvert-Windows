@@ -87,6 +87,23 @@ public sealed class ImageHardeningTests : IDisposable
     }
 
     [Fact]
+    public void SeekablePositionBeyondLength_ReturnsEmptyInputWithoutThrowing()
+    {
+        var png = ImageFixtures.PatternPng();
+        using var input = new MemoryStream(png) { Position = png.Length + 10 };
+        Assert.Equal(ImageInspectionError.EmptyInput, Engine.Inspect(input).Error);
+    }
+
+    [Fact]
+    public void SeekableStreamEndingBeforeItsDeclaredLength_IsRejected()
+    {
+        // A complete, valid image whose stream claims more bytes than it delivers must not yield a shortened snapshot.
+        var png = ImageFixtures.PatternPng();
+        Assert.Equal(ImageInspectionError.InvalidOrCorruptImage, Engine.Inspect(new TrickleStream(png, reportedLength: png.Length + 10)).Error);
+        Assert.Equal(ImageInspectionError.InvalidOrCorruptImage, Engine.Inspect(new TrickleStream([], reportedLength: 100)).Error);
+    }
+
+    [Fact]
     public void JpegSideLimit_IsCheckedInFrameHeader()
     {
         var jpeg = ImageFixtures.Jpeg();

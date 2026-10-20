@@ -37,7 +37,12 @@ Phase 2D hardens the existing single-image engine (PNG, JPEG, WebP, BMP). It add
 
 **Cause.** `ImageInputGuard.ReadBounded` copied seekable streams into a growing `MemoryStream`, then copied again with `ToArray()`. For a 48 MB BMP output, that meant roughly 112 MB of transient managed buffers during output validation.
 
-**Fix.** When the stream length is known, the guard now reads directly into one exact-size buffer. The read is still bounded by the same limit. A stream that grows after its length was read is rejected as `InvalidOrCorruptImage`. The non-seekable path is unchanged.
+**Fix.** When the stream length is known, the guard now reads directly into one exact-size buffer. The read is still bounded by the same limit. The non-seekable path is unchanged. Inconsistent seekable streams are handled explicitly:
+
+- A stream positioned at or beyond its end returns `EmptyInput`, as before the optimization.
+- A stream that ends before its declared length, or grows after its length was read, is rejected as `InvalidOrCorruptImage`. It is never accepted as a shortened snapshot.
+
+Both edge cases came from an independent review of this change. They were reproduced first: an escaping `OverflowException`, and a shortened snapshot that was accepted. Regression tests now cover them.
 
 **Evidence.** Peak working set, measured in the same Release benchmark before and after:
 
@@ -55,7 +60,7 @@ The sidebar phase label now reads `PHASE 2D` / `المرحلة 2D`.
 
 ## New regression coverage
 
-The suite now has **221 tests** (Phase 2C had 114). There are two new test classes.
+The suite now has **223 tests** (Phase 2C had 114). There are two new test classes.
 
 ### `MalformedInputHardeningTests`
 
@@ -87,7 +92,11 @@ A deterministic, bounded corruption corpus.
   - upscaling a small image to 4000 × 4000.
 
   All outputs are validated and stay within the 96 MiB output bound.
-- **Snapshot behavior:** reads that return only a few bytes at a time are assembled correctly; a stream that grows after its length was read is rejected.
+- **Snapshot behavior:**
+  - Reads that return only a few bytes at a time are assembled correctly.
+  - A stream that grows after its length was read is rejected.
+  - A stream that ends before its declared length is rejected, including one that declares 100 bytes and delivers none.
+  - A stream positioned past its end returns `EmptyInput` without throwing.
 - **Unicode paths:** Arabic, mixed script, emoji, punctuation, and nested folders, with a total path over 260 characters. The path is returned exactly and the source stays unchanged.
 - **Simulated disk full during write:** `OutputFailure`, with no output and no temporary file left behind.
 - **Read-only source:** converts, and its attribute and bytes are unchanged.
@@ -102,7 +111,7 @@ WebP outputs are checked by the engine's own full decode and by the RIFF structu
 
 | Stage | Enforcement |
 |---|---|
-| Input read | `ReadBounded`: maximum 25 MiB (exact boundary tested), in one buffer |
+| Input read | `ReadBounded`: maximum 25 MiB (exact boundary tested), in one buffer; the seekable stream must deliver exactly its declared length |
 | Container inspection | `ImageInputGuard`: maximum 8192 per side and 16,000,000 pixels, from headers, before pixel allocation (PNG, JPEG, WebP, BMP) |
 | Decoding | Native policy: width and height 8192, pixel cache memory 256 MiB, no disk or map cache, list length 8, time 30 s; `MaxMemoryRequest` 128 MiB, `MaxProfileSize` 1 MiB. Ping runs before the full read. |
 | Resizing | `ImageConversionOptions.IsValid` and `CheckDimensions` on the computed output size, before `Resize` |

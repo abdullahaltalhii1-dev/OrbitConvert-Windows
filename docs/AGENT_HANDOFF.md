@@ -4,6 +4,45 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 
 ---
 
+## 2026-10-21 — Claude: Phase 2D review follow-up (PR #9)
+
+### State
+
+- **Branch:** `feature/phase-2d-image-hardening`, on top of `4c6e2c8`.
+- **PR:** [#9](https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/pull/9), still Draft and not merged.
+
+### What changed and why
+
+An independent review flagged two edge cases in the optimized seekable path of `ImageInputGuard.ReadBounded`. Both were reproduced with regression tests before any fix:
+
+1. **Position beyond Length.** `remaining` went negative and `new byte[remaining]` threw `OverflowException` out of the engine.
+   - Fix: when `remaining <= 0`, return `EmptyInput`. This matches the behavior before the optimization.
+2. **Stream ends before its declared Length.** A shortened snapshot was accepted as a valid image.
+   - Fix: if the read stops before the declared length, reject it as `InvalidOrCorruptImage`. This is the same error already used for a stream that grows mid-read.
+
+No other behavior changed. The byte limits are unchanged, and so is the single exact-size buffer.
+
+### Verification actually run
+
+| Check | Result |
+|---|---|
+| restore | Passed |
+| Release build | 0 warnings, 0 errors |
+| tests | **223 passed**, 0 failed, 0 skipped (221 before, plus 2 new tests) |
+| format | Passed |
+| `git diff --check` | Passed |
+
+- **Memory re-check** (heaviest benchmark cases): 16 MP → BMP peaks at 281 MiB and 16 MP → PNG at 193 MiB. These are unchanged from the Phase 2D measurements.
+- **GUI:** not re-run. The change only affects inconsistent seekable streams, which the GUI cannot produce.
+
+### Next steps
+
+- The owner reviews PR #9.
+- **Only the owner merges.**
+- Do not start Phase 3 without explicit approval.
+
+---
+
 ## 2026-10-20 — Claude: Phase 2D image engine hardening
 
 ### State
