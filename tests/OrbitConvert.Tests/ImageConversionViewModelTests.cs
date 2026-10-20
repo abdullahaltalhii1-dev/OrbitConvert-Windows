@@ -104,6 +104,63 @@ public sealed class ImageConversionViewModelTests
         Assert.False(model.CanChooseDestination);
     }
 
+    [Fact]
+    public async Task TargetQualityAndResize_ArePassedToService_AndFormatChangeClearsDestination()
+    {
+        var service = new ControlledService();
+        var model = Create(service);
+        model.SelectedFile = Source;
+        await model.InspectCommand.ExecuteAsync();
+        Assert.Equal(90, model.Quality);
+        Assert.True(model.PreserveAspectRatio);
+        model.SetDestination(@"C:\صوري\output.jpg");
+        model.OutputFormat = "WebP";
+        Assert.Empty(model.DestinationPath);
+        Assert.False(model.ConvertCommand.CanExecute(null));
+        model.Quality = 73;
+        model.ResizeEnabled = true;
+        model.ResizeWidth = "10";
+        model.ResizeHeight = "10";
+        Assert.Equal("7 × 10", model.ExpectedDimensions);
+        model.SetDestination(@"C:\صوري\output.webp");
+        await model.ConvertCommand.ExecuteAsync();
+        Assert.Equal("WebP", service.LastFormat);
+        Assert.Equal(new ImageConversionOptions(73, true, 10, 10, true), service.LastOptions);
+        model.OutputFormat = "BMP";
+        Assert.False(model.IsLossyFormat);
+        model.OutputFormat = "PNG";
+        Assert.False(model.IsLossyFormat);
+        model.OutputFormat = "JPEG";
+        Assert.True(model.IsLossyFormat);
+    }
+
+    [Theory]
+    [InlineData("0")]
+    [InlineData("-1")]
+    [InlineData("9999999999999999999999999999")]
+    [InlineData("1.5")]
+    [InlineData("8193")]
+    [InlineData("")]
+    public async Task InvalidDimensionText_DisablesConversionAndLocalizesError(string text)
+    {
+        var localization = new LocalizationService(new TestLanguagePreferenceStore());
+        var model = Create(new ControlledService(), localization);
+        model.SelectedFile = Source;
+        await model.InspectCommand.ExecuteAsync();
+        model.SetDestination(@"C:\صوري\output.jpg");
+        model.ResizeEnabled = true;
+        model.ResizeWidth = text;
+        Assert.False(model.CanChooseDestination);
+        Assert.False(model.ConvertCommand.CanExecute(null));
+        Assert.Equal("—", model.ExpectedDimensions);
+        Assert.Contains("positive dimensions", model.SettingsError);
+        localization.ChangeLanguage(AppLanguage.Arabic);
+        Assert.Contains("أبعادًا موجبة", model.SettingsError);
+        model.ResizeEnabled = false;
+        Assert.Equal("2 × 3", model.ExpectedDimensions);
+        Assert.True(model.ConvertCommand.CanExecute(null));
+    }
+
     private static ImageConversionViewModel Create(ControlledService service, LocalizationService? localization = null) =>
         new(new ObservableCollection<SelectedFileItem> { Source }, service,
             localization ?? new LocalizationService(new TestLanguagePreferenceStore()));
@@ -113,11 +170,15 @@ public sealed class ImageConversionViewModelTests
         public Task<ImageConversionResult>? PendingConversion { get; init; }
         public ImageInspectionError InspectionError { get; set; }
         public int Calls { get; private set; }
+        public ImageConversionOptions? LastOptions { get; private set; }
+        public string? LastFormat { get; private set; }
         public Task<ImageInspectionResult> InspectAsync(string path) => Task.FromResult(InspectionError == ImageInspectionError.None
             ? ImageInspectionResult.Success(new(2, 3, 8, "PNG", true)) : ImageInspectionResult.Failure(InspectionError));
-        public Task<ImageConversionResult> ConvertAsync(string source, string destination, string format)
+        public Task<ImageConversionResult> ConvertAsync(string source, string destination, string format, ImageConversionOptions? options = null)
         {
             Calls++;
+            LastOptions = options;
+            LastFormat = format;
             return PendingConversion ?? Task.FromResult(new ImageConversionResult(ImageInspectionError.None, destination));
         }
     }

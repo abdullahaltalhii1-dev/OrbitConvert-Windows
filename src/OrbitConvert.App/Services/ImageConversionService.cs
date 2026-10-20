@@ -1,5 +1,6 @@
 using System.IO;
 using System.Security;
+using OrbitConvert.App.Models;
 
 namespace OrbitConvert.App.Services;
 
@@ -11,7 +12,7 @@ public sealed record ImageConversionResult(ImageInspectionError Error, string? O
 public interface IImageConversionService
 {
     Task<ImageInspectionResult> InspectAsync(string sourcePath);
-    Task<ImageConversionResult> ConvertAsync(string sourcePath, string destinationPath, string outputFormat);
+    Task<ImageConversionResult> ConvertAsync(string sourcePath, string destinationPath, string outputFormat, ImageConversionOptions? options = null);
 }
 
 public sealed class ImageConversionService(IImageEngine engine) : IImageConversionService
@@ -39,27 +40,26 @@ public sealed class ImageConversionService(IImageEngine engine) : IImageConversi
         finally { OperationGate.Release(); }
     }
 
-    public async Task<ImageConversionResult> ConvertAsync(string sourcePath, string destinationPath, string outputFormat)
+    public async Task<ImageConversionResult> ConvertAsync(string sourcePath, string destinationPath, string outputFormat, ImageConversionOptions? options = null)
     {
         await OperationGate.WaitAsync();
-        try { return await Task.Run(() => ConvertFile(sourcePath, destinationPath, outputFormat)); }
+        try { return await Task.Run(() => ConvertFile(sourcePath, destinationPath, outputFormat, options ?? new())); }
         finally { OperationGate.Release(); }
     }
 
-    private ImageConversionResult ConvertFile(string sourcePath, string destinationPath, string outputFormat)
+    private ImageConversionResult ConvertFile(string sourcePath, string destinationPath, string outputFormat, ImageConversionOptions options)
     {
         string? ownedTemporaryPath = null;
         var result = new ImageConversionResult(ImageInspectionError.OutputFailure);
         try
         {
+            if (!options.IsValid) { return new(ImageInspectionError.InvalidSettings); }
             var source = Path.GetFullPath(sourcePath);
             var destination = Path.GetFullPath(destinationPath);
             if (string.Equals(source, destination, StringComparison.OrdinalIgnoreCase)) { return new(ImageInspectionError.SamePath); }
             if (File.Exists(destination) || Directory.Exists(destination)) { return new(ImageInspectionError.DestinationExists); }
             var extension = Path.GetExtension(destination);
-            if ((outputFormat == "PNG" && !extension.Equals(".png", StringComparison.OrdinalIgnoreCase)) ||
-                (outputFormat == "JPEG" && !extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) && !extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase)) ||
-                outputFormat is not ("PNG" or "JPEG")) { return new(ImageInspectionError.InvalidDestination); }
+            if (!ImageConversionOptions.MatchesExtension(outputFormat, extension)) { return new(ImageInspectionError.InvalidDestination); }
 
             // Windows read sharing prohibits replacement/modification while the source is open.
             using var input = OpenSource(source);
@@ -71,7 +71,7 @@ public sealed class ImageConversionService(IImageEngine engine) : IImageConversi
             using (var output = new FileStream(candidate, FileMode.CreateNew, FileAccess.Write, FileShare.None))
             {
                 ownedTemporaryPath = candidate;
-                conversion = engine.Convert(input, output, outputFormat);
+                conversion = engine.Convert(input, output, outputFormat, options);
                 output.Flush(flushToDisk: true);
             }
             if (!conversion.IsSuccess) { result = new(conversion.Error); }

@@ -45,6 +45,27 @@ internal static class ImageFixtures
 
     internal static byte[] Jpeg(bool orientation = false) => OnSta(() => JpegCore(orientation));
 
+    internal static byte[] PatternPng() => OnSta(() =>
+    {
+        var pixels = new byte[96 * 64 * 3];
+        for (var y = 0; y < 64; y++)
+        {
+            for (var x = 0; x < 96; x++)
+            {
+                var offset = (y * 96 + x) * 3;
+                pixels[offset] = (byte)((x * 11 + y * 3) % 256);
+                pixels[offset + 1] = (byte)((x * 5 + y * 13) % 256);
+                pixels[offset + 2] = (byte)((x * 17 + y * 7) % 256);
+            }
+        }
+        var bitmap = BitmapSource.Create(96, 64, 96, 96, PixelFormats.Rgb24, null, pixels, 96 * 3);
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(bitmap));
+        using var file = new MemoryStream();
+        encoder.Save(file);
+        return file.ToArray();
+    });
+
     internal static byte[] WithoutJpegScanData(byte[] jpeg)
     {
         // Keep the real encoder's headers, including SOS, but replace all compressed pixels with EOI.

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using OrbitConvert.App.Localization;
 using OrbitConvert.App.Models;
@@ -18,6 +19,12 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
     private string _statusKey = "ImageIdle";
     private string? _completedPath;
     private bool _cleanupFailed;
+    private string _outputFormat = "JPEG";
+    private int _quality = 90;
+    private bool _resizeEnabled;
+    private bool _preserveAspectRatio = true;
+    private string _resizeWidth = string.Empty;
+    private string _resizeHeight = string.Empty;
 
     public ImageConversionViewModel(ObservableCollection<SelectedFileItem> files,
         IImageConversionService service, LocalizationService localization)
@@ -31,7 +38,7 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
         {
             if (!IsBusy && SelectedFile is not null && !files.Contains(SelectedFile)) { SelectedFile = null; }
         };
-        localization.LanguageChanged += (_, _) => Notify(nameof(StatusMessage));
+        localization.LanguageChanged += (_, _) => { Notify(nameof(StatusMessage)); Notify(nameof(SettingsError)); };
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -47,6 +54,8 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
             if (IsBusy || Equals(_selectedFile, value)) { return; }
             _selectedFile = value;
             _inspection = null;
+            _resizeEnabled = false;
+            _resizeWidth = _resizeHeight = string.Empty;
             _destinationPath = string.Empty;
             SetStatus("ImageIdle");
             Refresh();
@@ -55,11 +64,32 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
 
     public bool IsBusy => _isBusy;
     public bool IsIdle => !IsBusy;
-    public bool CanChooseDestination => !IsBusy && _inspection is not null && SelectedFile is not null;
+    public bool CanEditSettings => !IsBusy && _inspection is not null && SelectedFile is not null;
+    public bool CanChooseDestination => CanEditSettings && TryGetOptions(out _);
     public string DestinationPath => _destinationPath;
     public string SourceFormat => _inspection?.Format ?? "—";
     public string Dimensions => _inspection is { } image ? $"{image.Width} × {image.Height}" : "—";
-    public string OutputFormat => _inspection is null ? "—" : _inspection.Format == "PNG" ? "JPEG" : "PNG";
+    public IReadOnlyList<string> OutputFormats => ImageConversionOptions.Formats;
+    public string OutputFormat
+    {
+        get => _outputFormat;
+        set
+        {
+            if (!CanEditSettings || !OutputFormats.Contains(value) || value == _outputFormat) { return; }
+            _outputFormat = value;
+            _destinationPath = string.Empty; // A destination chosen for another encoder is no longer valid.
+            SettingsChanged();
+        }
+    }
+    public bool IsLossyFormat => OutputFormat is "JPEG" or "WebP";
+    public int Quality { get => _quality; set => SetOption(ref _quality, value); }
+    public bool ResizeEnabled { get => _resizeEnabled; set => SetOption(ref _resizeEnabled, value); }
+    public bool PreserveAspectRatio { get => _preserveAspectRatio; set => SetOption(ref _preserveAspectRatio, value); }
+    public string ResizeWidth { get => _resizeWidth; set => SetOption(ref _resizeWidth, value); }
+    public string ResizeHeight { get => _resizeHeight; set => SetOption(ref _resizeHeight, value); }
+    public string ExpectedDimensions => _inspection is { } image && TryGetOptions(out var options)
+        ? FormatSize(options.OutputSize(image.Width, image.Height)) : "—";
+    public string SettingsError => _inspection is not null && !TryGetOptions(out _) ? _localization["ImageErrorInvalidSettings"] : string.Empty;
     public string CompletedPath => _completedPath ?? string.Empty;
     public string StatusMessage => _localization[_statusKey] +
         (_cleanupFailed ? "\n" + _localization["ImageCleanupFailed"] : string.Empty);
@@ -82,6 +112,13 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
         {
             var result = await _service.InspectAsync(file.FullPath);
             _inspection = result.Inspection;
+            if (_inspection is { } image)
+            {
+                _outputFormat = image.Format == "PNG" ? "JPEG" : "PNG";
+                _resizeWidth = image.Width.ToString(CultureInfo.InvariantCulture);
+                _resizeHeight = image.Height.ToString(CultureInfo.InvariantCulture);
+                _resizeEnabled = false;
+            }
             SetStatus(result.IsSuccess ? "ImageReady" : "ImageError" + result.Error);
         }
         catch (Exception)
@@ -97,10 +134,11 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
         var sourcePath = SelectedFile!.FullPath;
         var destination = DestinationPath;
         var format = OutputFormat;
+        if (!TryGetOptions(out var options)) { return; }
         BeginOperation("ImageConverting");
         try
         {
-            var result = await _service.ConvertAsync(sourcePath, destination, format);
+            var result = await _service.ConvertAsync(sourcePath, destination, format, options);
             SetStatus(result.IsSuccess ? "ImageSuccess" : "ImageError" + result.Error);
             _completedPath = result.OutputPath;
             _cleanupFailed = result.CleanupFailed;
@@ -108,6 +146,30 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
         catch (Exception) { SetStatus("ImageUnexpectedError"); }
         finally { EndOperation(); }
     }
+
+    private bool TryGetOptions(out ImageConversionOptions options)
+    {
+        int width = 0, height = 0;
+        var parsed = !ResizeEnabled || (int.TryParse(ResizeWidth, NumberStyles.None, CultureInfo.InvariantCulture, out width) &&
+            int.TryParse(ResizeHeight, NumberStyles.None, CultureInfo.InvariantCulture, out height));
+        options = new(Quality, ResizeEnabled, width, height, PreserveAspectRatio);
+        return parsed && options.IsValid;
+    }
+
+    private void SetOption<T>(ref T field, T value)
+    {
+        if (!CanEditSettings || EqualityComparer<T>.Default.Equals(field, value)) { return; }
+        field = value;
+        SettingsChanged();
+    }
+
+    private void SettingsChanged()
+    {
+        SetStatus("ImageReady");
+        Refresh();
+    }
+
+    private static string FormatSize((uint Width, uint Height) size) => $"{size.Width} × {size.Height}";
 
     private void BeginOperation(string key)
     {
@@ -140,7 +202,9 @@ public sealed class ImageConversionViewModel : INotifyPropertyChanged
     private void Refresh()
     {
         foreach (var name in new[] { nameof(SelectedFile), nameof(IsBusy), nameof(IsIdle), nameof(CanChooseDestination),
-            nameof(DestinationPath), nameof(SourceFormat), nameof(Dimensions), nameof(OutputFormat), nameof(StatusMessage), nameof(CompletedPath) })
+            nameof(DestinationPath), nameof(SourceFormat), nameof(Dimensions), nameof(OutputFormat), nameof(StatusMessage), nameof(CompletedPath),
+            nameof(CanEditSettings), nameof(IsLossyFormat), nameof(Quality), nameof(ResizeEnabled), nameof(PreserveAspectRatio),
+            nameof(ResizeWidth), nameof(ResizeHeight), nameof(ExpectedDimensions), nameof(SettingsError) })
         {
             Notify(name);
         }

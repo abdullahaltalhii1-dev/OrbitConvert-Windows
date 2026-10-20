@@ -23,13 +23,13 @@
   <data name="NavAudioAutomation" xml:space="preserve"><value>Audio coming soon</value></data>
   <data name="NavDocumentsAutomation" xml:space="preserve"><value>Documents coming soon</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
-  <data name="BadgeDemo" xml:space="preserve"><value>PNG / JPEG</value></data>
+  <data name="BadgeDemo" xml:space="preserve"><value>4 FORMATS</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 2B</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 2C</value></data>
   <data name="PhaseDescription" xml:space="preserve"><value>Single-image conversion</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images to convert one PNG or JPEG.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images to convert one supported image.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>Choose files or drop them here.</value></data>
   <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose one image in Images to convert.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>Browse Files</value></data>
@@ -44,7 +44,7 @@
   <data name="PrivateProcessingTitle" xml:space="preserve"><value>Private Processing</value></data>
   <data name="PrivateProcessingDescription" xml:space="preserve"><value>Images are processed locally. Originals stay unchanged and files are never uploaded.</value></data>
   <data name="MultipleFormatsTitle" xml:space="preserve"><value>Multiple Formats</value></data>
-  <data name="MultipleFormatsDescription" xml:space="preserve"><value>PNG and JPEG conversion is available in Images. Other formats are coming later.</value></data>
+  <data name="MultipleFormatsDescription" xml:space="preserve"><value>Convert PNG, JPEG, WebP, and BMP images with quality and resize options.</value></data>
   <data name="FileDialogTitle" xml:space="preserve"><value>Select files for OrbitConvert</value></data>
   <data name="FileDialogFilter" xml:space="preserve"><value>All files (*.*)|*.*</value></data>
   <data name="FileCountNone" xml:space="preserve"><value>No files selected</value></data>
@@ -74,7 +74,7 @@
   <data name="IntakeFolderDropRejected" xml:space="preserve"><value>Folders aren’t supported yet. Drop individual files instead.</value></data>
   <data name="ImagesEyebrow" xml:space="preserve"><value>IMAGES</value></data>
   <data name="ImagesTitle" xml:space="preserve"><value>A fresh format. The same image.</value></data>
-  <data name="ImagesDescription" xml:space="preserve"><value>Convert one PNG or JPEG safely to a new file. Select the source from your workspace.</value></data>
+  <data name="ImagesDescription" xml:space="preserve"><value>Convert one image safely. Choose a format, quality, and optional output dimensions.</value></data>
   <data name="Dimensions" xml:space="preserve"><value>DIMENSIONS</value></data>
   <data name="ComingSoon" xml:space="preserve"><value>COMING SOON</value></data>
   <data name="VideoEyebrow" xml:space="preserve"><value>VIDEO</value></data>
@@ -119,22 +119,22 @@
   <data name="ImageOutputFormat" xml:space="preserve"><value>Output format</value></data>
   <data name="ImageDestination" xml:space="preserve"><value>Save a new copy</value></data>
   <data name="ImageChooseDestination" xml:space="preserve"><value>Choose output location</value></data>
-  <data name="ImageWhiteBackground" xml:space="preserve"><value>PNG transparency is replaced with solid white (#FFFFFF) when saving JPEG.</value></data>
-  <data name="ImageFixedSettings" xml:space="preserve"><value>JPEG quality 90 · PNG 8-bit · Originals stay unchanged</value></data>
+  <data name="ImageWhiteBackground" xml:space="preserve"><value>Transparency is preserved in PNG/WebP and composited onto solid white for JPEG/BMP.</value></data>
+  <data name="ImageFixedSettings" xml:space="preserve"><value>8-bit output · Originals stay unchanged · Existing destinations are never overwritten</value></data>
   <data name="ImageConvert" xml:space="preserve"><value>Convert image</value></data>
   <data name="ImageIdle" xml:space="preserve"><value>Choose a file and inspect it to begin.</value></data>
   <data name="ImageInspecting" xml:space="preserve"><value>Inspecting image…</value></data>
-  <data name="ImageReady" xml:space="preserve"><value>Choose an output location, then convert this image.</value></data>
+  <data name="ImageReady" xml:space="preserve"><value>Choose your settings and a new output location, then convert.</value></data>
   <data name="ImageConverting" xml:space="preserve"><value>Converting and verifying image…</value></data>
   <data name="ImageSuccess" xml:space="preserve"><value>Image saved and verified:</value></data>
-  <data name="ImageUnsupportedHelp" xml:space="preserve"><value>PNG and JPEG only · One image at a time · WebP and other formats are unavailable</value></data>
+  <data name="ImageUnsupportedHelp" xml:space="preserve"><value>PNG · JPEG · WebP · BMP — One image per operation</value></data>
   <data name="ImageCleanupFailed" xml:space="preserve"><value>A temporary file could not be removed. Check the output folder for .orbitconvert-*.tmp.</value></data>
   <data name="ImageUnexpectedError" xml:space="preserve"><value>The operation could not be completed. Please try again.</value></data>
   <data name="ImageWaitToClose" xml:space="preserve"><value>Please wait for the image operation to finish before closing.</value></data>
   <data name="ImageErrorEmptyInput" xml:space="preserve"><value>This file is empty.</value></data>
   <data name="ImageErrorUnreadableInput" xml:space="preserve"><value>The source file could not be read. Check that it still exists and is accessible.</value></data>
-  <data name="ImageErrorInvalidOrCorruptImage" xml:space="preserve"><value>This file is not a readable PNG or JPEG image, or its contents are damaged.</value></data>
-  <data name="ImageErrorUnsupportedFormat" xml:space="preserve"><value>Only PNG and JPEG images are supported.</value></data>
+  <data name="ImageErrorInvalidOrCorruptImage" xml:space="preserve"><value>This image is unreadable or its contents are damaged.</value></data>
+  <data name="ImageErrorUnsupportedFormat" xml:space="preserve"><value>Only supported PNG, JPEG, WebP, and BMP images are accepted.</value></data>
   <data name="ImageErrorTooLarge" xml:space="preserve"><value>Image exceeds the limit: 25 MiB, 8192 pixels per side, or 16 million pixels.</value></data>
   <data name="ImageErrorUnsupportedBitDepth" xml:space="preserve"><value>Images above 8 bits per component are not supported yet. The original is unchanged.</value></data>
   <data name="ImageErrorUnsupportedColor" xml:space="preserve"><value>This image uses an unsupported color configuration or embedded color profile.</value></data>
@@ -142,7 +142,17 @@
   <data name="ImageErrorResourceLimit" xml:space="preserve"><value>This image requires more processing resources than allowed.</value></data>
   <data name="ImageErrorSamePath" xml:space="preserve"><value>Choose a different output path. The original cannot be replaced.</value></data>
   <data name="ImageErrorDestinationExists" xml:space="preserve"><value>A file or folder already exists at this location. Choose a new filename.</value></data>
-  <data name="ImageErrorInvalidDestination" xml:space="preserve"><value>Choose a filename with the matching .png, .jpg, or .jpeg extension.</value></data>
+  <data name="ImageErrorInvalidDestination" xml:space="preserve"><value>Choose a filename with the matching .png, .jpg/.jpeg, .webp, or .bmp extension.</value></data>
   <data name="ImageErrorOutputFailure" xml:space="preserve"><value>Could not save the image. Check the paths, folder permissions, and free space.</value></data>
   <data name="ImageErrorOutputValidationFailed" xml:space="preserve"><value>The output image could not be verified. No final file was saved.</value></data>
+  <data name="ImageOutputSettings" xml:space="preserve"><value>Output settings</value></data>
+  <data name="ImageQuality" xml:space="preserve"><value>Quality (1–100)</value></data>
+  <data name="ImageLosslessHelp" xml:space="preserve"><value>Quality applies to JPEG/WebP only. PNG and BMP use lossless pixel encoding.</value></data>
+  <data name="ImageResize" xml:space="preserve"><value>Resize image</value></data>
+  <data name="ImageWidth" xml:space="preserve"><value>Width (pixels)</value></data>
+  <data name="ImageHeight" xml:space="preserve"><value>Height (pixels)</value></data>
+  <data name="ImageKeepAspect" xml:space="preserve"><value>Preserve aspect ratio</value></data>
+  <data name="ImageResizeHelp" xml:space="preserve"><value>Fit within the width and height without cropping. Uncheck the ratio only to request exact dimensions, which may stretch the image.</value></data>
+  <data name="ImageExpectedSize" xml:space="preserve"><value>Expected output size</value></data>
+  <data name="ImageErrorInvalidSettings" xml:space="preserve"><value>Use quality 1–100 and positive dimensions: at most 8192 per side and 16 million pixels.</value></data>
 </root>

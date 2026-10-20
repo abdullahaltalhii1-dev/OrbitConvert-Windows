@@ -23,13 +23,13 @@
   <data name="NavAudioAutomation" xml:space="preserve"><value>الصوت، قريبًا</value></data>
   <data name="NavDocumentsAutomation" xml:space="preserve"><value>المستندات، قريبًا</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>الإعدادات</value></data>
-  <data name="BadgeDemo" xml:space="preserve"><value>PNG / JPEG</value></data>
+  <data name="BadgeDemo" xml:space="preserve"><value>٤ صيغ</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>قريبًا</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 2B</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 2C</value></data>
   <data name="PhaseDescription" xml:space="preserve"><value>تحويل صورة واحدة</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>مساحة العمل</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>حوّل ملفاتك بلا تعقيد.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور لتحويل ملف PNG أو JPEG واحد.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور لتحويل صورة واحدة مدعومة.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>اختر الملفات أو أفلتها هنا.</value></data>
   <data name="DropZoneDescription" xml:space="preserve"><value>حدد ملفًا أو أكثر. المجلدات غير مدعومة. اختر صورة واحدة في قسم الصور لتحويلها.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>استعراض الملفات</value></data>
@@ -44,7 +44,7 @@
   <data name="PrivateProcessingTitle" xml:space="preserve"><value>معالجة خاصة</value></data>
   <data name="PrivateProcessingDescription" xml:space="preserve"><value>تُعالج الصور محليًا. تبقى الملفات الأصلية دون تغيير ولا تُرفع الملفات.</value></data>
   <data name="MultipleFormatsTitle" xml:space="preserve"><value>صيغ متعددة</value></data>
-  <data name="MultipleFormatsDescription" xml:space="preserve"><value>يتوفر تحويل PNG وJPEG في قسم الصور. ستتوفر الصيغ الأخرى لاحقًا.</value></data>
+  <data name="MultipleFormatsDescription" xml:space="preserve"><value>حوّل صور PNG وJPEG وWebP وBMP مع خيارات الجودة وتغيير الأبعاد.</value></data>
   <data name="FileDialogTitle" xml:space="preserve"><value>اختر ملفات لـ OrbitConvert</value></data>
   <data name="FileDialogFilter" xml:space="preserve"><value>كل الملفات (*.*)|*.*</value></data>
   <data name="FileCountNone" xml:space="preserve"><value>لم يتم تحديد ملفات</value></data>
@@ -74,7 +74,7 @@
   <data name="IntakeFolderDropRejected" xml:space="preserve"><value>المجلدات غير مدعومة حاليًا. أفلت ملفات منفردة بدلًا منها.</value></data>
   <data name="ImagesEyebrow" xml:space="preserve"><value>الصور</value></data>
   <data name="ImagesTitle" xml:space="preserve"><value>صيغة جديدة. والصورة نفسها.</value></data>
-  <data name="ImagesDescription" xml:space="preserve"><value>حوّل صورة PNG أو JPEG واحدة بأمان إلى ملف جديد. اختر المصدر من ملفات مساحة العمل.</value></data>
+  <data name="ImagesDescription" xml:space="preserve"><value>حوّل صورة واحدة بأمان. اختر الصيغة والجودة وأبعاد الإخراج الاختيارية.</value></data>
   <data name="Dimensions" xml:space="preserve"><value>الأبعاد</value></data>
   <data name="ComingSoon" xml:space="preserve"><value>قريبًا</value></data>
   <data name="VideoEyebrow" xml:space="preserve"><value>الفيديو</value></data>
@@ -118,22 +118,22 @@
   <data name="ImageOutputFormat" xml:space="preserve"><value>صيغة الإخراج</value></data>
   <data name="ImageDestination" xml:space="preserve"><value>حفظ نسخة جديدة</value></data>
   <data name="ImageChooseDestination" xml:space="preserve"><value>اختر موقع الإخراج</value></data>
-  <data name="ImageWhiteBackground" xml:space="preserve"><value>تُدمج شفافية PNG مع خلفية بيضاء ثابتة (#FFFFFF) عند الحفظ بصيغة JPEG.</value></data>
-  <data name="ImageFixedSettings" xml:space="preserve"><value>جودة JPEG: ‏90 · PNG بعمق 8 بت · تبقى الملفات الأصلية دون تغيير</value></data>
+  <data name="ImageWhiteBackground" xml:space="preserve"><value>تُحفظ الشفافية في PNG وWebP، وتُدمج مع خلفية بيضاء ثابتة في JPEG وBMP.</value></data>
+  <data name="ImageFixedSettings" xml:space="preserve"><value>إخراج بعمق ٨ بت · تبقى الملفات الأصلية دون تغيير · لا تُستبدل ملفات الإخراج الموجودة</value></data>
   <data name="ImageConvert" xml:space="preserve"><value>تحويل الصورة</value></data>
   <data name="ImageIdle" xml:space="preserve"><value>اختر ملفًا وافحصه للبدء.</value></data>
   <data name="ImageInspecting" xml:space="preserve"><value>جارٍ فحص الصورة…</value></data>
-  <data name="ImageReady" xml:space="preserve"><value>اختر موقع الإخراج، ثم حوّل هذه الصورة.</value></data>
+  <data name="ImageReady" xml:space="preserve"><value>اختر الإعدادات وموقع إخراج جديدًا، ثم حوّل الصورة.</value></data>
   <data name="ImageConverting" xml:space="preserve"><value>جارٍ تحويل الصورة والتحقق منها…</value></data>
   <data name="ImageSuccess" xml:space="preserve"><value>تم حفظ الصورة والتحقق منها:</value></data>
-  <data name="ImageUnsupportedHelp" xml:space="preserve"><value>PNG وJPEG فقط · صورة واحدة في كل عملية · WebP والصيغ الأخرى غير متاحة</value></data>
+  <data name="ImageUnsupportedHelp" xml:space="preserve"><value>PNG · JPEG · WebP · BMP — صورة واحدة في كل عملية</value></data>
   <data name="ImageCleanupFailed" xml:space="preserve"><value>تعذّر حذف ملف مؤقت. تحقق من وجود ملف ‎.orbitconvert-*.tmp في مجلد الإخراج.</value></data>
   <data name="ImageUnexpectedError" xml:space="preserve"><value>تعذّر إكمال العملية. يرجى المحاولة مجددًا.</value></data>
   <data name="ImageWaitToClose" xml:space="preserve"><value>يرجى انتظار انتهاء عملية الصورة قبل الإغلاق.</value></data>
   <data name="ImageErrorEmptyInput" xml:space="preserve"><value>هذا الملف فارغ.</value></data>
   <data name="ImageErrorUnreadableInput" xml:space="preserve"><value>تعذّرت قراءة الملف الأصلي. تحقق من وجوده وإمكانية الوصول إليه.</value></data>
-  <data name="ImageErrorInvalidOrCorruptImage" xml:space="preserve"><value>هذا الملف ليس صورة PNG أو JPEG قابلة للقراءة، أو أن محتواه تالف.</value></data>
-  <data name="ImageErrorUnsupportedFormat" xml:space="preserve"><value>صور PNG وJPEG فقط مدعومة.</value></data>
+  <data name="ImageErrorInvalidOrCorruptImage" xml:space="preserve"><value>هذه الصورة غير قابلة للقراءة أو أن محتواها تالف.</value></data>
+  <data name="ImageErrorUnsupportedFormat" xml:space="preserve"><value>تُقبل صور PNG وJPEG وWebP وBMP المدعومة فقط.</value></data>
   <data name="ImageErrorTooLarge" xml:space="preserve"><value>تتجاوز الصورة الحد: 25 ميبيبايت، أو 8192 بكسل لكل بُعد، أو 16 مليون بكسل.</value></data>
   <data name="ImageErrorUnsupportedBitDepth" xml:space="preserve"><value>الصور التي يتجاوز عمقها 8 بت لكل مكوّن غير مدعومة حاليًا. لم يتغير الأصل.</value></data>
   <data name="ImageErrorUnsupportedColor" xml:space="preserve"><value>تستخدم الصورة إعداد ألوان أو ملف تعريف ألوان مضمنًا غير مدعوم.</value></data>
@@ -141,7 +141,17 @@
   <data name="ImageErrorResourceLimit" xml:space="preserve"><value>تحتاج هذه الصورة إلى موارد معالجة تتجاوز الحد المسموح.</value></data>
   <data name="ImageErrorSamePath" xml:space="preserve"><value>اختر مسار إخراج مختلفًا. لا يمكن استبدال الملف الأصلي.</value></data>
   <data name="ImageErrorDestinationExists" xml:space="preserve"><value>يوجد ملف أو مجلد في هذا الموقع. اختر اسم ملف جديدًا.</value></data>
-  <data name="ImageErrorInvalidDestination" xml:space="preserve"><value>اختر اسم ملف بالامتداد المطابق ‎.png أو ‎.jpg أو ‎.jpeg.</value></data>
+  <data name="ImageErrorInvalidDestination" xml:space="preserve"><value>اختر اسم ملف بامتداد مطابق: ‎.png أو ‎.jpg/‎.jpeg أو ‎.webp أو ‎.bmp.</value></data>
   <data name="ImageErrorOutputFailure" xml:space="preserve"><value>تعذّر حفظ الصورة. تحقق من المسارات وصلاحيات المجلد والمساحة المتاحة.</value></data>
   <data name="ImageErrorOutputValidationFailed" xml:space="preserve"><value>تعذّر التحقق من الصورة الناتجة. لم يُحفظ ملف نهائي.</value></data>
+  <data name="ImageOutputSettings" xml:space="preserve"><value>إعدادات الإخراج</value></data>
+  <data name="ImageQuality" xml:space="preserve"><value>الجودة (١–١٠٠)</value></data>
+  <data name="ImageLosslessHelp" xml:space="preserve"><value>تُطبّق الجودة على JPEG وWebP فقط. يستخدم PNG وBMP ترميز بكسلات دون فقد.</value></data>
+  <data name="ImageResize" xml:space="preserve"><value>تغيير أبعاد الصورة</value></data>
+  <data name="ImageWidth" xml:space="preserve"><value>العرض (بكسل)</value></data>
+  <data name="ImageHeight" xml:space="preserve"><value>الارتفاع (بكسل)</value></data>
+  <data name="ImageKeepAspect" xml:space="preserve"><value>الحفاظ على نسبة الأبعاد</value></data>
+  <data name="ImageResizeHelp" xml:space="preserve"><value>تُناسب الصورة العرض والارتفاع دون قص. ألغِ الحفاظ على النسبة فقط لطلب أبعاد مطابقة قد تمدد الصورة.</value></data>
+  <data name="ImageExpectedSize" xml:space="preserve"><value>أبعاد الإخراج المتوقعة</value></data>
+  <data name="ImageErrorInvalidSettings" xml:space="preserve"><value>استخدم جودة من ١ إلى ١٠٠ وأبعادًا موجبة، بحد أقصى ٨١٩٢ لكل جانب و١٦ مليون بكسل.</value></data>
 </root>

@@ -269,12 +269,12 @@ public sealed class ImageConversionTests : IDisposable
     private sealed class FaultEngine(IImageEngine inner, string mode, string destination) : IImageEngine
     {
         public ImageInspectionResult Inspect(Stream input) => inner.Inspect(input);
-        public ImageInspectionResult Convert(Stream input, Stream output, string format)
+        public ImageInspectionResult Convert(Stream input, Stream output, string format, ImageConversionOptions? options = null)
         {
             if (mode == "jpeg-warning-output")
             {
                 using var encoded = new MemoryStream();
-                var converted = inner.Convert(input, encoded, format);
+                var converted = inner.Convert(input, encoded, format, options);
                 Assert.True(converted.IsSuccess);
                 output.Write(ImageFixtures.WithoutJpegScanData(encoded.ToArray()));
                 return converted; // The real validator must reject the warning-producing temporary file.
@@ -284,7 +284,7 @@ public sealed class ImageConversionTests : IDisposable
                 output.WriteByte(1);
                 return ImageInspectionResult.Failure(ImageInspectionError.OutputFailure);
             }
-            var result = inner.Convert(input, output, format);
+            var result = inner.Convert(input, output, format, options);
             if (mode == "corrupt-output") { output.SetLength(1); }
             return result;
         }
@@ -300,7 +300,7 @@ public sealed class ImageConversionTests : IDisposable
     {
         private FileStream? _lock;
         public ImageInspectionResult Inspect(Stream input) => inner.Inspect(input);
-        public ImageInspectionResult Convert(Stream input, Stream output, string format) => inner.Convert(input, output, format);
+        public ImageInspectionResult Convert(Stream input, Stream output, string format, ImageConversionOptions? options = null) => inner.Convert(input, output, format, options);
         public ImageInspectionResult ValidateOutput(Stream output, ImageInspection expected)
         {
             _lock = new FileStream(((FileStream)output).Name, FileMode.Open, FileAccess.Read, FileShare.Read);
