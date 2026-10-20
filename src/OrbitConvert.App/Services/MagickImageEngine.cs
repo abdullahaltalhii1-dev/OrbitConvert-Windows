@@ -104,6 +104,8 @@ public sealed class MagickImageEngine : IImageEngine
                     if (outputFormat is "JPEG" or "WebP") { image.Quality = (uint)options.Quality; }
                     image.Depth = 8;
                     if (outputFormat == "PNG") { image.Settings.SetDefine(MagickFormat.Png, "bit-depth", "8"); }
+                    // BMP3 writes palette images as RLE8, which the input guard rejects; keep BMP output uncompressed.
+                    if (outputFormat == "BMP") { image.Settings.Compression = CompressionMethod.NoCompression; }
                     if (outputFormat == "WebP")
                     {
                         image.Settings.SetDefine(MagickFormat.WebP, "lossless", "false");

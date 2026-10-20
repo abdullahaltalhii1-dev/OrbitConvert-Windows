@@ -1,6 +1,6 @@
 # OrbitConvert
 
-OrbitConvert is a bilingual Windows desktop application for local file conversion. Phase 2C extends real single-image conversion to PNG, JPEG, WebP, and BMP, with quality and resize options, with safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
+OrbitConvert is a bilingual Windows desktop application for local file conversion. It converts single PNG, JPEG, WebP, and BMP images with quality and resize options (Phase 2C), hardened and validated in Phase 2D, with safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
 
 ## Requirements
 
@@ -30,6 +30,7 @@ The startup window opens the Studio workspace. Browse Files uses the native Wind
 
 - `src/OrbitConvert.App` — WPF desktop executable and presentation code
 - `tests/OrbitConvert.Tests` — xUnit tests
+- `tools/ImageBenchmark.cs` — standalone measurement helper used for the Phase 2D performance figures (not part of the app or the test run)
 - `docs/architecture.md` — architecture and phase-boundary notes
 - `docs/image-engine-decision.md` — pinned Magick.NET package and Q8/Q16 assessment
 - `.github/workflows/ci.yml` — Windows restore, Release build, and test workflow
@@ -47,7 +48,14 @@ Transparency is preserved in PNG and WebP and composited onto white (#FFFFFF) fo
 
 Inputs are limited to 25 MiB, 8192 pixels per side, and 16 million pixels; resize targets use the same limits. Sources above 8 bits, animation (including animated WebP), multi-frame images, CMYK, embedded ICC profiles, compressed/embedded BMP variants, and nonstandard PNG color configurations are rejected. EXIF orientation is applied to pixels; the EXIF profile is then removed to prevent repeated rotation. Unprofiled RGB/sRGB/grayscale and standard sRGB PNG color information are supported. This phase does not promise general color-managed or metadata-preserving conversion.
 
-See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dependency and protection limits, and [phase-2b-validation.md](docs/phase-2b-validation.md) and [phase-2c-validation.md](docs/phase-2c-validation.md) for verification evidence.
+See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dependency and protection limits, and [phase-2b-validation.md](docs/phase-2b-validation.md), [phase-2c-validation.md](docs/phase-2c-validation.md), and [phase-2d-validation.md](docs/phase-2d-validation.md) for verification evidence, including measured performance and limits.
+
+## Phase 2D screenshots
+
+- [Close blocked while a conversion runs](docs/screenshots/19-phase-2d-close-blocked-while-busy.jpg)
+- [Arabic — missing-source error](docs/screenshots/20-phase-2d-arabic-missing-source.jpg)
+- [Arabic — light, minimum window size](docs/screenshots/21-phase-2d-arabic-light-minimum-size.jpg)
+- [English — dark, minimum window size](docs/screenshots/22-phase-2d-english-dark-minimum-size.jpg)
 
 ## Phase 2C screenshots
 
@@ -78,4 +86,4 @@ See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dep
 
 ## Scope
 
-Phase 2C supports one PNG, JPEG, WebP, or BMP image per operation. File intake can contain multiple files, but only the explicitly selected image is processed. HEIC/AVIF, batch conversion, color management, metadata preservation, other engines, Explorer integration, and installers remain unavailable. No new dependencies were added; Magick.NET-Q8-AnyCPU remains pinned to 15.0.0.
+The app supports one PNG, JPEG, WebP, or BMP image per operation. Conversions cannot be cancelled once started (see phase-2d-validation.md); closing the window is blocked until they finish. File intake can contain multiple files, but only the explicitly selected image is processed. HEIC/AVIF, batch conversion, color management, metadata preservation, other engines, Explorer integration, and installers remain unavailable. No new dependencies were added; Magick.NET-Q8-AnyCPU remains pinned to 15.0.0.

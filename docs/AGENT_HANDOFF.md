@@ -4,6 +4,90 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 
 ---
 
+## 2026-10-20 — Claude: Phase 2D image engine hardening
+
+### State
+
+- **Branch:** `feature/phase-2d-image-hardening`, based on `main` at `4b3a93f` (PR #8 merged).
+- **PR:** a Draft PR targets `main`. The PR number and CI result are recorded in the PR itself and in the follow-up commit on this branch.
+- **Worktree:** clean after commit.
+- **Not merged.** No Phase 3 work was started.
+
+### What changed and why
+
+1. **`MagickImageEngine`: BMP output is written uncompressed.**
+   - Why: ImageMagick's BMP3 writer produced RLE8 for palette and grayscale images, and the input guard rejects RLE. Any image with 256 colors or fewer (including grayscale JPEG and PNG) failed with "The output image could not be verified".
+   - Evidence: 5 regression cases failed before the fix and pass after.
+2. **`ImagesView`: `SaveFileDialog.CreateTestFile = false`.**
+   - Why: the dialog's 0-byte write-test file sometimes survived on the OneDrive folder (sync or antivirus held it). It then blocked the conversion as an existing destination and was left in the user's folder.
+   - Evidence: reproduced in the real GUI and confirmed fixed there.
+3. **`ImageInputGuard.ReadBounded`: seekable streams are read into one exact-size buffer.**
+   - Why: the old growing `MemoryStream` plus `ToArray` held several transient copies of large outputs during validation.
+   - Behavior: same limits; a stream that grows mid-read is rejected.
+   - Evidence: peak working set for 16 MP → PNG went from 421 to 193 MiB, and for 16 MP → BMP from 478 to 282 MiB, with unchanged times.
+4. **Phase label** changed to `PHASE 2D` / `المرحلة 2D`.
+5. **Tests:** `MalformedInputHardeningTests` (a deterministic corruption corpus of about 3,600 inputs) and `ImageHardeningTests`:
+   - WIC-encoded variant matrix
+   - exact limit boundaries and a real 16 MP conversion
+   - snapshot reads
+   - Unicode and long paths
+   - simulated disk full, read-only source, ACL-denied folder
+   - concurrent conversions to one destination
+
+   Two helpers were added to `ImageFixtures`.
+6. **Documentation:**
+   - Added `tools/ImageBenchmark.cs`, a standalone measurement helper that is not in the solution.
+   - Added `docs/phase-2d-validation.md` and screenshots 19–22, cropped to the app window.
+   - Updated README, `architecture.md`, and `image-engine-decision.md`.
+
+### Verification actually run
+
+Run on this branch, with the app closed:
+
+| Check | Result |
+|---|---|
+| `dotnet restore OrbitConvert.slnx` | Passed |
+| `dotnet build OrbitConvert.slnx -c Release --no-restore` | 0 warnings, 0 errors |
+| `dotnet test OrbitConvert.slnx -c Release --no-build` | 221 passed, 0 failed, 0 skipped |
+| `dotnet format OrbitConvert.slnx --verify-no-changes` | Passed |
+| `git diff --check` | Passed |
+
+- **Benchmark:** 26 Release cases, one fresh process each, run before and after fix 3. The tables are in `docs/phase-2d-validation.md`.
+- **Real GUI** (UI Automation plus keyboard and mouse, native dialogs; computer-use tools were unavailable). Unicode test folder with Arabic, `&`, brackets, and parentheses. Results:
+  - intake
+  - 16 MP inspection (about 0.5 s)
+  - busy state: controls disabled, second Convert refused, Settings reachable, close blocked with a message
+  - Save dialog no longer creates a file
+  - invalid inputs: fake, empty, truncated, and deleted source, with English and Arabic messages
+  - destination protection
+  - Arabic Light and English Dark at the 900 × 620 minimum size
+  - normal shutdown
+- **Forced-kill experiment:** leaves a partial `.orbitconvert-*.tmp`. No final output is written and the source is unchanged. This is documented.
+- **Cancellation probe:** only WebP encoding honors ImageMagick cancellation. Not implemented; deferred to process isolation.
+
+### Not verified
+
+- 125% and 150% DPI (no approval to change display settings)
+- screen reader
+- uncontrolled malicious corpus
+- real disk-full volume
+- custom filenames typed into the Save dialog
+- long paths through native dialogs
+
+### Environment notes for the next agent
+
+- OneDrive intermittently locks freshly created files in this repo for a few seconds. Retry deletes, or use `%TEMP%` for test outputs.
+- An invisible Norton overlay covers part of the sidebar and swallows synthetic mouse clicks. Use keyboard activation, and only when the app's main window is in the foreground.
+- Never send keys while a native dialog is open. A stray keystroke started a rename in the Save dialog; it was cancelled and the files were intact.
+
+### Next steps
+
+- The owner reviews the Draft PR. Push any fixes to the same branch.
+- **Only the owner merges.** Do not start Phase 3 (FFmpeg) or any later phase without explicit approval.
+- Candidate follow-ups need owner approval: process-isolated conversion (enables real cancellation and crash containment), and DPI checks at 125% and 150%.
+
+---
+
 ## 2026-10-20 — Claude: Phase 2C final validation (review only)
 
 ### State

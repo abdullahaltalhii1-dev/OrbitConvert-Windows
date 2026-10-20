@@ -25,6 +25,9 @@ public partial class ImagesView : UserControl
             AddExtension = true,
             OverwritePrompt = false, // Existing files are always rejected by the conversion service.
             CheckPathExists = true,
+            // The dialog's write-test file can survive (e.g. when sync or antivirus holds it) and then block the
+            // conversion as an existing destination. The service verifies writability with its own temporary file.
+            CreateTestFile = false,
         };
         if (dialog.ShowDialog(Window.GetWindow(this)) == true) { conversion.SetDestination(dialog.FileName); }
     }

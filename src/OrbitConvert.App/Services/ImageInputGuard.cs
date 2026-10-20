@@ -28,6 +28,23 @@ internal static class ImageInputGuard
             {
                 throw new ImageInputException(ImageInspectionError.TooLarge);
             }
+
+            // Known length: read into one exact buffer instead of a growing MemoryStream plus a copy,
+            // which held up to three transient copies of a large output during validation.
+            var exact = new byte[remaining];
+            var filled = 0;
+            int read;
+            while (filled < exact.Length && (read = input.Read(exact, filled, exact.Length - filled)) > 0) { filled += read; }
+            if (input.ReadByte() != -1)
+            {
+                // The stream grew after its length was read; the snapshot would no longer be bounded or stable.
+                throw new ImageInputException(ImageInspectionError.InvalidOrCorruptImage);
+            }
+            if (filled == 0)
+            {
+                throw new ImageInputException(ImageInspectionError.EmptyInput);
+            }
+            return filled == exact.Length ? exact : exact[..filled];
         }
 
         using var copy = new MemoryStream();
