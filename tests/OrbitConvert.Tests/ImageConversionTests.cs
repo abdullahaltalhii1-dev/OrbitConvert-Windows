@@ -102,6 +102,64 @@ public sealed class ImageConversionTests : IDisposable
     }
 
     [Fact]
+    public void JpegWithoutScanData_ActuallyRaisesNativeCorruptionWarning()
+    {
+        var valid = ImageFixtures.Jpeg();
+        using var source = new MemoryStream(valid);
+        Assert.True(_engine.Inspect(source).IsSuccess); // Initialize the production policy first.
+        using var image = new MagickImage();
+        var warnings = new List<MagickWarningException>();
+        image.Warning += (_, warning) => warnings.Add(warning.Exception);
+        var settings = new MagickReadSettings { Format = MagickFormat.Jpeg };
+        image.Read(valid, settings);
+        Assert.Empty(warnings);
+
+        var damaged = ImageFixtures.WithoutJpegScanData(valid);
+        Assert.Equal(new byte[] { 0xFF, 0xD9 }, damaged[^2..]);
+        image.Read(damaged, settings); // Decoder recovers without throwing, despite missing all pixels.
+        Assert.Contains(warnings, warning => warning is MagickCorruptImageWarningException);
+    }
+
+    [Theory]
+    [InlineData("inspect", ImageInspectionError.InvalidOrCorruptImage)]
+    [InlineData("convert", ImageInspectionError.InvalidOrCorruptImage)]
+    [InlineData("validate", ImageInspectionError.OutputValidationFailed)]
+    public void DecoderWarning_RejectsDamagedJpeg(string operation, ImageInspectionError expected)
+    {
+        using var input = new MemoryStream(ImageFixtures.WithoutJpegScanData(ImageFixtures.Jpeg()));
+        using var output = new MemoryStream();
+        var result = operation switch
+        {
+            "inspect" => _engine.Inspect(input),
+            "convert" => _engine.Convert(input, output, "PNG"),
+            _ => _engine.ValidateOutput(input, new(2, 3, 8, "JPEG", false)),
+        };
+        Assert.Equal(expected, result.Error);
+        Assert.False(result.IsSuccess);
+        Assert.Equal(0, output.Length);
+
+        using var valid = new MemoryStream(ImageFixtures.Jpeg());
+        Assert.True(_engine.Inspect(valid).IsSuccess); // Warning state must not leak to later operations.
+    }
+
+    [Fact]
+    public async Task DecoderWarning_DamagedSourceNeverCreatesDestinationOrChangesOriginal()
+    {
+        var bytes = ImageFixtures.WithoutJpegScanData(ImageFixtures.Jpeg());
+        var source = FilePath("صورة ناقصة.jpg");
+        var destination = FilePath("output.png");
+        await File.WriteAllBytesAsync(source, bytes);
+
+        var result = await new ImageConversionService(_engine).ConvertAsync(source, destination, "PNG");
+
+        Assert.Equal(ImageInspectionError.InvalidOrCorruptImage, result.Error);
+        Assert.False(result.IsSuccess);
+        Assert.False(File.Exists(destination));
+        Assert.Equal(bytes, await File.ReadAllBytesAsync(source));
+        Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*.tmp"));
+    }
+
+    [Fact]
     public void Convert_NormalizesExifOrientation()
     {
         using var source = new MemoryStream(ImageFixtures.Jpeg(orientation: true));
@@ -132,6 +190,7 @@ public sealed class ImageConversionTests : IDisposable
     [InlineData("race", ImageInspectionError.DestinationExists)]
     [InlineData("corrupt-output", ImageInspectionError.OutputValidationFailed)]
     [InlineData("partial-failure", ImageInspectionError.OutputFailure)]
+    [InlineData("jpeg-warning-output", ImageInspectionError.OutputValidationFailed)]
     public async Task Convert_FailuresAndFinalizationRaceLeaveNoOwnedTemporaryFiles(string mode, ImageInspectionError expected)
     {
         var source = FilePath("source.png");
@@ -141,6 +200,7 @@ public sealed class ImageConversionTests : IDisposable
         var result = await service.ConvertAsync(source, destination, "JPEG");
         Assert.Equal(expected, result.Error);
         Assert.False(result.IsSuccess);
+        Assert.Equal(ImageFixtures.Png(), await File.ReadAllBytesAsync(source));
         Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*.tmp"));
         if (mode == "race") { Assert.Equal(new byte[] { 42 }, File.ReadAllBytes(destination)); }
         else { Assert.False(File.Exists(destination)); }
@@ -211,6 +271,14 @@ public sealed class ImageConversionTests : IDisposable
         public ImageInspectionResult Inspect(Stream input) => inner.Inspect(input);
         public ImageInspectionResult Convert(Stream input, Stream output, string format)
         {
+            if (mode == "jpeg-warning-output")
+            {
+                using var encoded = new MemoryStream();
+                var converted = inner.Convert(input, encoded, format);
+                Assert.True(converted.IsSuccess);
+                output.Write(ImageFixtures.WithoutJpegScanData(encoded.ToArray()));
+                return converted; // The real validator must reject the warning-producing temporary file.
+            }
             if (mode == "partial-failure")
             {
                 output.WriteByte(1);
