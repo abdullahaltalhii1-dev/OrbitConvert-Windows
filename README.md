@@ -1,6 +1,6 @@
 # OrbitConvert
 
-OrbitConvert is a Windows desktop application that will provide local file conversion workflows. The current repository contains the Phase 1.3 bilingual Studio UI shell: complete English and Arabic resources, runtime LTR/RTL switching, native multi-file selection, in-app drag-and-drop, basic local file metadata, tests, and CI.
+OrbitConvert is a Windows desktop application that will provide local file conversion workflows. The current repository contains the Phase 1.3 bilingual Studio UI shell plus the small Phase 2A image-engine foundation: complete English and Arabic resources, runtime LTR/RTL switching, native multi-file selection, in-app drag-and-drop, basic local file metadata, isolated image inspection, tests, and CI.
 
 ## Requirements
 
@@ -31,6 +31,7 @@ The startup window opens the Studio workspace. Browse Files uses the native Wind
 - `src/OrbitConvert.App` — WPF desktop executable and presentation code
 - `tests/OrbitConvert.Tests` — xUnit tests
 - `docs/architecture.md` — architecture and phase-boundary notes
+- `docs/image-engine-decision.md` — pinned Magick.NET package and Q8/Q16 assessment
 - `.github/workflows/ci.yml` — Windows restore, Release build, and test workflow
 
 ## Screenshots
@@ -49,4 +50,4 @@ The startup window opens the Studio workspace. Browse Files uses the native Wind
 
 ## Scope
 
-Phase 1.3 adds only localization and the minimal persisted language code. File intake still reads only a selected file's path, name, extension, and size. It does not open file contents, scan folders, convert files, persist selections, integrate with Explorer, or add conversion engines. Those capabilities remain gated behind later approved milestones.
+Phase 2A adds an isolated Magick.NET Q8 adapter that can inspect a caller-provided image stream. It is not connected to selected files or the UI. The application does not convert images, create output files, persist selections, scan folders, integrate with Explorer, or expose conversion actions. Those capabilities remain gated behind later approved milestones, and Convert remains disabled.
