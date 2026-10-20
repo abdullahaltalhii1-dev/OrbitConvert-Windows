@@ -63,6 +63,46 @@ public sealed class MagickImageEngineTests
         Assert.Equal(ImageInspectionError.UnreadableInput, result.Error);
     }
 
+    [Fact]
+    public void Inspect_SeekableInputWhoseLengthThrows_ReturnsSafeFailure()
+    {
+        var engine = new MagickImageEngine();
+        using var input = new ThrowingSeekPropertiesStream(throwOnLength: true);
+
+        var result = engine.Inspect(input);
+
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Inspection);
+        Assert.Equal(ImageInspectionError.UnreadableInput, result.Error);
+    }
+
+    [Fact]
+    public void Inspect_SeekableInputWhosePositionThrows_ReturnsSafeFailure()
+    {
+        var engine = new MagickImageEngine();
+        using var input = new ThrowingSeekPropertiesStream(throwOnLength: false);
+
+        var result = engine.Inspect(input);
+
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Inspection);
+        Assert.Equal(ImageInspectionError.UnreadableInput, result.Error);
+    }
+
+    [Fact]
+    public void Inspect_DisposedInput_ReturnsSafeFailure()
+    {
+        var engine = new MagickImageEngine();
+        var input = new MemoryStream(OnePixelPng, writable: false);
+        input.Dispose();
+
+        var result = engine.Inspect(input);
+
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Inspection);
+        Assert.Equal(ImageInspectionError.UnreadableInput, result.Error);
+    }
+
     private sealed class UnreadableStream : Stream
     {
         public override bool CanRead => false;
@@ -77,6 +117,25 @@ public sealed class MagickImageEngineTests
 
         public override void Flush() => throw new NotSupportedException();
         public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+
+    private sealed class ThrowingSeekPropertiesStream(bool throwOnLength) : Stream
+    {
+        public override bool CanRead => true;
+        public override bool CanSeek => true;
+        public override bool CanWrite => false;
+        public override long Length => throwOnLength ? throw new IOException() : 1;
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() => throw new NotSupportedException();
+        public override int Read(byte[] buffer, int offset, int count) => 0;
         public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
         public override void SetLength(long value) => throw new NotSupportedException();
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();

@@ -10,18 +10,18 @@ public sealed class MagickImageEngine : IImageEngine
     {
         ArgumentNullException.ThrowIfNull(input);
 
-        if (!input.CanRead)
-        {
-            return ImageInspectionResult.Failure(ImageInspectionError.UnreadableInput);
-        }
-
-        if (input.CanSeek && input.Length - input.Position == 0)
-        {
-            return ImageInspectionResult.Failure(ImageInspectionError.EmptyInput);
-        }
-
         try
         {
+            if (!input.CanRead)
+            {
+                return ImageInspectionResult.Failure(ImageInspectionError.UnreadableInput);
+            }
+
+            if (input.CanSeek && input.Length - input.Position == 0)
+            {
+                return ImageInspectionResult.Failure(ImageInspectionError.EmptyInput);
+            }
+
             using var image = new MagickImage();
             image.Read(input);
 
@@ -41,6 +41,10 @@ public sealed class MagickImageEngine : IImageEngine
             return ImageInspectionResult.Failure(ImageInspectionError.UnreadableInput);
         }
         catch (NotSupportedException)
+        {
+            return ImageInspectionResult.Failure(ImageInspectionError.UnreadableInput);
+        }
+        catch (ObjectDisposedException)
         {
             return ImageInspectionResult.Failure(ImageInspectionError.UnreadableInput);
         }
