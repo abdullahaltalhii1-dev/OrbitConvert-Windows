@@ -9,7 +9,7 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 ### State
 
 - **Branch:** `feature/phase-2d-image-hardening`, based on `main` at `4b3a93f` (PR #8 merged).
-- **PR:** a Draft PR targets `main`. The PR number and CI result are recorded in the PR itself and in the follow-up commit on this branch.
+- **PR:** [#9 — Phase 2D: image engine hardening and validation](https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/pull/9), Draft, targeting `main`. Implementation commit: `58d746c`. Check the PR for the latest CI result.
 - **Worktree:** clean after commit.
 - **Not merged.** No Phase 3 work was started.
 
