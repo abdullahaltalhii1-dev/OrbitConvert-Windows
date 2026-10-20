@@ -8,6 +8,17 @@ public enum ImageInspectionError
     EmptyInput,
     UnreadableInput,
     InvalidOrCorruptImage,
+    UnsupportedFormat,
+    TooLarge,
+    UnsupportedBitDepth,
+    UnsupportedColor,
+    MultipleFrames,
+    ResourceLimit,
+    SamePath,
+    DestinationExists,
+    InvalidDestination,
+    OutputFailure,
+    OutputValidationFailed,
 }
 
 public sealed record ImageInspectionResult(ImageInspection? Inspection, ImageInspectionError Error)

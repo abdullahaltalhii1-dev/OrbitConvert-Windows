@@ -29,23 +29,14 @@ public enum AccentChoice
     Teal,
 }
 
-public enum ImageOutputFormat
-{
-    WebP,
-    Jpg,
-    Png,
-}
-
 /// <summary>
-/// Provides presentation state for the application shell, file intake, and Phase 1.3 localization.
+/// Provides presentation state for the application shell, file intake, localization, and single-image conversion.
 /// </summary>
 public sealed class MainViewModel : INotifyPropertyChanged
 {
     private AppSection _currentSection = AppSection.Workspace;
     private AppTheme _selectedTheme = AppTheme.Dark;
     private AccentChoice _selectedAccent = AccentChoice.Blue;
-    private ImageOutputFormat _selectedOutputFormat = ImageOutputFormat.WebP;
-    private double _previewQuality = 82;
 
     public MainViewModel()
         : this(
@@ -66,8 +57,14 @@ public sealed class MainViewModel : INotifyPropertyChanged
         LocalizationService localization)
     {
         Localization = localization ?? throw new ArgumentNullException(nameof(localization));
-        Localization.LanguageChanged += Localization_LanguageChanged;
+        Localization.LanguageChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(IsEnglishLanguage));
+            OnPropertyChanged(nameof(IsArabicLanguage));
+        };
         FileIntake = new FileIntakeViewModel(metadataProvider, Localization);
+        ImageConversion = new ImageConversionViewModel(FileIntake.SelectedFiles,
+            new ImageConversionService(new MagickImageEngine()), Localization);
 
         NavigateCommand = new RelayCommand(parameter =>
         {
@@ -98,14 +95,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
             if (parameter is AppLanguage language)
             {
                 Localization.ChangeLanguage(language);
-            }
-        });
-
-        SetOutputFormatCommand = new RelayCommand(parameter =>
-        {
-            if (parameter is ImageOutputFormat format)
-            {
-                SelectedOutputFormat = format;
             }
         });
     }
@@ -164,54 +153,19 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public ImageOutputFormat SelectedOutputFormat
-    {
-        get => _selectedOutputFormat;
-        private set
-        {
-            if (!SetField(ref _selectedOutputFormat, value))
-            {
-                return;
-            }
-
-            OnPropertyChanged(nameof(IsWebPSelected));
-            OnPropertyChanged(nameof(IsJpgSelected));
-            OnPropertyChanged(nameof(IsPngSelected));
-            OnPropertyChanged(nameof(IsQualityEnabled));
-            OnPropertyChanged(nameof(OutputPreviewFileName));
-            OnPropertyChanged(nameof(OutputPreviewSummary));
-        }
-    }
-
-    public double PreviewQuality
-    {
-        get => _previewQuality;
-        set
-        {
-            var clampedValue = Math.Clamp(value, 25, 100);
-            if (!SetField(ref _previewQuality, clampedValue))
-            {
-                return;
-            }
-
-            OnPropertyChanged(nameof(PreviewQualityText));
-            OnPropertyChanged(nameof(OutputPreviewSummary));
-        }
-    }
-
     public ICommand NavigateCommand { get; }
 
     public ICommand SetThemeCommand { get; }
 
     public ICommand SetAccentCommand { get; }
 
-    public ICommand SetOutputFormatCommand { get; }
-
     public ICommand SetLanguageCommand { get; }
 
     public LocalizationService Localization { get; }
 
     public FileIntakeViewModel FileIntake { get; }
+
+    public ImageConversionViewModel ImageConversion { get; }
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 
@@ -238,35 +192,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public bool IsEnglishLanguage => Localization.CurrentLanguage == AppLanguage.English;
 
     public bool IsArabicLanguage => Localization.CurrentLanguage == AppLanguage.Arabic;
-
-    public bool IsWebPSelected => SelectedOutputFormat == ImageOutputFormat.WebP;
-
-    public bool IsJpgSelected => SelectedOutputFormat == ImageOutputFormat.Jpg;
-
-    public bool IsPngSelected => SelectedOutputFormat == ImageOutputFormat.Png;
-
-    public bool IsQualityEnabled => SelectedOutputFormat != ImageOutputFormat.Png;
-
-    public string PreviewQualityText => $"{Math.Round(PreviewQuality):0}%";
-
-    public string OutputPreviewFileName => SelectedOutputFormat switch
-    {
-        ImageOutputFormat.WebP => "landscape_demo.webp",
-        ImageOutputFormat.Jpg => "landscape_demo.jpg",
-        ImageOutputFormat.Png => "landscape_demo.png",
-        _ => "landscape_demo.preview",
-    };
-
-    public string OutputPreviewSummary => SelectedOutputFormat == ImageOutputFormat.Png
-        ? Localization[LocalizationKeys.OutputPreviewLossless]
-        : Localization.Format(LocalizationKeys.OutputPreviewQuality, Math.Round(PreviewQuality));
-
-    private void Localization_LanguageChanged(object? sender, EventArgs e)
-    {
-        OnPropertyChanged(nameof(IsEnglishLanguage));
-        OnPropertyChanged(nameof(IsArabicLanguage));
-        OnPropertyChanged(nameof(OutputPreviewSummary));
-    }
 
     private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

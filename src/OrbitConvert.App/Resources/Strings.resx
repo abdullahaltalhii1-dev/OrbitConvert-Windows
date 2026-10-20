@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="HeaderSubtitle" xml:space="preserve"><value>STUDIO / WINDOWS</value></data>
-  <data name="UiPreview" xml:space="preserve"><value>UI PREVIEW</value></data>
+  <data name="UiPreview" xml:space="preserve"><value>STUDIO</value></data>
   <data name="ThemeDark" xml:space="preserve"><value>Dark</value></data>
   <data name="ThemeLight" xml:space="preserve"><value>Light</value></data>
   <data name="UseDarkTheme" xml:space="preserve"><value>Use dark theme</value></data>
@@ -18,20 +18,20 @@
   <data name="NavDocuments" xml:space="preserve"><value>Documents</value></data>
   <data name="NavSettings" xml:space="preserve"><value>Settings</value></data>
   <data name="NavWorkspaceAutomation" xml:space="preserve"><value>Workspace</value></data>
-  <data name="NavImagesAutomation" xml:space="preserve"><value>Images demo preview</value></data>
+  <data name="NavImagesAutomation" xml:space="preserve"><value>Image conversion</value></data>
   <data name="NavVideoAutomation" xml:space="preserve"><value>Video coming soon</value></data>
   <data name="NavAudioAutomation" xml:space="preserve"><value>Audio coming soon</value></data>
   <data name="NavDocumentsAutomation" xml:space="preserve"><value>Documents coming soon</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
-  <data name="BadgeDemo" xml:space="preserve"><value>DEMO</value></data>
+  <data name="BadgeDemo" xml:space="preserve"><value>PNG / JPEG</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 1.3</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>Localization · No conversion</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 2B</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Single-image conversion</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Choose real files now. Conversion remains disabled until a later approved phase.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images to convert one PNG or JPEG.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>Choose files or drop them here.</value></data>
-  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported yet, and no file content is opened.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose one image in Images to convert.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>Browse Files</value></data>
   <data name="BrowseFilesHelp" xml:space="preserve"><value>Open the Windows file picker</value></data>
   <data name="SelectedFiles" xml:space="preserve"><value>Selected files</value></data>
@@ -42,9 +42,9 @@
   <data name="Remove" xml:space="preserve"><value>Remove</value></data>
   <data name="RemoveHelp" xml:space="preserve"><value>Remove this file from the selection</value></data>
   <data name="PrivateProcessingTitle" xml:space="preserve"><value>Private Processing</value></data>
-  <data name="PrivateProcessingDescription" xml:space="preserve"><value>Only basic file details are read locally. Files are never uploaded or modified.</value></data>
+  <data name="PrivateProcessingDescription" xml:space="preserve"><value>Images are processed locally. Originals stay unchanged and files are never uploaded.</value></data>
   <data name="MultipleFormatsTitle" xml:space="preserve"><value>Multiple Formats</value></data>
-  <data name="MultipleFormatsDescription" xml:space="preserve"><value>Select any file type now. Format support will be introduced in later approved phases.</value></data>
+  <data name="MultipleFormatsDescription" xml:space="preserve"><value>PNG and JPEG conversion is available in Images. Other formats are coming later.</value></data>
   <data name="FileDialogTitle" xml:space="preserve"><value>Select files for OrbitConvert</value></data>
   <data name="FileDialogFilter" xml:space="preserve"><value>All files (*.*)|*.*</value></data>
   <data name="FileCountNone" xml:space="preserve"><value>No files selected</value></data>
@@ -73,27 +73,9 @@
   <data name="IntakeSelectionCleared" xml:space="preserve"><value>Selection cleared.</value></data>
   <data name="IntakeFolderDropRejected" xml:space="preserve"><value>Folders aren’t supported yet. Drop individual files instead.</value></data>
   <data name="ImagesEyebrow" xml:space="preserve"><value>IMAGES</value></data>
-  <data name="FictionalDemo" xml:space="preserve"><value>FICTIONAL DEMO</value></data>
-  <data name="ImagesTitle" xml:space="preserve"><value>Shape the output before it exists.</value></data>
-  <data name="ImagesDescription" xml:space="preserve"><value>Explore a sample conversion layout. No file is loaded, read, or created.</value></data>
-  <data name="DemoImage" xml:space="preserve"><value>DEMO IMAGE</value></data>
-  <data name="FictionalSample" xml:space="preserve"><value>Fictional in-memory sample</value></data>
-  <data name="SampleSize" xml:space="preserve"><value>SAMPLE SIZE</value></data>
+  <data name="ImagesTitle" xml:space="preserve"><value>A fresh format. The same image.</value></data>
+  <data name="ImagesDescription" xml:space="preserve"><value>Convert one PNG or JPEG safely to a new file. Select the source from your workspace.</value></data>
   <data name="Dimensions" xml:space="preserve"><value>DIMENSIONS</value></data>
-  <data name="OutputPreview" xml:space="preserve"><value>Output Preview</value></data>
-  <data name="OutputPreviewDescription" xml:space="preserve"><value>Controls update preview text only.</value></data>
-  <data name="ExampleFormat" xml:space="preserve"><value>EXAMPLE FORMAT</value></data>
-  <data name="PreviewWebPAutomation" xml:space="preserve"><value>Preview WebP output</value></data>
-  <data name="PreviewJpgAutomation" xml:space="preserve"><value>Preview JPG output</value></data>
-  <data name="PreviewPngAutomation" xml:space="preserve"><value>Preview PNG output</value></data>
-  <data name="ExampleQuality" xml:space="preserve"><value>EXAMPLE QUALITY</value></data>
-  <data name="ExampleQualityAutomation" xml:space="preserve"><value>Example output quality</value></data>
-  <data name="OutputFilenamePreview" xml:space="preserve"><value>OUTPUT FILENAME PREVIEW</value></data>
-  <data name="OutputPreviewLossless" xml:space="preserve"><value>Lossless preview · Quality control not applicable</value></data>
-  <data name="OutputPreviewQuality" xml:space="preserve"><value>Preview only · Quality {0}%</value></data>
-  <data name="ConversionUnavailableHelp" xml:space="preserve"><value>Conversion is not available in Phase 1.3</value></data>
-  <data name="ConvertComingSoon" xml:space="preserve"><value>Convert · Coming soon</value></data>
-  <data name="NoPreviewFileCreated" xml:space="preserve"><value>No file will be created in this preview.</value></data>
   <data name="ComingSoon" xml:space="preserve"><value>COMING SOON</value></data>
   <data name="VideoEyebrow" xml:space="preserve"><value>VIDEO</value></data>
   <data name="VideoTitle" xml:space="preserve"><value>Video tools are on the horizon.</value></data>
@@ -130,4 +112,37 @@
   <data name="LanguageArabicAutomation" xml:space="preserve"><value>استخدام الواجهة العربية</value></data>
   <data name="SettingsInfo" xml:space="preserve"><value>Only the language preference is stored locally. No registry entry, account, cloud sync, or telemetry is used.</value></data>
   <data name="FallbackProbe" xml:space="preserve"><value>English fallback text</value></data>
+  <data name="ImageSelectSource" xml:space="preserve"><value>Select one image</value></data>
+  <data name="ImageSelectionHelp" xml:space="preserve"><value>Add files in Workspace, then select one file here and inspect it.</value></data>
+  <data name="ImageInspect" xml:space="preserve"><value>Inspect image</value></data>
+  <data name="ImageSourceFormat" xml:space="preserve"><value>Source format</value></data>
+  <data name="ImageOutputFormat" xml:space="preserve"><value>Output format</value></data>
+  <data name="ImageDestination" xml:space="preserve"><value>Save a new copy</value></data>
+  <data name="ImageChooseDestination" xml:space="preserve"><value>Choose output location</value></data>
+  <data name="ImageWhiteBackground" xml:space="preserve"><value>PNG transparency is replaced with solid white (#FFFFFF) when saving JPEG.</value></data>
+  <data name="ImageFixedSettings" xml:space="preserve"><value>JPEG quality 90 · PNG 8-bit · Originals stay unchanged</value></data>
+  <data name="ImageConvert" xml:space="preserve"><value>Convert image</value></data>
+  <data name="ImageIdle" xml:space="preserve"><value>Choose a file and inspect it to begin.</value></data>
+  <data name="ImageInspecting" xml:space="preserve"><value>Inspecting image…</value></data>
+  <data name="ImageReady" xml:space="preserve"><value>Choose an output location, then convert this image.</value></data>
+  <data name="ImageConverting" xml:space="preserve"><value>Converting and verifying image…</value></data>
+  <data name="ImageSuccess" xml:space="preserve"><value>Image saved and verified:</value></data>
+  <data name="ImageUnsupportedHelp" xml:space="preserve"><value>PNG and JPEG only · One image at a time · WebP and other formats are unavailable</value></data>
+  <data name="ImageCleanupFailed" xml:space="preserve"><value>A temporary file could not be removed. Check the output folder for .orbitconvert-*.tmp.</value></data>
+  <data name="ImageUnexpectedError" xml:space="preserve"><value>The operation could not be completed. Please try again.</value></data>
+  <data name="ImageWaitToClose" xml:space="preserve"><value>Please wait for the image operation to finish before closing.</value></data>
+  <data name="ImageErrorEmptyInput" xml:space="preserve"><value>This file is empty.</value></data>
+  <data name="ImageErrorUnreadableInput" xml:space="preserve"><value>The source file could not be read. Check that it still exists and is accessible.</value></data>
+  <data name="ImageErrorInvalidOrCorruptImage" xml:space="preserve"><value>This file is not a readable PNG or JPEG image, or its contents are damaged.</value></data>
+  <data name="ImageErrorUnsupportedFormat" xml:space="preserve"><value>Only PNG and JPEG images are supported.</value></data>
+  <data name="ImageErrorTooLarge" xml:space="preserve"><value>Image exceeds the limit: 25 MiB, 8192 pixels per side, or 16 million pixels.</value></data>
+  <data name="ImageErrorUnsupportedBitDepth" xml:space="preserve"><value>Images above 8 bits per component are not supported yet. The original is unchanged.</value></data>
+  <data name="ImageErrorUnsupportedColor" xml:space="preserve"><value>This image uses an unsupported color configuration or embedded color profile.</value></data>
+  <data name="ImageErrorMultipleFrames" xml:space="preserve"><value>Animated and multi-frame images are not supported.</value></data>
+  <data name="ImageErrorResourceLimit" xml:space="preserve"><value>This image requires more processing resources than allowed.</value></data>
+  <data name="ImageErrorSamePath" xml:space="preserve"><value>Choose a different output path. The original cannot be replaced.</value></data>
+  <data name="ImageErrorDestinationExists" xml:space="preserve"><value>A file or folder already exists at this location. Choose a new filename.</value></data>
+  <data name="ImageErrorInvalidDestination" xml:space="preserve"><value>Choose a filename with the matching .png, .jpg, or .jpeg extension.</value></data>
+  <data name="ImageErrorOutputFailure" xml:space="preserve"><value>Could not save the image. Check the paths, folder permissions, and free space.</value></data>
+  <data name="ImageErrorOutputValidationFailed" xml:space="preserve"><value>The output image could not be verified. No final file was saved.</value></data>
 </root>

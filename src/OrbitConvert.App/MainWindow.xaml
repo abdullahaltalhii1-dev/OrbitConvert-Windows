@@ -45,7 +45,7 @@
 
             <Grid Grid.Column="1">
                 <views:WorkspaceView Visibility="{Binding IsWorkspaceSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <views:ImagesPreviewView Visibility="{Binding IsImagesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <views:ImagesView Visibility="{Binding IsImagesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <views:ComingSoonView Eyebrow="{Binding Localization[VideoEyebrow]}"
                                       Title="{Binding Localization[VideoTitle]}"

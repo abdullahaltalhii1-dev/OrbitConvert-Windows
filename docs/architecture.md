@@ -1,30 +1,29 @@
 # Architecture
 
-OrbitConvert is a deliberately small WPF application organized around MVVM. Phase 1.3 adds maintainable English and Arabic localization to the safe file-intake Studio shell. The first Phase 2A checkpoint adds only an isolated, non-UI image inspection boundary.
+OrbitConvert is a small .NET 10 WPF application using MVVM. The existing shell, themes, localization, native file picker, drag/drop, and file intake remain in place.
 
-## Projects
+## Presentation
 
-- `src/OrbitConvert.App` contains the Windows desktop executable, XAML views, theme resources, and view models.
-- `tests/OrbitConvert.Tests` contains fast xUnit tests for presentation logic.
+MainWindow composes UserControls and binds its title to MainViewModel.AppTitle. MainViewModel owns navigation, session theme/accent, localization, FileIntakeViewModel, and ImageConversionViewModel.
 
-## UI composition
+FileIntakeViewModel retains the observable collection, case-insensitive duplicate prevention, metadata-only intake, remove/clear actions, and localized statuses. Intake does not automatically decode or convert files.
 
-`MainWindow.xaml` binds its title to `MainViewModel.AppTitle` and stays focused on shell composition. The `Views` folder contains small `UserControl` components for the header, sidebar, workspace, fictional image demo, settings, and a reusable coming-soon page. These controls inherit the window data context, so navigation and preview commands remain centralized rather than duplicated.
+ImagesView replaces the fictional ImagesPreviewView. Its selector binds to FileIntake.SelectedFiles and chooses one item. Inspecting is explicit. ImageConversionViewModel owns inspected metadata, opposite output format, destination, busy state, localized status keys, and completed output path. The view contains only SaveFileDialog handling. AsyncCommand prevents repeated execution; the view model prevents conflicting actions. MainWindow rejects normal closing while an image operation is busy. Settings and navigation remain usable.
 
-`MainViewModel` owns session-only navigation, theme, accent, fictional image preview state, and language selection. It exposes a focused `FileIntakeViewModel`, which owns the observable selection, Windows-style duplicate prevention, logical status state, and add/remove/clear commands. Dynamic status text is resolved at display time, so an existing message updates when the language changes.
+Paths and format identifiers use LTR bindings even in Arabic. LocalizationService still resolves RESX keys, falls back to English, and refreshes messages on language changes. Only the language preference is persisted.
 
-`LocalizationService` resolves stable keys from `Resources/Strings.resx` and `Resources/Strings.ar.resx`, publishes the current culture and flow direction, and falls back to English when an Arabic key is missing. Views bind to the service indexer, allowing one XAML tree to refresh at runtime. The root content grid follows LTR or RTL direction; paths, filenames, format labels, and vector icons opt into LTR where mirroring would be incorrect.
+## Processing and filesystem boundaries
 
-`FileLanguagePreferenceStore` persists only the `en` or `ar` code in `%LOCALAPPDATA%\OrbitConvert\language.txt`. A missing, unreadable, or invalid value safely falls back to English. Selected files, theme, and accent remain in memory only.
+IImageEngine exposes Inspect, Convert, and ValidateOutput using streams. MagickImageEngine contains all Magick.NET operations and has no output-path API. ImageInputGuard bounds stream bytes, reads PNG IHDR bit depth before Q8 decoding, validates dimensions, scans container structure, rejects animation/MPO/concatenated JPEGs and unsupported color profiles, and forces the matching PNG/JPEG reader. Native ping precedes full pixel decoding.
 
-`FileMetadataProvider` uses filesystem metadata APIs to obtain only the normalized path, name, extension, and byte length. It never opens or parses file content. Its small interface keeps missing, inaccessible, invalid, and directory cases testable without coupling the view model to Windows dialogs.
+MagickImageEngine applies its process-local native policy once, with a lock around native operations. It normalizes EXIF orientation, removes EXIF to avoid double rotation, composites alpha onto white for JPEG, encodes JPEG quality 90 or PNG 8-bit, and returns explicit metadata/errors. ValidateOutput fully decodes and checks actual format, dimensions, depth, and alpha against the expected result.
 
-`IImageEngine` is the narrow boundary for the Phase 2A image foundation. `MagickImageEngine` uses the pinned Magick.NET Q8 package to decode a caller-provided stream and report its format, dimensions, bit depth, and alpha presence. Expected empty, corrupt, and unreadable inputs return explicit failures. The service is not connected to file intake or WPF and has no output or conversion API.
+ImageConversionService owns source/destination paths. All inspection/conversion work runs on Task.Run behind a shared one-operation semaphore. It opens the source read-only with FileShare.Read, rejects identical/existing destinations, and creates a unique .orbitconvert-{guid}.tmp file in the destination directory with FileMode.CreateNew. Ownership begins only after creation succeeds.
 
-`WorkspaceView` code-behind contains only the native `OpenFileDialog` boundary and WPF drag/drop event translation. It forwards paths to the file-intake commands; all selection behavior remains outside the view.
+After encoding, it flushes/closes the temporary file, reopens it for full validation, and finalizes with File.Move(overwrite: false). A destination created during the operation is preserved. Expected failures return explicit errors; finally deletes only the owned temporary path. Cleanup failures are reported separately. No directory sweeping or original-file writes occur.
 
-The window code-behind translates the view model's theme and accent choices into dynamic WPF resources. It also asks the supported Windows DWM API to match the native title bar to the selected theme while retaining standard window controls and gracefully keeping the system default when the attribute is unavailable. This code is intentionally UI-specific, contains no product logic, and does not persist values.
+## Tests and limits
 
-## Phase boundary
+xUnit tests cover native conversion, container guards, file safety, finalization races, cleanup failures, view-model async state, localization, and existing intake/shell behavior. WPF/WIC independently decodes output in dedicated STA test threads. Synthetic PNG fixtures use valid headers, zlib data, and CRCs, including a real 16-bit PNG verified independently as 64 bits per RGBA pixel.
 
-Phase 2A preserves the localized shell and adds image inspection only behind an isolated service. File intake still reads basic filesystem metadata; folders are rejected without scanning. The Images page remains a fictional, isolated demo and Convert remains disabled. The application contains no user-file image decoding, conversion, output generation, selected-file persistence, Explorer integration, installer, updater, telemetry, or network features. Those capabilities require separately approved milestones.
+See image-engine-decision.md for exact resource settings and limitations. This phase has no batch workflow, advanced conversion settings, other formats/engines, output thumbnails, telemetry, shell integration, or updater.

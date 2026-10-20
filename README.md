@@ -1,6 +1,6 @@
 # OrbitConvert
 
-OrbitConvert is a Windows desktop application that will provide local file conversion workflows. The current repository contains the Phase 1.3 bilingual Studio UI shell plus the small Phase 2A image-engine foundation: complete English and Arabic resources, runtime LTR/RTL switching, native multi-file selection, in-app drag-and-drop, basic local file metadata, isolated image inspection, tests, and CI.
+OrbitConvert is a bilingual Windows desktop application for local file conversion. Phase 2B adds real single-image PNG ↔ JPEG conversion to the Studio shell, with safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
 
 ## Requirements
 
@@ -34,7 +34,28 @@ The startup window opens the Studio workspace. Browse Files uses the native Wind
 - `docs/image-engine-decision.md` — pinned Magick.NET package and Q8/Q16 assessment
 - `.github/workflows/ci.yml` — Windows restore, Release build, and test workflow
 
-## Screenshots
+## Convert an image
+
+1. Add files through Workspace using Browse Files or drag-and-drop.
+2. Open Images, select one file, and choose Inspect image.
+3. PNG selects JPEG output automatically; JPEG selects PNG.
+4. Choose a new output location, then select Convert image.
+5. Wait for the saved-and-verified message. Original files and existing destination files are never overwritten.
+
+PNG transparency is composited onto white (#FFFFFF) for JPEG. JPEG quality is fixed at 90 and PNG output uses 8 bits per component. JPEG → PNG does not restore details already lost to JPEG compression.
+
+Inputs are limited to 25 MiB, 8192 pixels per side, and 16 million pixels. PNG above 8 bits, animation, multi-frame images, CMYK, embedded ICC profiles, and nonstandard PNG color configurations are rejected. EXIF orientation is applied to pixels; the EXIF profile is then removed to prevent repeated rotation. Unprofiled RGB/sRGB/grayscale and standard sRGB PNG color information are supported. This phase does not promise general color-managed or metadata-preserving conversion.
+
+See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dependency and protection limits, and [phase-2b-validation.md](docs/phase-2b-validation.md) for verification evidence.
+
+## Phase 2B screenshots
+
+- [English — dark](docs/screenshots/12-phase-2b-english-dark.png)
+- [English — light](docs/screenshots/13-phase-2b-english-light.png)
+- [Arabic — light](docs/screenshots/14-phase-2b-arabic-light.png)
+- [Arabic — dark](docs/screenshots/15-phase-2b-arabic-dark.png)
+
+## Historical shell screenshots
 
 - `docs/screenshots/01-dark-workspace.png`
 - `docs/screenshots/02-light-workspace.png`
@@ -50,4 +71,4 @@ The startup window opens the Studio workspace. Browse Files uses the native Wind
 
 ## Scope
 
-Phase 2A adds an isolated Magick.NET Q8 adapter that can inspect a caller-provided image stream. It is not connected to selected files or the UI. The application does not convert images, create output files, persist selections, scan folders, integrate with Explorer, or expose conversion actions. Those capabilities remain gated behind later approved milestones, and Convert remains disabled.
+Phase 2B supports one PNG or JPEG per operation. File intake can contain multiple files, but only the explicitly selected image is processed. WebP, BMP, HEIC/AVIF, batch conversion, advanced settings, other engines, Explorer integration, and installers remain unavailable. No new dependencies were added; Magick.NET-Q8-AnyCPU remains pinned to 15.0.0.

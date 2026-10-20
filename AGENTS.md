@@ -17,7 +17,9 @@ OrbitConvert is an incremental Windows desktop application built with C#, .NET 1
 9. Use original OrbitConvert design and branding. Do not copy Tangerine code, assets, screenshots, or trademarks.
 10. Favor accessible controls, keyboard navigation, robust error handling, and straightforward documentation.
 
-## Approved Phase 1.1 scope
+## Historical Phase 1.1 scope
+
+The following restrictions applied only to Phase 1.1 and are retained as history. Later owner-approved tasks supersede this section; the repository-wide development and safety rules above always apply.
 
 Phase 1.1 is limited to the OrbitConvert Studio UI shell: a responsive header, preview navigation, workspace presentation, an explicitly fictional image demo, coming-soon pages, and in-memory theme and accent choices. Preserve the Phase 0 solution, MVVM binding, theme resource structure, tests, and Windows CI.
 
