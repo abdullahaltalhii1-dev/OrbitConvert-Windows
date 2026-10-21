@@ -53,16 +53,8 @@
                 <views:AudiosView IsEnabled="{Binding CanUseAudio}"
                                   Visibility="{Binding IsAudioSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <views:ComingSoonView Eyebrow="{Binding Localization[DocumentsEyebrow]}"
-                                      Title="{Binding Localization[DocumentsTitle]}"
-                                      Description="{Binding Localization[DocumentsDescription]}"
-                                      IconData="M3,2 H34 L51,19 V66 H3 Z M33,3 V21 H50 M12,33 H42 M12,42 H42 M12,51 H34"
-                                      IconWidth="54"
-                                      IconHeight="68"
-                                      FormatsHeading="{Binding Localization[DocumentsFormatsHeading]}"
-                                      Formats="PDF|DOCX"
-                                      InformationalText="{Binding Localization[DocumentsInformationalText]}"
-                                      Visibility="{Binding IsDocumentsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <views:DocumentsView IsEnabled="{Binding CanUseDocuments}"
+                                     Visibility="{Binding IsDocumentsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <views:SettingsView Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>

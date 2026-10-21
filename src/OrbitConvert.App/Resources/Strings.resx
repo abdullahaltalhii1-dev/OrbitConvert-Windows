@@ -21,17 +21,17 @@
   <data name="NavImagesAutomation" xml:space="preserve"><value>Image conversion</value></data>
   <data name="NavVideoAutomation" xml:space="preserve"><value>Video conversion</value></data>
   <data name="NavAudioAutomation" xml:space="preserve"><value>Audio conversion and extraction</value></data>
-  <data name="NavDocumentsAutomation" xml:space="preserve"><value>Documents coming soon</value></data>
+  <data name="NavDocumentsAutomation" xml:space="preserve"><value>Document and Markdown conversion</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>4 FORMATS</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 4</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>Local image, video and audio conversion</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 5</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Private media and document conversion</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images, Video or Audio to process one supported file.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images, Video, Audio or Documents to process one supported file.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>Choose files or drop them here.</value></data>
-  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose one source in Images, Video or Audio.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose one source in a conversion workspace.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>Browse Files</value></data>
   <data name="BrowseFilesHelp" xml:space="preserve"><value>Open the Windows file picker</value></data>
   <data name="SelectedFiles" xml:space="preserve"><value>Selected files</value></data>
@@ -274,4 +274,46 @@
   <data name="AudioErrorOutputFailure" xml:space="preserve"><value>The output could not be saved. Check folder permissions and free space.</value></data>
   <data name="AudioErrorOutputValidationFailed" xml:space="preserve"><value>The audio output could not be verified. No completed destination was saved.</value></data>
   <data name="AudioErrorProcessTerminationFailed" xml:space="preserve"><value>The audio tool did not confirm stopping. No final file was saved. Wait before retrying and check for temporary files.</value></data>
+  <data name="DocumentTitle" xml:space="preserve"><value>Documents, thoughtfully converted.</value></data>
+  <data name="DocumentDescription" xml:space="preserve"><value>Convert one document or Markdown file offline. Keep the original, verify the new copy.</value></data>
+  <data name="DocumentSource" xml:space="preserve"><value>Source document</value></data>
+  <data name="DocumentSelectionHelp" xml:space="preserve"><value>Add files in Workspace, select one here, then inspect. No automatic conversion.</value></data>
+  <data name="DocumentInspect" xml:space="preserve"><value>Inspect document</value></data>
+  <data name="DocumentActualFormat" xml:space="preserve"><value>Detected format</value></data>
+  <data name="DocumentSize" xml:space="preserve"><value>Source size</value></data>
+  <data name="DocumentStructure" xml:space="preserve"><value>Headings: {0} · Tables: {1} · Lists: {2}</value></data>
+  <data name="DocumentOutput" xml:space="preserve"><value>Verified output formats</value></data>
+  <data name="DocumentPolicy" xml:space="preserve"><value>Single file. Existing files are never overwritten. Linked resources, macros and active content are rejected. UTF-8 text; layout may change between formats. PDF is unavailable.</value></data>
+  <data name="DocumentDestination" xml:space="preserve"><value>Choose a new document location</value></data>
+  <data name="DocumentConvert" xml:space="preserve"><value>Convert document</value></data>
+  <data name="DocumentCancel" xml:space="preserve"><value>Cancel operation</value></data>
+  <data name="DocumentProgress" xml:space="preserve"><value>Document processing stage</value></data>
+  <data name="DocumentIdle" xml:space="preserve"><value>Select a source document and inspect it first.</value></data>
+  <data name="DocumentReady" xml:space="preserve"><value>Choose a supported format and a new destination.</value></data>
+  <data name="DocumentWorking" xml:space="preserve"><value>Processing a private workspace copy. The original stays unchanged.</value></data>
+  <data name="DocumentSuccess" xml:space="preserve"><value>Document saved and verified successfully.</value></data>
+  <data name="DocumentUnexpectedError" xml:space="preserve"><value>Document processing could not be completed. No success was reported.</value></data>
+  <data name="DocumentCancelling" xml:space="preserve"><value>Cancelling; waiting for the tool to stop and temporary files to be cleaned.</value></data>
+  <data name="DocumentCleanupFailed" xml:space="preserve"><value>Temporary-file cleanup or process termination was not confirmed. Wait before retrying and check the operation workspace.</value></data>
+  <data name="DocumentStageInspecting" xml:space="preserve"><value>Inspecting the document safely…</value></data>
+  <data name="DocumentStageConverting" xml:space="preserve"><value>Converting the document…</value></data>
+  <data name="DocumentStageVerifying" xml:space="preserve"><value>Verifying the new document…</value></data>
+  <data name="DocumentCancelToClose" xml:space="preserve"><value>A document operation is running. Cancel and close after cleanup? Choose No to keep waiting.</value></data>
+  <data name="DocumentErrorUnreadableInput" xml:space="preserve"><value>The document could not be read. Check that it still exists and is accessible.</value></data>
+  <data name="DocumentErrorUnsupportedFormat" xml:space="preserve"><value>This document format is not supported. Text inputs must be UTF-8 .md, .txt or .html.</value></data>
+  <data name="DocumentErrorUnsupportedDirection" xml:space="preserve"><value>This input/output combination is not supported.</value></data>
+  <data name="DocumentErrorInvalidDocument" xml:space="preserve"><value>The document is empty, malformed or unreadable.</value></data>
+  <data name="DocumentErrorUnsafeContent" xml:space="preserve"><value>The document contains unsupported active content, linked resources or unsafe package entries.</value></data>
+  <data name="DocumentErrorTooLarge" xml:space="preserve"><value>The document exceeds the file, expanded-content or structural limits.</value></data>
+  <data name="DocumentErrorToolsUnavailable" xml:space="preserve"><value>The bundled document tool is unavailable or could not start.</value></data>
+  <data name="DocumentErrorToolsIncompatible" xml:space="preserve"><value>The document tool version is incompatible. Use the verified bundled version.</value></data>
+  <data name="DocumentErrorSamePath" xml:space="preserve"><value>Choose a destination different from the original.</value></data>
+  <data name="DocumentErrorDestinationExists" xml:space="preserve"><value>The destination already exists. Nothing was overwritten; choose a new name.</value></data>
+  <data name="DocumentErrorInvalidDestination" xml:space="preserve"><value>Choose a new filename with the selected extension in an existing folder.</value></data>
+  <data name="DocumentErrorConversionFailed" xml:space="preserve"><value>The document tool rejected this content or could not convert it. No completed output was saved.</value></data>
+  <data name="DocumentErrorOutputValidationFailed" xml:space="preserve"><value>The output failed document or content verification. No completed destination was saved.</value></data>
+  <data name="DocumentErrorCancelled" xml:space="preserve"><value>Document operation cancelled. No completed destination was saved.</value></data>
+  <data name="DocumentErrorTimedOut" xml:space="preserve"><value>The document tool exceeded its time limit. No completed destination was saved.</value></data>
+  <data name="DocumentErrorProcessTerminationFailed" xml:space="preserve"><value>The document tool did not confirm stopping. No final file was saved; cleanup may be incomplete.</value></data>
+  <data name="DocumentErrorOutputFailure" xml:space="preserve"><value>The document output could not be saved. Check permissions and free space.</value></data>
 </root>

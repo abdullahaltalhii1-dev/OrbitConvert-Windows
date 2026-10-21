@@ -21,17 +21,17 @@
   <data name="NavImagesAutomation" xml:space="preserve"><value>تحويل الصور</value></data>
   <data name="NavVideoAutomation" xml:space="preserve"><value>تحويل الفيديو</value></data>
   <data name="NavAudioAutomation" xml:space="preserve"><value>تحويل الصوت واستخراجه</value></data>
-  <data name="NavDocumentsAutomation" xml:space="preserve"><value>المستندات، قريبًا</value></data>
+  <data name="NavDocumentsAutomation" xml:space="preserve"><value>تحويل المستندات وMarkdown</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>٤ صيغ</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>قريبًا</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 4</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>تحويل الصور والفيديو والصوت محليًا</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 5</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>تحويل الوسائط والمستندات محليًا</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>مساحة العمل</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>حوّل ملفاتك بلا تعقيد.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور أو الفيديو أو الصوت لمعالجة ملف مدعوم واحد.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور أو الفيديو أو الصوت أو المستندات لمعالجة ملف مدعوم واحد.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>اختر الملفات أو أفلتها هنا.</value></data>
-  <data name="DropZoneDescription" xml:space="preserve"><value>حدد ملفًا أو أكثر. المجلدات غير مدعومة. اختر مصدرًا واحدًا في الصور أو الفيديو أو الصوت.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>حدد ملفًا أو أكثر. المجلدات غير مدعومة. اختر مصدرًا واحدًا في مساحة التحويل.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>استعراض الملفات</value></data>
   <data name="BrowseFilesHelp" xml:space="preserve"><value>فتح منتقي ملفات Windows</value></data>
   <data name="SelectedFiles" xml:space="preserve"><value>الملفات المحددة</value></data>
@@ -273,4 +273,46 @@
   <data name="AudioErrorOutputFailure" xml:space="preserve"><value>تعذر حفظ الناتج. تحقق من أذونات المجلد والمساحة المتاحة.</value></data>
   <data name="AudioErrorOutputValidationFailed" xml:space="preserve"><value>تعذر التحقق من ناتج الصوت. لم يُحفظ ملف نهائي.</value></data>
   <data name="AudioErrorProcessTerminationFailed" xml:space="preserve"><value>لم تؤكد أداة الصوت توقفها. لم يُحفظ ملف نهائي. انتظر قبل المحاولة وافحص الملفات المؤقتة.</value></data>
+  <data name="DocumentTitle" xml:space="preserve"><value>مستنداتك، بصيغة أبسط.</value></data>
+  <data name="DocumentDescription" xml:space="preserve"><value>حوّل مستندًا أو ملف Markdown واحدًا محليًا. يبقى الأصل كما هو وتُفحص النسخة الجديدة.</value></data>
+  <data name="DocumentSource" xml:space="preserve"><value>المستند المصدر</value></data>
+  <data name="DocumentSelectionHelp" xml:space="preserve"><value>أضف الملفات في مساحة العمل، ثم اختر مستندًا وافحصه هنا. لا يبدأ التحويل تلقائيًا.</value></data>
+  <data name="DocumentInspect" xml:space="preserve"><value>فحص المستند</value></data>
+  <data name="DocumentActualFormat" xml:space="preserve"><value>الصيغة المكتشفة</value></data>
+  <data name="DocumentSize" xml:space="preserve"><value>حجم المصدر</value></data>
+  <data name="DocumentStructure" xml:space="preserve"><value>العناوين: {0} · الجداول: {1} · القوائم: {2}</value></data>
+  <data name="DocumentOutput" xml:space="preserve"><value>صيغ الإخراج المتحقق منها</value></data>
+  <data name="DocumentPolicy" xml:space="preserve"><value>ملف واحد دون استبدال الملفات الموجودة. تُرفض الموارد المرتبطة والماكرو والمحتويات النشطة. النص بترميز UTF-8؛ قد يتغير التخطيط بين الصيغ. PDF غير متاح.</value></data>
+  <data name="DocumentDestination" xml:space="preserve"><value>اختيار موقع مستند جديد</value></data>
+  <data name="DocumentConvert" xml:space="preserve"><value>تحويل المستند</value></data>
+  <data name="DocumentCancel" xml:space="preserve"><value>إلغاء العملية</value></data>
+  <data name="DocumentProgress" xml:space="preserve"><value>مرحلة معالجة المستند</value></data>
+  <data name="DocumentIdle" xml:space="preserve"><value>اختر مستندًا مصدرًا وافحصه أولًا.</value></data>
+  <data name="DocumentReady" xml:space="preserve"><value>اختر صيغة مدعومة ووجهة جديدة.</value></data>
+  <data name="DocumentWorking" xml:space="preserve"><value>تجري معالجة نسخة خاصة. يبقى الأصل دون تغيير.</value></data>
+  <data name="DocumentSuccess" xml:space="preserve"><value>تم حفظ المستند والتحقق منه بنجاح.</value></data>
+  <data name="DocumentUnexpectedError" xml:space="preserve"><value>تعذر إتمام معالجة المستند. لم يُبلّغ عن نجاح.</value></data>
+  <data name="DocumentCancelling" xml:space="preserve"><value>جارٍ الإلغاء وانتظار توقف الأداة وتنظيف الملفات المؤقتة.</value></data>
+  <data name="DocumentCleanupFailed" xml:space="preserve"><value>لم يتأكد تنظيف الملفات المؤقتة أو توقف العملية. انتظر قبل إعادة المحاولة وتحقق من مجلد العملية.</value></data>
+  <data name="DocumentStageInspecting" xml:space="preserve"><value>جارٍ فحص المستند…</value></data>
+  <data name="DocumentStageConverting" xml:space="preserve"><value>جارٍ تحويل المستند…</value></data>
+  <data name="DocumentStageVerifying" xml:space="preserve"><value>جارٍ التحقق من المستند الجديد…</value></data>
+  <data name="DocumentCancelToClose" xml:space="preserve"><value>توجد عملية مستند قيد التشغيل. هل تريد إلغاءها والإغلاق بعد التنظيف؟ اختر «لا» للمتابعة والانتظار.</value></data>
+  <data name="DocumentErrorUnreadableInput" xml:space="preserve"><value>تعذر قراءة المستند. تحقق من وجوده وإمكانية الوصول إليه.</value></data>
+  <data name="DocumentErrorUnsupportedFormat" xml:space="preserve"><value>صيغة المستند غير مدعومة. يجب أن تكون الملفات النصية UTF-8 بامتداد .md أو .txt أو .html.</value></data>
+  <data name="DocumentErrorUnsupportedDirection" xml:space="preserve"><value>التحويل بين هاتين الصيغتين غير مدعوم.</value></data>
+  <data name="DocumentErrorInvalidDocument" xml:space="preserve"><value>المستند فارغ أو تالف أو غير قابل للقراءة.</value></data>
+  <data name="DocumentErrorUnsafeContent" xml:space="preserve"><value>يحتوي المستند على محتوى نشط أو موارد مرتبطة أو عناصر حزمة غير آمنة وغير مدعومة.</value></data>
+  <data name="DocumentErrorTooLarge" xml:space="preserve"><value>يتجاوز المستند حدود الحجم أو المحتوى الموسع أو البنية.</value></data>
+  <data name="DocumentErrorToolsUnavailable" xml:space="preserve"><value>أداة المستندات المضمّنة غير متاحة أو تعذر تشغيلها.</value></data>
+  <data name="DocumentErrorToolsIncompatible" xml:space="preserve"><value>إصدار أداة المستندات غير متوافق. استخدم الإصدار المضمّن المتحقق منه.</value></data>
+  <data name="DocumentErrorSamePath" xml:space="preserve"><value>اختر وجهة مختلفة عن الملف الأصلي.</value></data>
+  <data name="DocumentErrorDestinationExists" xml:space="preserve"><value>الوجهة موجودة بالفعل. لم يُستبدل شيء؛ اختر اسمًا جديدًا.</value></data>
+  <data name="DocumentErrorInvalidDestination" xml:space="preserve"><value>اختر اسم ملف جديدًا بالامتداد المحدد داخل مجلد موجود.</value></data>
+  <data name="DocumentErrorConversionFailed" xml:space="preserve"><value>رفضت الأداة هذا المحتوى أو تعذر تحويله. لم يُحفظ ملف نهائي.</value></data>
+  <data name="DocumentErrorOutputValidationFailed" xml:space="preserve"><value>لم يجتز الإخراج فحص المستند أو المحتوى. لم يُحفظ ملف نهائي.</value></data>
+  <data name="DocumentErrorCancelled" xml:space="preserve"><value>أُلغيت عملية المستند. لم يُحفظ ملف نهائي.</value></data>
+  <data name="DocumentErrorTimedOut" xml:space="preserve"><value>تجاوزت أداة المستندات المدة المحددة. لم يُحفظ ملف نهائي.</value></data>
+  <data name="DocumentErrorProcessTerminationFailed" xml:space="preserve"><value>لم تؤكد أداة المستندات توقفها. لم يُحفظ ملف نهائي وقد لا يكون التنظيف مكتملًا.</value></data>
+  <data name="DocumentErrorOutputFailure" xml:space="preserve"><value>تعذر حفظ المستند. تحقق من الأذونات والمساحة المتاحة.</value></data>
 </root>

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
 using OrbitConvert.App.Services.Audio;
+using OrbitConvert.App.Services.Documents;
 using OrbitConvert.App.Services.Video;
 
 namespace OrbitConvert.App.ViewModels;
@@ -57,7 +58,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public MainViewModel(
         IFileMetadataProvider metadataProvider,
         LocalizationService localization,
-        IAudioConversionService? audioService = null)
+        IAudioConversionService? audioService = null,
+        IDocumentConversionService? documentService = null)
     {
         Localization = localization ?? throw new ArgumentNullException(nameof(localization));
         Localization.LanguageChanged += (_, _) =>
@@ -70,7 +72,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
             new ImageConversionService(new MagickImageEngine()), Localization);
         VideoConversion = new VideoConversionViewModel(FileIntake.SelectedFiles, new VideoConversionService(), Localization);
         AudioConversion = new AudioConversionViewModel(FileIntake.SelectedFiles, audioService ?? new AudioConversionService(), Localization);
-        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion })
+        DocumentConversion = new DocumentConversionViewModel(FileIntake.SelectedFiles, documentService ?? new DocumentConversionService(), Localization);
+        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion, DocumentConversion })
         {
             conversion.PropertyChanged += (_, args) =>
             {
@@ -78,6 +81,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 OnPropertyChanged(nameof(CanUseImages));
                 OnPropertyChanged(nameof(CanUseVideo));
                 OnPropertyChanged(nameof(CanUseAudio));
+                OnPropertyChanged(nameof(CanUseDocuments));
             };
         }
 
@@ -185,9 +189,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public VideoConversionViewModel VideoConversion { get; }
 
     public AudioConversionViewModel AudioConversion { get; }
-    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle;
-    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle;
-    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle;
+    public DocumentConversionViewModel DocumentConversion { get; }
+    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle;
+    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle;
+    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle && DocumentConversion.IsIdle;
+    public bool CanUseDocuments => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle;
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 

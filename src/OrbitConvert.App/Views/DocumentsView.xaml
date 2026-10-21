@@ -1,0 +1,49 @@
+<UserControl x:Class="OrbitConvert.App.Views.DocumentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources><BooleanToVisibilityConverter x:Key="BoolVisibility" /></UserControl.Resources>
+    <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
+        <StackPanel MaxWidth="980">
+            <TextBlock Style="{StaticResource EyebrowTextStyle}" Text="{Binding Localization[DocumentsEyebrow]}" />
+            <TextBlock Margin="0,8,0,0" Style="{StaticResource PageTitleTextStyle}" Text="{Binding Localization[DocumentTitle]}" />
+            <TextBlock Margin="0,7,0,22" Style="{StaticResource BodyTextStyle}" Text="{Binding Localization[DocumentDescription]}" />
+            <Border Style="{StaticResource CardBorderStyle}"><StackPanel>
+                <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[DocumentSource]}" />
+                <TextBlock Margin="0,6,0,12" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[DocumentSelectionHelp]}" />
+                <ComboBox Style="{StaticResource ImageSourceComboBoxStyle}" ItemsSource="{Binding FileIntake.SelectedFiles}"
+                          SelectedItem="{Binding DocumentConversion.SelectedFile, Mode=TwoWay}" IsEnabled="{Binding DocumentConversion.IsIdle}"
+                          FlowDirection="LeftToRight" MaxDropDownHeight="240" AutomationProperties.Name="{Binding Localization[DocumentSource]}">
+                    <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding FileName}" TextTrimming="CharacterEllipsis" /></DataTemplate></ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Margin="0,12,0,0" HorizontalAlignment="Left" Style="{StaticResource SecondaryButtonStyle}"
+                        Content="{Binding Localization[DocumentInspect]}" Command="{Binding DocumentConversion.InspectCommand}" />
+                <UniformGrid Margin="0,18,0,0" Columns="2">
+                    <StackPanel><TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[DocumentActualFormat]}" />
+                        <TextBlock Margin="0,5,0,0" Text="{Binding DocumentConversion.SourceFormat}" FlowDirection="LeftToRight" /></StackPanel>
+                    <StackPanel><TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[DocumentSize]}" />
+                        <TextBlock Margin="0,5,0,0" Text="{Binding DocumentConversion.Size}" FlowDirection="LeftToRight" /></StackPanel>
+                </UniformGrid>
+                <TextBlock Margin="0,12,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding DocumentConversion.Structure}" />
+            </StackPanel></Border>
+            <Border Margin="0,18,0,0" Style="{StaticResource CardBorderStyle}"><StackPanel>
+                <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[DocumentOutput]}" />
+                <ComboBox Margin="0,12,0,0" Style="{StaticResource ImageComboBoxStyle}" ItemsSource="{Binding DocumentConversion.Outputs}"
+                          SelectedItem="{Binding DocumentConversion.Format, Mode=TwoWay}" IsEnabled="{Binding DocumentConversion.CanChooseDestination}"
+                          FlowDirection="LeftToRight" AutomationProperties.Name="{Binding Localization[DocumentOutput]}" />
+                <TextBlock Margin="0,12,0,12" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[DocumentPolicy]}" />
+                <Button HorizontalAlignment="Left" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[DocumentDestination]}"
+                        Click="ChooseDestination_Click" IsEnabled="{Binding DocumentConversion.CanChooseDestination}" />
+                <TextBlock Margin="0,12,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding DocumentConversion.DestinationPath}" FlowDirection="LeftToRight" />
+                <WrapPanel Margin="0,16,0,0">
+                    <Button Margin="0,0,10,8" Style="{StaticResource PrimaryButtonStyle}" Content="{Binding Localization[DocumentConvert]}" Command="{Binding DocumentConversion.ConvertCommand}" />
+                    <Button Margin="0,0,0,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[DocumentCancel]}" Command="{Binding DocumentConversion.CancelCommand}" />
+                </WrapPanel>
+                <StackPanel Margin="0,8,0,8" Visibility="{Binding DocumentConversion.IsBusy, Converter={StaticResource BoolVisibility}}">
+                    <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding DocumentConversion.StageText}" />
+                    <ProgressBar Margin="0,8,0,0" Height="8" IsIndeterminate="True" Foreground="{DynamicResource AccentBrush}" AutomationProperties.Name="{Binding Localization[DocumentProgress]}" />
+                </StackPanel>
+                <TextBlock Margin="0,12,0,0" Style="{StaticResource BodyTextStyle}" Text="{Binding DocumentConversion.StatusMessage}" AutomationProperties.LiveSetting="Polite" />
+                <TextBlock Margin="0,8,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding DocumentConversion.CompletedPath}" FlowDirection="LeftToRight" />
+            </StackPanel></Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

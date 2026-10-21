@@ -33,6 +33,22 @@ public partial class MainWindow : Window
                 e.Cancel = true;
                 MessageBox.Show(this, model.Localization["ImageWaitToClose"], model.AppTitle);
             }
+            else if (DataContext is MainViewModel documentModel && documentModel.DocumentConversion.IsBusy)
+            {
+                e.Cancel = true;
+                if (MessageBox.Show(this, documentModel.Localization["DocumentCancelToClose"], documentModel.AppTitle,
+                    MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) { return; }
+                _closingAfterCancellation = true;
+                documentModel.DocumentConversion.RequestCancellation();
+                await documentModel.DocumentConversion.WaitForIdleAsync();
+                _closingAfterCancellation = false;
+                if (documentModel.DocumentConversion.HasCleanupWarning)
+                {
+                    MessageBox.Show(this, documentModel.DocumentConversion.StatusMessage, documentModel.AppTitle);
+                    return;
+                }
+                Close();
+            }
             else if (DataContext is MainViewModel mediaModel && (mediaModel.VideoConversion.IsBusy || mediaModel.AudioConversion.IsBusy))
             {
                 e.Cancel = true;

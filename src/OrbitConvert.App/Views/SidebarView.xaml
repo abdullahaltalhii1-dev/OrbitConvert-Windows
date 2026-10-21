@@ -161,7 +161,7 @@
                                    VerticalAlignment="Center"
                                    FontSize="9"
                                    Foreground="{DynamicResource MutedTextBrush}"
-                                   Text="{Binding Localization[BadgeSoon]}" />
+                                   Text="MD" />
                     </Grid>
                 </RadioButton>
 

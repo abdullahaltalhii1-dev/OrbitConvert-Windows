@@ -43,6 +43,9 @@ public sealed class DocumentConversionService(PandocLocator locator, IProcessRun
     private async Task<DocumentConversionResult> ConvertCoreAsync(string source, string destination, DocumentFormat target, IProgress<DocumentStage>? progress, CancellationToken token)
     {
         string? workspace = null;
+        string? ownedOutput = null;
+        var checkingOutput = false;
+        var finalizing = false;
         var result = new DocumentConversionResult(DocumentError.ConversionFailed);
         try
         {
@@ -53,7 +56,8 @@ public sealed class DocumentConversionService(PandocLocator locator, IProcessRun
             if (File.Exists(outputPath) || Directory.Exists(outputPath)) { return new(DocumentError.DestinationExists); }
             if (!Enum.IsDefined(target) || !Path.GetExtension(outputPath).Equals(target.Extension(), StringComparison.OrdinalIgnoreCase)) { return new(DocumentError.InvalidDestination); }
             using var original = new FileStream(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            workspace = NewWorkspace(Path.GetDirectoryName(outputPath)!);
+            // Keep parser work/ZIP rewrites out of user sync folders. Only the final owned .tmp is staged beside the destination.
+            workspace = NewWorkspace(Path.GetTempPath());
             var copy = CopyInput(original, inputPath, workspace);
             progress?.Report(DocumentStage.Inspecting);
             var format = DocumentGuard.Check(copy);
@@ -68,7 +72,9 @@ public sealed class DocumentConversionService(PandocLocator locator, IProcessRun
             progress?.Report(DocumentStage.Converting);
             var args = Arguments(workspace).Concat(new[] { "--from", "json", "--to", target.Writer(), "--wrap=none", "--standalone", "--output", candidate, intermediate }).ToArray();
             Check(await runner.RunAsync(new(engine, args, DocumentFormats.Timeout), token).ConfigureAwait(false));
+            checkingOutput = true;
             if (target == DocumentFormat.DOCX) { DocumentDirection.ApplyDocx(candidate); }
+            if (target == DocumentFormat.ODT) { DocumentDirection.ApplyOdt(candidate); }
             progress?.Report(DocumentStage.Verifying);
             if (!File.Exists(candidate) || new FileInfo(candidate).Length > DocumentFormats.MaximumBytes) { throw new DocumentRejected(DocumentError.OutputValidationFailed); }
             ValidateHtml(candidate, target);
@@ -77,17 +83,35 @@ public sealed class DocumentConversionService(PandocLocator locator, IProcessRun
             var verified = await ReadAsync(engine, candidate, target, workspace, token).ConfigureAwait(false);
             var output = DocumentAst.Describe(verified, target, new FileInfo(candidate).Length);
             if (!DocumentAst.PreservesText(inspected.Text, output.Text) || target is DocumentFormat.DOCX or DocumentFormat.ODT &&
-                (output.Headings < inspected.Headings || output.Tables < inspected.Tables || output.Lists < inspected.Lists))
+                (output.Headings < inspected.Headings || output.Tables < inspected.Tables || output.Lists < inspected.Lists || output.Images < inspected.Images))
             { throw new DocumentRejected(DocumentError.OutputValidationFailed); }
             token.ThrowIfCancellationRequested();
-            File.Move(candidate, outputPath, overwrite: false);
+            finalizing = true;
+            var stage = Path.Combine(Path.GetDirectoryName(outputPath)!, ".orbitconvert-" + Guid.NewGuid().ToString("N") + ".tmp");
+            using (var staged = new FileStream(stage, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            {
+                ownedOutput = stage;
+                using var verifiedInput = new FileStream(candidate, FileMode.Open, FileAccess.Read, FileShare.Read);
+                await verifiedInput.CopyToAsync(staged, token).ConfigureAwait(false);
+                staged.Flush(flushToDisk: true);
+            }
+            token.ThrowIfCancellationRequested();
+            File.Move(stage, outputPath, overwrite: false);
+            ownedOutput = null;
             result = new(DocumentError.None, outputPath);
         }
         catch (IOException) when (File.Exists(destination) || Directory.Exists(destination)) { result = new(DocumentError.DestinationExists); }
-        catch (Exception error) when (Expected(error)) { result = new(Error(error)); }
+        catch (Exception error) when (Expected(error))
+        {
+            var code = Error(error);
+            if (checkingOutput && code is DocumentError.InvalidDocument or DocumentError.UnreadableInput or DocumentError.UnsupportedFormat or DocumentError.UnsafeContent or DocumentError.TooLarge)
+            { code = finalizing ? DocumentError.OutputFailure : DocumentError.OutputValidationFailed; }
+            result = new(code);
+        }
         finally
         {
             if (workspace is not null && !Cleanup(workspace)) { result = result with { CleanupFailed = true }; }
+            if (ownedOutput is not null && !CleanupFile(ownedOutput)) { result = result with { CleanupFailed = true }; }
         }
         return result.Error == DocumentError.ProcessTerminationFailed ? result with { CleanupFailed = true } : result;
     }
@@ -119,8 +143,10 @@ public sealed class DocumentConversionService(PandocLocator locator, IProcessRun
     {
         var error = !result.TerminationConfirmed ? DocumentError.ProcessTerminationFailed : result.Outcome switch
         {
-            ProcessOutcome.Cancelled => DocumentError.Cancelled, ProcessOutcome.TimedOut => DocumentError.TimedOut,
-            ProcessOutcome.StartFailed => DocumentError.ToolsUnavailable, _ => result.ExitCode == 0 ? DocumentError.None : DocumentError.ConversionFailed,
+            ProcessOutcome.Cancelled => DocumentError.Cancelled,
+            ProcessOutcome.TimedOut => DocumentError.TimedOut,
+            ProcessOutcome.StartFailed => DocumentError.ToolsUnavailable,
+            _ => result.ExitCode == 0 ? DocumentError.None : DocumentError.ConversionFailed,
         };
         if (error != DocumentError.None) { throw new DocumentRejected(error); }
     }
@@ -149,6 +175,15 @@ public sealed class DocumentConversionService(PandocLocator locator, IProcessRun
         }
         return !Directory.Exists(path);
     }
+    private static bool CleanupFile(string path)
+    {
+        for (var attempt = 0; attempt < 5; attempt++)
+        {
+            try { File.Delete(path); return true; }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException) { Thread.Sleep(200); }
+        }
+        return !File.Exists(path);
+    }
     private static void ValidateHtml(string path, DocumentFormat format)
     {
         if (format != DocumentFormat.HTML) { return; }
@@ -160,7 +195,8 @@ public sealed class DocumentConversionService(PandocLocator locator, IProcessRun
     private static bool Expected(Exception error) => error is DocumentRejected or InvalidDataException or IOException or UnauthorizedAccessException or SecurityException or ArgumentException or NotSupportedException or XmlException or JsonException or InvalidOperationException or FormatException or OperationCanceledException or OverflowException;
     private static DocumentError Error(Exception error) => error switch
     {
-        DocumentRejected rejected => rejected.Error, OperationCanceledException => DocumentError.Cancelled,
+        DocumentRejected rejected => rejected.Error,
+        OperationCanceledException => DocumentError.Cancelled,
         InvalidDataException or XmlException or JsonException or InvalidOperationException or FormatException => DocumentError.InvalidDocument,
         _ => DocumentError.UnreadableInput,
     };

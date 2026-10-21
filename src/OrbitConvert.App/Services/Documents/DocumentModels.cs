@@ -3,7 +3,7 @@ namespace OrbitConvert.App.Services.Documents;
 public enum DocumentFormat { DOCX, ODT, RTF, TXT, Markdown, HTML }
 public enum DocumentError { None, UnreadableInput, UnsupportedFormat, UnsupportedDirection, InvalidDocument, UnsafeContent, TooLarge, ToolsUnavailable, ToolsIncompatible, SamePath, DestinationExists, InvalidDestination, ConversionFailed, OutputValidationFailed, Cancelled, TimedOut, ProcessTerminationFailed, OutputFailure }
 public enum DocumentStage { Inspecting, Converting, Verifying }
-public sealed record DocumentInspection(DocumentFormat Format, long SizeBytes, string Text, int Headings, int Tables, int Lists, bool HasArabic);
+public sealed record DocumentInspection(DocumentFormat Format, long SizeBytes, string Text, int Headings, int Tables, int Lists, bool HasArabic, int Images = 0);
 public sealed record DocumentInspectionResult(DocumentInspection? Inspection, DocumentError Error, bool CleanupFailed = false)
 {
     public bool IsSuccess => Error == DocumentError.None && Inspection is not null;

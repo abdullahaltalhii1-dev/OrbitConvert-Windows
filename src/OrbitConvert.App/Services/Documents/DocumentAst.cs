@@ -51,7 +51,14 @@ internal static class DocumentAst
             {
                 // Pandoc Attr triples: strip untrusted attributes/classes, including event handlers and styles.
                 if (array.Count == 3 && array[0] is JsonValue value && value.TryGetValue<string>(out _) && array[1] is JsonArray && array[2] is JsonArray)
-                { array[0] = ""; array[1] = new JsonArray(); array[2] = new JsonArray(); }
+                {
+                    var safe = new JsonArray();
+                    foreach (var pair in array[2]!.AsArray().OfType<JsonArray>())
+                    {
+                        if (pair.Count == 2 && pair[0]?.GetValue<string>() == "dir" && pair[1]?.GetValue<string>() is "rtl" or "ltr") { safe.Add(pair.DeepClone()); }
+                    }
+                    array[0] = ""; array[1] = new JsonArray(); array[2] = safe;
+                }
                 foreach (var child in array) { Visit(child); }
             }
         }
@@ -80,13 +87,14 @@ internal static class DocumentAst
     public static DocumentInspection Describe(JsonObject root, DocumentFormat format, long size)
     {
         var text = new StringBuilder();
-        int headings = 0, tables = 0, lists = 0;
+        int headings = 0, tables = 0, lists = 0, images = 0;
         Walk(root["blocks"]);
         void Walk(JsonNode? node)
         {
             if (node is JsonObject obj)
             {
                 var tag = obj["t"]?.GetValue<string>();
+                if (tag == "Image") { images++; return; } // Alt text is not body text and some office writers do not round-trip it.
                 if (tag == "Header") { headings++; }
                 if (tag == "Table") { tables++; }
                 if (tag is "BulletList" or "OrderedList") { lists++; }
@@ -98,13 +106,14 @@ internal static class DocumentAst
         }
         var actual = text.ToString().Trim();
         if (actual.Length == 0) { throw new DocumentRejected(DocumentError.InvalidDocument); }
-        return new(format, size, actual, headings, tables, lists, actual.Any(IsArabic));
+        return new(format, size, actual, headings, tables, lists, actual.Any(IsArabic), images);
     }
     internal static bool IsArabic(char c) => c is >= '\u0600' and <= '\u06ff' or >= '\u0750' and <= '\u077f' or >= '\u08a0' and <= '\u08ff';
     internal static bool IsRtl(string text) => text.Where(char.IsLetter).Take(1).Any(IsArabic);
     public static JsonObject LiteralText(string text) => new()
     {
-        ["pandoc-api-version"] = new JsonArray(1, 23, 1, 2), ["meta"] = new JsonObject(),
+        ["pandoc-api-version"] = new JsonArray(1, 23, 1, 2),
+        ["meta"] = new JsonObject(),
         ["blocks"] = new JsonArray(text.TrimStart('\uFEFF').Replace("\r\n", "\n").Split("\n\n").Select(p => (JsonNode)new JsonObject
         { ["t"] = "Para", ["c"] = new JsonArray(new JsonObject { ["t"] = "Str", ["c"] = p }) }).ToArray()),
     };

@@ -71,6 +71,13 @@ public sealed class DocumentConversionTests : IDisposable
             Assert.Contains(document.Descendants(w + "p"), p => string.Concat(p.Descendants(w + "t").Select(t => t.Value)).StartsWith("عنوان") && (string?)p.Element(w + "pPr")?.Element(w + "bidi")?.Attribute(w + "val") == "1");
             Assert.NotEmpty(document.Descendants(w + "rtl"));
         }
+        if (output == DocumentFormat.ODT)
+        {
+            using var zip = ZipFile.OpenRead(destination); using var xml = zip.GetEntry("content.xml")!.Open();
+            var document = XDocument.Load(xml);
+            XNamespace style = "urn:oasis:names:tc:opendocument:xmlns:style:1.0";
+            Assert.Contains(document.Descendants(style + "paragraph-properties"), p => (string?)p.Attribute(style + "writing-mode") == "rl-tb");
+        }
     }
     [PandocFact]
     public async Task TextIsLiteral_AndHtmlHasPerBlockDirections()
