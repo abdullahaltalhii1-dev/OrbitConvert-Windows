@@ -339,6 +339,40 @@ public sealed class VideoConversionTests : IDisposable
         Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
     }
 
+    [FfmpegFact]
+    public async Task FailedEncoderJobAssignment_RejectsConversionAndCleansOwnedOutput()
+    {
+        var source = VideoFixtures.Standard();
+        var original = SHA256.HashData(await File.ReadAllBytesAsync(source));
+        var destination = Path.Combine(_directory, "uncontained.mp4");
+        var runner = new UncontainedEncoderRunner();
+        var result = await FfmpegTestTools.Service(runner: runner).ConvertAsync(source, destination, new());
+        Assert.True(runner.RejectedAssignment);
+        Assert.Equal(VideoError.ToolsUnavailable, result.Error); // Existing mapping for ProcessOutcome.StartFailed.
+        Assert.False(result.IsSuccess);
+        Assert.False(result.CleanupFailed);
+        Assert.False(File.Exists(destination));
+        Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
+        Assert.Equal(original, SHA256.HashData(await File.ReadAllBytesAsync(source)));
+    }
+
+    private sealed class UncontainedEncoderRunner : IProcessRunner
+    {
+        public bool RejectedAssignment { get; private set; }
+        public Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken)
+        {
+            var runner = request.Arguments.Contains("-movflags")
+                ? new ProcessRunner(process => process.Start(), (_, processHandle) =>
+                {
+                    var assigned = JobAssignmentTestSupport.AssignProcessToJobObject(IntPtr.Zero, processHandle);
+                    RejectedAssignment = !assigned;
+                    return assigned;
+                })
+                : new ProcessRunner();
+            return runner.RunAsync(request, cancellationToken);
+        }
+    }
+
     private sealed class BeforeFinalizationRunner(Action beforeFinalization) : IProcessRunner
     {
         public async Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken)

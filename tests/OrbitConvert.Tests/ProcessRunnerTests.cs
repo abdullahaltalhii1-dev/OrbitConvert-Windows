@@ -1,10 +1,77 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using OrbitConvert.App.Services.Media;
 
 namespace OrbitConvert.Tests;
 
 public sealed class ProcessRunnerTests
 {
+    [FfmpegFact]
+    public async Task FailedJobAssignment_StopsTheOwnedLiveProcessAndReportsStartFailure()
+    {
+        Process? owned = null;
+        var nativeError = 0;
+        var failedWhileRunning = false;
+        var runner = new ProcessRunner(process =>
+        {
+            var started = process.Start();
+            if (started)
+            {
+                owned = Process.GetProcessById(process.Id);
+                owned.EnableRaisingEvents = true;
+            }
+            return started;
+        }, (_, processHandle) =>
+        {
+            // Exercise the actual Windows FALSE/error return, not just a mocked managed exception.
+            var assigned = JobAssignmentTestSupport.AssignProcessToJobObject(IntPtr.Zero, processHandle);
+            nativeError = Marshal.GetLastWin32Error();
+            failedWhileRunning = !assigned && owned is { HasExited: false };
+            return assigned;
+        });
+        try
+        {
+            var result = await runner.RunAsync(new(FfmpegTestTools.Ffmpeg,
+                ["-hide_banner", "-nostdin", "-v", "error", "-re", "-f", "lavfi", "-i", "testsrc=size=64x48:rate=10", "-f", "null", "-"],
+                TimeSpan.FromSeconds(1)), CancellationToken.None);
+            Assert.Equal(6, nativeError); // ERROR_INVALID_HANDLE.
+            Assert.True(failedWhileRunning);
+            Assert.Equal(ProcessOutcome.StartFailed, result.Outcome);
+            Assert.Contains("job", result.StandardError, StringComparison.OrdinalIgnoreCase);
+            Assert.False(result.Succeeded);
+            Assert.True(result.TerminationConfirmed);
+            Assert.NotNull(owned);
+            Assert.True(owned.HasExited);
+        }
+        finally
+        {
+            if (owned is { HasExited: false }) { owned.Kill(entireProcessTree: true); owned.WaitForExit(5000); }
+            owned?.Dispose();
+        }
+    }
+
+    [FfmpegFact]
+    public async Task FailedJobAssignment_AfterProcessAlreadyExitedIsHarmless()
+    {
+        var nativeError = 0;
+        var runner = new ProcessRunner(process =>
+        {
+            var started = process.Start();
+            if (started) { Assert.True(process.WaitForExit(5000)); }
+            return started;
+        }, (_, processHandle) =>
+        {
+            var assigned = JobAssignmentTestSupport.AssignProcessToJobObject(IntPtr.Zero, processHandle);
+            nativeError = Marshal.GetLastWin32Error();
+            return assigned;
+        });
+        var result = await runner.RunAsync(new(FfmpegTestTools.Ffprobe, ["-version"], TimeSpan.FromSeconds(5)), CancellationToken.None);
+        Assert.Equal(6, nativeError);
+        Assert.True(result.Succeeded, result.StandardError);
+        Assert.True(result.TerminationConfirmed);
+        Assert.Contains("ffprobe version", result.StandardOutput, StringComparison.Ordinal);
+    }
+
     [Fact]
     public async Task AlreadyCancelled_DoesNotStartAnyProcess()
     {
@@ -96,4 +163,10 @@ public sealed class ProcessRunnerTests
     }
 
     private static string FfmpegArgumentsProbe(string name) => "file:" + Path.Combine(Path.GetTempPath(), name + ".mp4");
+}
+
+internal static class JobAssignmentTestSupport
+{
+    [DllImport("kernel32.dll", SetLastError = true)]
+    internal static extern bool AssignProcessToJobObject(IntPtr job, IntPtr process);
 }

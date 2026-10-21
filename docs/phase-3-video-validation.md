@@ -1,5 +1,17 @@
 # Phase 3 — video conversion validation
 
+## Final review follow-up — Windows job assignment
+
+The reviewed base was `f7aac1ed6ed9490ca3c9ae0f4e1195d5ca40851d`. An unchecked FALSE return from AssignProcessToJobObject previously let a live uncontained child continue until ordinary exit, cancellation, or timeout. [Microsoft's API contract](https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-assignprocesstojobobject) requires checking that return and retrieving the native error on failure.
+
+- Deterministic regression uses the actual Windows API with an invalid job handle and a real running FFmpeg child, not a mocked managed exception. It observed FALSE / **ERROR_INVALID_HANDLE (6)** while the child was alive. Before the correction (only an internal native-call test seam added), the test failed: expected StartFailed, actual TimedOut. The already-exited race test passed.
+- Assignment now checks the native result, captures the Win32 error before further OS calls, and fails explicitly if the child has not exited. The runner immediately uses the existing process-tree kill/bounded-wait path, reports StartFailed and retains the TerminationConfirmed result. It never claims a successful managed run for that uncontained live child.
+- Job creation/configuration failure also fails closed **before** starting any child. No silent no-job fallback. A short-lived tool that has already exited is allowed to finish normally even when assignment fails. This is not an atomic start-and-assign implementation; kill-on-close coverage begins once assignment succeeds. Existing startup-timeout/late-start limitations remain unchanged.
+- A real conversion regression injects the native assignment failure only for the encoder: the conversion reports the existing ToolsUnavailable startup error, preserves source hashes, creates no completed destination, removes its operation-owned temporary output and confirms cleanup.
+- Focused run: **11 passed, 0 failed/skipped**, including process startup, normal cancellation, runtime/inactivity timeouts, live assignment failure, already-exited assignment failure and conversion cleanup. Build: zero warnings/errors.
+- Full local gate: restore and standard Release build succeeded (zero warnings/errors), **310 passed, 0 failed, 0 skipped**, 28 seconds, with `ORBITCONVERT_REQUIRE_FFMPEG=1`. `dotnet format OrbitConvert.slnx --verify-no-changes` and `git diff --check` passed. The three new regressions extend the previously passing 307 tests; no previous test was removed.
+- No packages, settings, UI, architecture, or future-phase features were added. Manual GUI was not rerun for this backend-only correction; prior GUI evidence below is unchanged.
+
 ## Backend checkpoint — 2026-10-21
 
 Continues Claude's implementation on `feature/phase-3-video-ffmpeg`, Draft PR #10. No Phase 4 work.

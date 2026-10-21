@@ -39,8 +39,8 @@ public interface IProcessRunner
 
 /// <summary>
 /// Runs a trusted executable directly (no shell) with an argument list, captures bounded output without deadlocks,
-/// and terminates the whole owned process tree on cancellation or timeout. A Windows job object kills the process
-/// if OrbitConvert itself exits unexpectedly. Reusable by future media engines.
+/// and terminates the whole owned process tree on cancellation or timeout. Once assignment is confirmed, a Windows
+/// job object provides kill-on-close protection. Failed containment stops the child and fails the run.
 /// </summary>
 public sealed class ProcessRunner : IProcessRunner
 {
@@ -48,14 +48,19 @@ public sealed class ProcessRunner : IProcessRunner
     internal static readonly TimeSpan DefaultStartTimeout = TimeSpan.FromSeconds(60);
     internal static readonly TimeSpan TerminationGrace = TimeSpan.FromSeconds(10);
     private readonly Func<Process, bool> _start;
+    private readonly Func<IntPtr, IntPtr, bool>? _assignToJob;
 
     public ProcessRunner()
         : this(process => process.Start())
     {
     }
 
-    /// <summary>Test seam for the process-creation step.</summary>
-    internal ProcessRunner(Func<Process, bool> start) => _start = start;
+    /// <summary>Test seams for process creation and the native job-assignment call.</summary>
+    internal ProcessRunner(Func<Process, bool> start, Func<IntPtr, IntPtr, bool>? assignToJob = null)
+    {
+        _start = start;
+        _assignToJob = assignToJob;
+    }
 
     public async Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken)
     {
@@ -77,6 +82,11 @@ public sealed class ProcessRunner : IProcessRunner
 
         var process = new Process { StartInfo = startInfo };
         var job = JobObject.TryCreate();
+        if (job is null)
+        {
+            process.Dispose();
+            return new(ProcessOutcome.StartFailed, -1, string.Empty, "Windows job containment could not be initialized.");
+        }
         // Process.Start is synchronous and has been observed to block indefinitely inside process creation while
         // security software inspects a new executable. Never let that hang the conversion.
         var starting = Task.Run(() => _start(process));
@@ -105,9 +115,11 @@ public sealed class ProcessRunner : IProcessRunner
         finally { Release(process, job); }
     }
 
-    private static async Task<ProcessRunResult> MonitorAsync(Process process, JobObject? job, ProcessRunRequest request, CancellationToken cancellationToken)
+    private async Task<ProcessRunResult> MonitorAsync(Process process, JobObject job, ProcessRunRequest request, CancellationToken cancellationToken)
     {
-        job?.Assign(process);
+        string? containmentError = null;
+        try { job.Assign(process, _assignToJob); }
+        catch (Win32Exception error) { containmentError = error.Message; }
         process.StandardInput.Close(); // The tools never need interactive input.
 
         var lastActivity = Stopwatch.StartNew();
@@ -121,10 +133,10 @@ public sealed class ProcessRunner : IProcessRunner
         });
         var errorTask = PumpAsync(process.StandardError, standardError.AppendLine);
 
-        var outcome = ProcessOutcome.Exited;
+        var outcome = containmentError is null ? ProcessOutcome.Exited : ProcessOutcome.StartFailed;
         var deadline = Stopwatch.StartNew();
         var exited = process.WaitForExitAsync(CancellationToken.None);
-        while (!exited.IsCompleted)
+        while (outcome == ProcessOutcome.Exited && !exited.IsCompleted)
         {
             if (cancellationToken.IsCancellationRequested) { outcome = ProcessOutcome.Cancelled; break; }
             if (deadline.Elapsed > request.Timeout ||
@@ -148,13 +160,14 @@ public sealed class ProcessRunner : IProcessRunner
             terminated = await CompletesWithin(exited, TerminationGrace).ConfigureAwait(false);
             if (!terminated)
             {
-                job?.Terminate();
+                job.Terminate();
                 terminated = await CompletesWithin(exited, TerminationGrace).ConfigureAwait(false);
             }
         }
         // Pipes reach end-of-file once the process (and anything that inherited them) has exited.
         await CompletesWithin(Task.WhenAll(outputTask, errorTask), terminated ? TerminationGrace : TimeSpan.Zero).ConfigureAwait(false);
-        return new(outcome, terminated ? process.ExitCode : -1, standardOutput.ToString(), standardError.ToString(), terminated);
+        var diagnostic = containmentError is null ? standardError.ToString() : containmentError + Environment.NewLine + standardError;
+        return new(outcome, terminated ? process.ExitCode : -1, standardOutput.ToString(), diagnostic, terminated);
     }
 
     private static async Task<bool> CompletesWithin(Task task, TimeSpan limit) =>
@@ -206,7 +219,7 @@ public sealed class ProcessRunner : IProcessRunner
         public override string ToString() { lock (_gate) { return _text.ToString(); } }
     }
 
-    /// <summary>Job object with kill-on-close: owned processes cannot outlive OrbitConvert.</summary>
+    /// <summary>Kill-on-close protection for processes successfully assigned to this job.</summary>
     private sealed class JobObject : IDisposable
     {
         private const int ExtendedLimitInformation = 9;
@@ -235,10 +248,16 @@ public sealed class ProcessRunner : IProcessRunner
             return new JobObject(handle);
         }
 
-        public void Assign(Process process)
+        public void Assign(Process process, Func<IntPtr, IntPtr, bool>? assign = null)
         {
-            try { AssignProcessToJobObject(_handle, process.Handle); }
-            catch (InvalidOperationException) { } // The process already exited.
+            try
+            {
+                var assigned = (assign ?? AssignProcessToJobObject)(_handle, process.Handle);
+                var error = assigned ? 0 : Marshal.GetLastWin32Error();
+                // A short-lived tool can exit before assignment. Only an observed exit makes failure harmless.
+                if (!assigned && !process.HasExited) { throw new Win32Exception(error, $"Windows job assignment failed (error {error})."); }
+            }
+            catch (InvalidOperationException) when (process.HasExited) { }
         }
 
         public void Terminate() => TerminateJobObject(_handle, 1);
