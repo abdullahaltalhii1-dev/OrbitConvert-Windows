@@ -6,6 +6,15 @@ namespace OrbitConvert.Tests;
 public sealed class ProcessRunnerTests
 {
     [Fact]
+    public async Task AlreadyCancelled_DoesNotStartAnyProcess()
+    {
+        var runner = new ProcessRunner(_ => throw new InvalidOperationException("Must not start."));
+        var result = await runner.RunAsync(new("ignored.exe", [], TimeSpan.FromSeconds(5)), new CancellationToken(true));
+        Assert.Equal(ProcessOutcome.Cancelled, result.Outcome);
+        Assert.True(result.TerminationConfirmed);
+    }
+
+    [Fact]
     public async Task MissingExecutable_ReportsStartFailedInsteadOfThrowing()
     {
         var result = await new ProcessRunner().RunAsync(

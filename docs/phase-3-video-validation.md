@@ -18,4 +18,65 @@ Development/CI build: gyan.dev FFmpeg **9.0.2 Essentials**, archive `ffmpeg-9.0.
 
 Resolution order: `<application>\ffmpeg\ffmpeg.exe` plus `ffprobe.exe`, then absolute `ORBITCONVERT_FFMPEG_DIR` (development/CI). Future offline packaging must bundle the engines and runtime; no installer is implemented here.
 
-The selected development build enables GPL/version3 and includes libx264/libx265. Final distribution licensing is **not approved by this checkpoint**. Owner review must cover exact binary/source correspondence, redistribution notices/source obligations and codec patent considerations. An LGPL-compatible Media Foundation build or a minimal reproducible FFmpeg build are possible alternatives, not decisions made here. See the existing handoff for the initial technical assessment; obtain appropriate licensing advice before shipping.
+The selected development build enables GPL/version3 and includes libx264/libx265. Final distribution licensing is **not approved by this checkpoint**. Owner review must cover exact binary/source correspondence, redistribution notices/source obligations and codec patent considerations. An LGPL-compatible Media Foundation build or a minimal reproducible FFmpeg build are possible alternatives, not decisions made here. [FFmpeg's official licensing guidance](https://ffmpeg.org/legal.html) distinguishes LGPL and GPL-enabled builds, calls out libx264, source correspondence, and jurisdiction-dependent patent questions. Consult that guidance and appropriate licensing advice before shipping; invoking separate executables is not by itself a compliance determination.
+
+## Implemented engine and UI
+
+- Inputs: MP4/MOV (mov/mp4/m4a/3gp/3g2/mj2 demuxer family), MKV/WebM, AVI.
+- Selected video codecs: h264, hevc, mpeg4, vp8, vp9, av1, mpeg2video, mjpeg. Selected audio: aac, mp3, opus, vorbis, flac, pcm_s16le, ac3. Container acceptance alone does not imply every codec is supported.
+- First non-cover-art video; default audio stream or otherwise first audio. Extra streams, subtitles, chapters, attachments, and metadata are not copied. Rotation is applied to pixels; output dimensions are even for 4:2:0. No upscaling.
+- Output is MP4, one H.264 video and AAC when source audio exists. libx264 is preferred; h264_mf is a capability-based fallback, not a promise of hardware acceleration.
+- High/Balanced/Small map to libx264 medium CRF 18/23/28, or Media Foundation quality 85/65/45; AAC 192k/160k/128k. Height options: source, 1080, 720, 480. A smaller file is not guaranteed.
+- Video selection reuses intake; inspection is explicit. Metadata, quality/height, native destination selection, start, actual two-stage progress, cancellation, completion and errors are bilingual. Unknown duration remains indeterminate. Selecting/navigating never starts conversion. No batch or audio-only workflow.
+- Async commands suppress duplicate submissions, freeze source/settings during work and wait for actual service completion. Cross-engine UI busy guards prevent simultaneous image/video operations. Closing offers keep-waiting or cancel-and-close after the service finishes cleanup.
+
+## Safety and limits
+
+Input limit: 32 GiB, 12 hours, 8192 per side, 8192 × 4320 pixels, 32 streams. Probe: 60 s. No stdout activity during encoding/verification: 120 s. Maximum stage runtime: 24 h. Default process-creation deadline: 60 s; bounded termination waits: 10 s plus 10 s after job termination. Already-cancelled requests never start a process. Huge reported durations are rejected before TimeSpan conversion can overflow.
+
+The source is held read-only; arguments bypass shells, use `file:` paths and file-only protocols plus demuxer whitelists. No playlists or network URL processing. One unique `.orbitconvert-<guid>.tmp` is reserved with CreateNew in the destination directory. Output must pass container/stream/codec/size/orientation/audio/duration checks and a complete decode before `File.Move(overwrite:false)`. Last-moment destination creation and cancellation are explicitly tested. Cleanup targets only the operation-owned path.
+
+These are process-level guardrails, **not a sandbox or hard CPU/memory budget**. FFprobe must parse untrusted input before all metadata limits are known. No suspended-process cause was established. Forced termination, OS shutdown, permission/sync interference, or delayed process creation can leave temporary files; cleanup warnings remain visible. Full-decode validation establishes output readability, not universal detection of every recoverable defect in an input video.
+
+## Automated verification — UI checkpoint
+
+- Release build: **0 warnings, 0 errors**. Local builds use `-p:UseSharedCompilation=false -m:1`; standard CI build is unchanged.
+- Full suite after UI and safety edge-case tests: **307 passed, 0 failed, 0 skipped**, 27 seconds locally. Actual pinned FFmpeg was available, including both encoder quality cases and all ten input codec/container cases.
+- View-model tests: 9 passed (Unicode source/options, duplicates/busy guards, cancellation/cleanup waiting, stale progress, bilingual errors, unknown duration/no audio, invalid settings/inspection and complete error-resource coverage).
+- Actual WPF resource/layout/binding test: English and Arabic, every section, 900×620, 1120×720 and 1920×1080; **no binding errors** captured. This is automated layout validation, not a substitute for real DPI/visual testing.
+- Format verification and `git diff --check` passed.
+- Backend checkpoint CI at `da77e86`: both push and PR workflows green; 293 tests passed (push run 39530991661, PR run 39530996018). Final UI CI results will be recorded after pushing.
+
+## Measured quality/performance sample
+
+Local actual FFmpeg, 3-second 640×360 25fps synthetic testsrc2 input, source encoded losslessly with libx264 qp0 (1,441,343 bytes). Each time is one run including probing, encoding and full output verification, excluding fixture generation and the separate SSIM run. Not a general benchmark or target-size guarantee; hardware, content and load affect results.
+
+| Encoder / quality | Time (s) | Bytes | Video SSIM |
+| --- | ---: | ---: | ---: |
+| libx264 / High | 0.667 | 416,707 | 0.998397 |
+| libx264 / Balanced | 0.528 | 289,384 | 0.995743 |
+| libx264 / Small | 0.521 | 166,317 | 0.987756 |
+| h264_mf / High | 0.751 | 679,118 | 0.996511 |
+| h264_mf / Balanced | 0.516 | 461,185 | 0.990754 |
+| h264_mf / Small | 0.533 | 286,374 | 0.983504 |
+
+Both quality-order tests passed and now print their measurements to test output for reproducibility. These figures do not establish a universal comparison between encoders or hardware acceleration.
+
+## Windows GUI observations
+
+Actual WPF application, not mockups:
+
+- Native Browse selected `فيديو تجريبي\مقطع & تجربة.mp4`; source metadata showed 320×240, 3 seconds, H.264/AAC and one stream each.
+- Native MP4 Save dialog created **no file** before Convert. Conversion succeeded, displayed the localized verified-success message, and left the original intact (304,721 bytes; output 149,849 bytes). Integration tests additionally compare original hashes.
+- Arabic dark and English light, live language/theme changes, navigation and retained completed state were visually verified. Default window and native maximized layout rendered without overlap/crash.
+- A generated 5-minute 1280×720 source displayed real percentage/elapsed progress with source/settings disabled. Cancel terminated the observed FFmpeg process (PID 49732), restored idle controls, and left no completed destination or owned temporary file.
+- Closing while busy displayed the native yes/no prompt. Choosing No kept the app running; the conversion subsequently finished. Idle close exited normally. The cancel-and-close path still needs a focused actual GUI run; service cancellation and wait-for-cleanup behavior are already tested separately.
+- Source/quality combo boxes, native picker/save dialogs and keyboard shortcuts were exercised. Native modal accessibility snapshots sometimes lagged; screenshots and keyboard interaction confirmed actual state.
+- Visual checks at 125%/150% DPI and actual minimum-size resizing have **not** been performed. Automated minimum/default/large layout checks passed. Image regression is covered by the full existing automated suite; a new manual image conversion is still pending.
+- One build attempted while the test app was running failed on the expected apphost file lock. After normal close, Release build succeeded. This is distinct from Claude's earlier unexplained suspended-process stalls; those were not reproduced in the successful bounded runs here. No antivirus or OS security settings were changed.
+
+Actual captures: `docs/screenshots/23-phase3-arabic-dark-success.png`, `24-phase3-english-light-success.png`, `25-phase3-real-progress.png`.
+
+## Deferred / release considerations
+
+No Phase 4, installer/updater, shell integration, telemetry, cloud processing, batch UI, target-bitrate mode, HDR/color-managed fidelity guarantee, metadata/subtitle preservation, or extra output formats. Distribution licensing and a reproducible/minimal offline binary bundle require owner review before release. Media Foundation behavior is machine/build-dependent; current selected build prefers tested libx264.

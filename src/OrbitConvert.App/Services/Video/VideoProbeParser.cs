@@ -68,8 +68,9 @@ internal static class VideoProbeParser
                 return VideoInspectionResult.Failure(VideoError.UnsupportedCodec);
             }
 
-            TimeSpan? duration = Seconds(Text(format, "duration")) is { } seconds && seconds > 0 ? TimeSpan.FromSeconds(seconds) : null;
-            if (duration > VideoLimits.MaximumDuration) { return VideoInspectionResult.Failure(VideoError.TooLarge); }
+            var seconds = Seconds(Text(format, "duration"));
+            if (seconds > VideoLimits.MaximumDuration.TotalSeconds) { return VideoInspectionResult.Failure(VideoError.TooLarge); }
+            TimeSpan? duration = seconds is > 0 ? TimeSpan.FromSeconds(seconds.Value) : null;
             return new(new VideoInspection(container, duration, sizeBytes, video, selectedAudio, videoCount, audioCount, otherCount), VideoError.None);
         }
         catch (Exception error) when (error is JsonException or InvalidOperationException or FormatException)

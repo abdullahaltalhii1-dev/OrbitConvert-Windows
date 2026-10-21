@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
+using OrbitConvert.App.Services.Video;
 
 namespace OrbitConvert.App.ViewModels;
 
@@ -65,6 +66,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         FileIntake = new FileIntakeViewModel(metadataProvider, Localization);
         ImageConversion = new ImageConversionViewModel(FileIntake.SelectedFiles,
             new ImageConversionService(new MagickImageEngine()), Localization);
+        VideoConversion = new VideoConversionViewModel(FileIntake.SelectedFiles, new VideoConversionService(), Localization);
 
         NavigateCommand = new RelayCommand(parameter =>
         {
@@ -166,6 +168,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public FileIntakeViewModel FileIntake { get; }
 
     public ImageConversionViewModel ImageConversion { get; }
+
+    public VideoConversionViewModel VideoConversion { get; }
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 

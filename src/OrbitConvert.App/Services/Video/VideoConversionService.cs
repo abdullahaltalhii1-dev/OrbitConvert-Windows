@@ -104,6 +104,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
             {
                 var validation = await ValidateAsync(tools, candidate, input, options, clock, progress, cancellationToken).ConfigureAwait(false);
                 if (!validation.IsSuccess) { result = new(validation.Error, CleanupFailed: validation.Error == VideoError.ProcessTerminationFailed); }
+                else if (cancellationToken.IsCancellationRequested) { result = new(VideoError.Cancelled); }
                 else
                 {
                     File.Move(candidate, destination, overwrite: false);

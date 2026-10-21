@@ -45,19 +45,10 @@
 
             <Grid Grid.Column="1">
                 <views:WorkspaceView Visibility="{Binding IsWorkspaceSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <views:ImagesView Visibility="{Binding IsImagesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                <views:ComingSoonView Eyebrow="{Binding Localization[VideoEyebrow]}"
-                                      Title="{Binding Localization[VideoTitle]}"
-                                      Description="{Binding Localization[VideoDescription]}"
-                                      IconData="M2,2 H48 V42 H2 Z M48,14 L66,5 V39 L48,30 Z M20,13 L34,22 L20,31 Z"
-                                      IconWidth="68"
-                                      IconHeight="54"
-                                      IconFill="{DynamicResource AccentSoftBrush}"
-                                      FormatsHeading="{Binding Localization[VideoFormatsHeading]}"
-                                      Formats="MP4|MOV|MKV|WebM"
-                                      InformationalText="{Binding Localization[VideoInformationalText]}"
-                                      Visibility="{Binding IsVideoSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <views:ImagesView IsEnabled="{Binding VideoConversion.IsIdle}"
+                                  Visibility="{Binding IsImagesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <views:VideosView IsEnabled="{Binding ImageConversion.IsIdle}"
+                                  Visibility="{Binding IsVideoSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <views:ComingSoonView Eyebrow="{Binding Localization[AudioEyebrow]}"
                                       Title="{Binding Localization[AudioTitle]}"

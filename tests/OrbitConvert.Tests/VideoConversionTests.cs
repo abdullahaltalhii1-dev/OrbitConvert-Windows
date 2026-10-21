@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using OrbitConvert.App.Services.Media;
 using OrbitConvert.App.Services.Video;
+using Xunit.Abstractions;
 
 namespace OrbitConvert.Tests;
 
@@ -9,8 +10,13 @@ namespace OrbitConvert.Tests;
 public sealed class VideoConversionTests : IDisposable
 {
     private readonly string _directory = Path.Combine(Path.GetTempPath(), "OrbitConvert.Tests", "video-" + Guid.NewGuid().ToString("N"));
+    private readonly ITestOutputHelper _output;
 
-    public VideoConversionTests() => Directory.CreateDirectory(_directory);
+    public VideoConversionTests(ITestOutputHelper output)
+    {
+        _output = output;
+        Directory.CreateDirectory(_directory);
+    }
 
     public void Dispose()
     {
@@ -100,9 +106,12 @@ public sealed class VideoConversionTests : IDisposable
         foreach (var quality in new[] { VideoQuality.High, VideoQuality.Balanced, VideoQuality.Small })
         {
             var destination = Path.Combine(_directory, $"{encoder}-{quality}.mp4");
+            var clock = Stopwatch.StartNew();
             var result = await service.ConvertAsync(source, destination, new VideoConversionOptions(quality));
+            clock.Stop();
             Assert.True(result.IsSuccess, $"{encoder}/{quality}: {result.Error}");
             measured.Add((new FileInfo(destination).Length, VideoFixtures.Ssim(destination, source)));
+            _output.WriteLine($"{encoder}/{quality}: {clock.Elapsed.TotalSeconds:F3} s including validation; {measured[^1].Size} bytes; SSIM {measured[^1].Ssim:F6}");
         }
         Assert.True(measured[0].Size > measured[1].Size && measured[1].Size > measured[2].Size, string.Join(", ", measured));
         Assert.True(measured[0].Ssim >= measured[1].Ssim && measured[1].Ssim >= measured[2].Ssim, string.Join(", ", measured));
@@ -305,6 +314,39 @@ public sealed class VideoConversionTests : IDisposable
         Assert.Equal(VideoError.OutputValidationFailed, result.Error);
         Assert.False(File.Exists(destination));
         Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
+    }
+
+    [FfmpegTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task FinalizationRace_PreservesNewDestinationAndHonorsLastMomentCancellation(bool cancel)
+    {
+        var source = VideoFixtures.Standard();
+        var original = SHA256.HashData(await File.ReadAllBytesAsync(source));
+        var destination = Path.Combine(_directory, "race.mp4");
+        using var cancellation = new CancellationTokenSource();
+        var runner = new BeforeFinalizationRunner(() =>
+        {
+            if (cancel) { cancellation.Cancel(); }
+            else { File.WriteAllBytes(destination, [9, 8, 7]); }
+        });
+        var result = await FfmpegTestTools.Service(runner: runner).ConvertAsync(source, destination, new(), cancellationToken: cancellation.Token);
+        Assert.Equal(cancel ? VideoError.Cancelled : VideoError.DestinationExists, result.Error);
+        Assert.False(result.CleanupFailed);
+        if (cancel) { Assert.False(File.Exists(destination)); }
+        else { Assert.Equal(new byte[] { 9, 8, 7 }, await File.ReadAllBytesAsync(destination)); }
+        Assert.Equal(original, SHA256.HashData(await File.ReadAllBytesAsync(source)));
+        Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
+    }
+
+    private sealed class BeforeFinalizationRunner(Action beforeFinalization) : IProcessRunner
+    {
+        public async Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken)
+        {
+            var result = await new ProcessRunner().RunAsync(request, cancellationToken);
+            if (result.Succeeded && request.Arguments.Contains("-xerror")) { beforeFinalization(); }
+            return result;
+        }
     }
 
     /// <summary>Lets the real encoder run, then truncates its output, so only output validation can catch the damage.</summary>

@@ -11,6 +11,7 @@ public partial class MainWindow : Window
 {
     private const int DwmUseImmersiveDarkMode = 20;
     private const int DwmUseImmersiveDarkModeBefore20H1 = 19;
+    private bool _closingAfterCancellation;
 
     public MainWindow()
     {
@@ -24,12 +25,24 @@ public partial class MainWindow : Window
             ApplyVisualTheme(viewModel);
         }
 
-        Closing += (_, e) =>
+        Closing += async (_, e) =>
         {
+            if (_closingAfterCancellation) { e.Cancel = true; return; }
             if (DataContext is MainViewModel model && model.ImageConversion.IsBusy)
             {
                 e.Cancel = true;
                 MessageBox.Show(this, model.Localization["ImageWaitToClose"], model.AppTitle);
+            }
+            else if (DataContext is MainViewModel videoModel && videoModel.VideoConversion.IsBusy)
+            {
+                e.Cancel = true;
+                if (MessageBox.Show(this, videoModel.Localization["VideoCancelToClose"], videoModel.AppTitle,
+                    MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) { return; }
+                _closingAfterCancellation = true;
+                videoModel.VideoConversion.RequestCancellation();
+                await videoModel.VideoConversion.WaitForIdleAsync();
+                _closingAfterCancellation = false;
+                Close();
             }
         };
         Closed += MainWindow_Closed;

@@ -65,6 +65,10 @@ public sealed class VideoEngineUnitTests : IDisposable
     private const string Video = """{"index":0,"codec_type":"video","codec_name":"h264","width":1920,"height":1080,"avg_frame_rate":"30000/1001","pix_fmt":"yuv420p"}""";
 
     [Fact]
+    public void Parser_RejectsHugeDurationBeforeTimeSpanCanOverflow() =>
+        Assert.Equal(VideoError.TooLarge, VideoProbeParser.Parse(Probe(Video, """{"format_name":"mp4","duration":"1e100"}"""), 100).Error);
+
+    [Fact]
     public void Parser_SelectsDefaultAudioSkipsCoverArtAndReadsRotation()
     {
         var json = Probe(

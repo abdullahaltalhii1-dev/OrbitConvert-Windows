@@ -60,6 +60,7 @@ public sealed class ProcessRunner : IProcessRunner
     public async Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
+        if (cancellationToken.IsCancellationRequested) { return new(ProcessOutcome.Cancelled, -1, string.Empty, string.Empty); }
         var startInfo = new ProcessStartInfo
         {
             FileName = request.ExecutablePath,
