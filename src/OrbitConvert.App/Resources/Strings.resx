@@ -19,19 +19,19 @@
   <data name="NavSettings" xml:space="preserve"><value>Settings</value></data>
   <data name="NavWorkspaceAutomation" xml:space="preserve"><value>Workspace</value></data>
   <data name="NavImagesAutomation" xml:space="preserve"><value>Image conversion</value></data>
-  <data name="NavVideoAutomation" xml:space="preserve"><value>Video coming soon</value></data>
+  <data name="NavVideoAutomation" xml:space="preserve"><value>Video conversion</value></data>
   <data name="NavAudioAutomation" xml:space="preserve"><value>Audio coming soon</value></data>
   <data name="NavDocumentsAutomation" xml:space="preserve"><value>Documents coming soon</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>4 FORMATS</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 2D</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>Single-image conversion</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 3</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Local image and video conversion</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images to convert one supported image.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images or Video to convert one supported file.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>Choose files or drop them here.</value></data>
-  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose one image in Images to convert.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose a single source in Images or Video.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>Browse Files</value></data>
   <data name="BrowseFilesHelp" xml:space="preserve"><value>Open the Windows file picker</value></data>
   <data name="SelectedFiles" xml:space="preserve"><value>Selected files</value></data>
@@ -42,9 +42,9 @@
   <data name="Remove" xml:space="preserve"><value>Remove</value></data>
   <data name="RemoveHelp" xml:space="preserve"><value>Remove this file from the selection</value></data>
   <data name="PrivateProcessingTitle" xml:space="preserve"><value>Private Processing</value></data>
-  <data name="PrivateProcessingDescription" xml:space="preserve"><value>Images are processed locally. Originals stay unchanged and files are never uploaded.</value></data>
+  <data name="PrivateProcessingDescription" xml:space="preserve"><value>Images and videos are processed locally. Originals stay unchanged and files are never uploaded.</value></data>
   <data name="MultipleFormatsTitle" xml:space="preserve"><value>Multiple Formats</value></data>
-  <data name="MultipleFormatsDescription" xml:space="preserve"><value>Convert PNG, JPEG, WebP, and BMP images with quality and resize options.</value></data>
+  <data name="MultipleFormatsDescription" xml:space="preserve"><value>Convert PNG, JPEG, WebP, and BMP images, or supported videos to MP4.</value></data>
   <data name="FileDialogTitle" xml:space="preserve"><value>Select files for OrbitConvert</value></data>
   <data name="FileDialogFilter" xml:space="preserve"><value>All files (*.*)|*.*</value></data>
   <data name="FileCountNone" xml:space="preserve"><value>No files selected</value></data>
@@ -78,8 +78,8 @@
   <data name="Dimensions" xml:space="preserve"><value>DIMENSIONS</value></data>
   <data name="ComingSoon" xml:space="preserve"><value>COMING SOON</value></data>
   <data name="VideoEyebrow" xml:space="preserve"><value>VIDEO</value></data>
-  <data name="VideoTitle" xml:space="preserve"><value>Video tools are on the horizon.</value></data>
-  <data name="VideoDescription" xml:space="preserve"><value>This polished placeholder communicates direction without enabling unfinished functionality.</value></data>
+  <data name="VideoTitle" xml:space="preserve"><value>Your video. A cleaner format.</value></data>
+  <data name="VideoDescription" xml:space="preserve"><value>Convert one local video to MP4. Choose the balance between quality and size.</value></data>
   <data name="VideoFormatsHeading" xml:space="preserve"><value>Planned video formats</value></data>
   <data name="VideoInformationalText" xml:space="preserve"><value>Informational only · No media is opened or processed</value></data>
   <data name="AudioEyebrow" xml:space="preserve"><value>AUDIO</value></data>
@@ -155,4 +155,60 @@
   <data name="ImageResizeHelp" xml:space="preserve"><value>Fit within the width and height without cropping. Uncheck the ratio only to request exact dimensions, which may stretch the image.</value></data>
   <data name="ImageExpectedSize" xml:space="preserve"><value>Expected output size</value></data>
   <data name="ImageErrorInvalidSettings" xml:space="preserve"><value>Use quality 1–100 and positive dimensions: at most 8192 per side and 16 million pixels.</value></data>
+  <data name="VideoSelectSource" xml:space="preserve"><value>Source video</value></data>
+  <data name="VideoSelectionHelp" xml:space="preserve"><value>Add a local video in Workspace, select it here, then inspect. One file per conversion.</value></data>
+  <data name="VideoInspect" xml:space="preserve"><value>Inspect video</value></data>
+  <data name="VideoContainer" xml:space="preserve"><value>Container</value></data>
+  <data name="VideoDuration" xml:space="preserve"><value>Duration</value></data>
+  <data name="VideoSize" xml:space="preserve"><value>File size</value></data>
+  <data name="VideoCodec" xml:space="preserve"><value>Video codec</value></data>
+  <data name="VideoAudioCodec" xml:space="preserve"><value>Audio codec</value></data>
+  <data name="VideoNoAudio" xml:space="preserve"><value>No audio</value></data>
+  <data name="VideoUnknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="VideoStreamCounts" xml:space="preserve"><value>Streams: {0} video · {1} audio · {2} other</value></data>
+  <data name="VideoOutputSettings" xml:space="preserve"><value>MP4 output settings</value></data>
+  <data name="VideoOutputHelp" xml:space="preserve"><value>H.264 video + AAC audio (when present). Quality affects compression and size; smaller output is not guaranteed. Resolution is never increased.</value></data>
+  <data name="VideoQuality" xml:space="preserve"><value>Quality / compression</value></data>
+  <data name="VideoQualityHigh" xml:space="preserve"><value>High quality · larger file</value></data>
+  <data name="VideoQualityBalanced" xml:space="preserve"><value>Balanced · recommended</value></data>
+  <data name="VideoQualitySmall" xml:space="preserve"><value>Smaller file · lower quality</value></data>
+  <data name="VideoMaxHeight" xml:space="preserve"><value>Maximum output height</value></data>
+  <data name="VideoKeepSize" xml:space="preserve"><value>Keep source resolution</value></data>
+  <data name="VideoChooseDestination" xml:space="preserve"><value>Choose new MP4 location</value></data>
+  <data name="VideoConvert" xml:space="preserve"><value>Convert video</value></data>
+  <data name="VideoCancel" xml:space="preserve"><value>Cancel operation</value></data>
+  <data name="VideoProgress" xml:space="preserve"><value>Video operation progress</value></data>
+  <data name="VideoEncoding" xml:space="preserve"><value>Encoding</value></data>
+  <data name="VideoVerifying" xml:space="preserve"><value>Verifying output</value></data>
+  <data name="VideoStarting" xml:space="preserve"><value>Preparing video operation…</value></data>
+  <data name="VideoElapsed" xml:space="preserve"><value>Elapsed: {0}</value></data>
+  <data name="VideoIdle" xml:space="preserve"><value>Select and inspect one video to begin.</value></data>
+  <data name="VideoInspecting" xml:space="preserve"><value>Inspecting local video…</value></data>
+  <data name="VideoReady" xml:space="preserve"><value>Choose your settings and a new MP4 destination.</value></data>
+  <data name="VideoConverting" xml:space="preserve"><value>Converting and verifying. The original stays unchanged.</value></data>
+  <data name="VideoCancelling" xml:space="preserve"><value>Cancelling… waiting for the process to exit and temporary-file cleanup.</value></data>
+  <data name="VideoSuccess" xml:space="preserve"><value>Video saved and verified successfully.</value></data>
+  <data name="VideoOriginalSafe" xml:space="preserve"><value>Local processing only. Original and existing files are never overwritten. No batch conversion.</value></data>
+  <data name="VideoCancelToClose" xml:space="preserve"><value>A video operation is running. Cancel it and close after cleanup? Choose No to keep waiting.</value></data>
+  <data name="VideoCleanupFailed" xml:space="preserve"><value>Process termination or temporary-file cleanup could not be confirmed. Check the output folder for .orbitconvert-*.tmp before retrying.</value></data>
+  <data name="VideoUnexpectedError" xml:space="preserve"><value>The video operation could not be completed. Please try again.</value></data>
+  <data name="VideoErrorToolsUnavailable" xml:space="preserve"><value>FFmpeg/FFprobe could not be started. For development, configure the verified tools folder; the app does not download tools.</value></data>
+  <data name="VideoErrorToolsUnsupported" xml:space="preserve"><value>This FFmpeg build does not provide the required H.264 and AAC encoders.</value></data>
+  <data name="VideoErrorEmptyInput" xml:space="preserve"><value>This video file is empty.</value></data>
+  <data name="VideoErrorUnreadableInput" xml:space="preserve"><value>The source file could not be read. Check that it exists and is accessible.</value></data>
+  <data name="VideoErrorUnsupportedFormat" xml:space="preserve"><value>This container is not supported. Use MP4, MOV, MKV, WebM, or AVI with a supported codec.</value></data>
+  <data name="VideoErrorUnsupportedCodec" xml:space="preserve"><value>This video or audio codec is not supported yet.</value></data>
+  <data name="VideoErrorNoVideoStream" xml:space="preserve"><value>This file does not contain a usable video stream.</value></data>
+  <data name="VideoErrorInvalidOrCorruptVideo" xml:space="preserve"><value>This file is not a readable supported video, or its contents are damaged.</value></data>
+  <data name="VideoErrorTooLarge" xml:space="preserve"><value>Video exceeds a safety limit: 32 GiB, 12 hours, 8192 pixels per side, 8192 × 4320 pixels, or 32 streams.</value></data>
+  <data name="VideoErrorInvalidSettings" xml:space="preserve"><value>Choose a supported quality and output height.</value></data>
+  <data name="VideoErrorSamePath" xml:space="preserve"><value>Choose a destination different from the original file.</value></data>
+  <data name="VideoErrorDestinationExists" xml:space="preserve"><value>That destination already exists. Choose a new filename; nothing was overwritten.</value></data>
+  <data name="VideoErrorInvalidDestination" xml:space="preserve"><value>Choose a new .mp4 filename in an existing writable folder.</value></data>
+  <data name="VideoErrorConversionFailed" xml:space="preserve"><value>The video could not be converted. No completed destination was saved.</value></data>
+  <data name="VideoErrorTimedOut" xml:space="preserve"><value>The video tool stopped responding or exceeded its time limit. No completed destination was saved.</value></data>
+  <data name="VideoErrorCancelled" xml:space="preserve"><value>Video operation cancelled. No completed destination was saved.</value></data>
+  <data name="VideoErrorOutputFailure" xml:space="preserve"><value>The output could not be saved. Check the folder permissions and free space.</value></data>
+  <data name="VideoErrorOutputValidationFailed" xml:space="preserve"><value>The output could not be verified. No completed destination was saved.</value></data>
+  <data name="VideoErrorProcessTerminationFailed" xml:space="preserve"><value>The video tool did not confirm stopping. No final file was saved; wait and check for temporary files before retrying.</value></data>
 </root>

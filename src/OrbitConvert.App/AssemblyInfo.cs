@@ -1,4 +1,8 @@
+using System.Runtime.CompilerServices;
 using System.Windows;
+
+// Unit tests exercise the pure video-engine internals (FFprobe parsing, argument building, progress parsing).
+[assembly: InternalsVisibleTo("OrbitConvert.Tests")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None,            //where theme specific resource dictionaries are located

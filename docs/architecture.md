@@ -4,7 +4,7 @@ OrbitConvert is a small .NET 10 WPF application using MVVM. The existing shell, 
 
 ## Presentation
 
-MainWindow composes UserControls and binds its title to MainViewModel.AppTitle. MainViewModel owns navigation, session theme/accent, localization, FileIntakeViewModel, and ImageConversionViewModel.
+MainWindow composes UserControls and binds its title to MainViewModel.AppTitle. MainViewModel owns navigation, session theme/accent, localization, FileIntakeViewModel, ImageConversionViewModel, and VideoConversionViewModel.
 
 FileIntakeViewModel retains the observable collection, case-insensitive duplicate prevention, metadata-only intake, remove/clear actions, and localized statuses. Intake does not automatically decode or convert files.
 
@@ -26,4 +26,16 @@ After encoding, it flushes/closes the temporary file, reopens it for full valida
 
 xUnit tests cover native conversion, container guards, file safety, finalization races, cleanup failures, view-model async state, localization, and existing intake/shell behavior. WPF/WIC independently decodes output in dedicated STA test threads. Synthetic PNG fixtures use valid headers, zlib data, and CRCs, including a real 16-bit PNG verified independently as 64 bits per RGBA pixel.
 
-See image-engine-decision.md for exact resource settings and limitations. This phase has no batch workflow, color management, HEIC/AVIF or other engines, output thumbnails, telemetry, shell integration, or updater.
+See image-engine-decision.md for exact image resource settings and limitations. There is no batch workflow, color management, HEIC/AVIF, output thumbnails, telemetry, shell integration, or updater.
+
+## Video / external-process boundary (Phase 3)
+
+VideosView shares the intake collection but selects its own single source. VideoConversionViewModel owns explicit inspection, metadata, quality, maximum height, destination, localized status, progress, cancellation, and the task that signals completed cleanup. No process starts merely by selecting a file. Its Progress<T> captures the WPF synchronization context and rejects stale queued reports. MainWindow offers cancel-and-wait or keep-waiting when a video operation is busy. Image and video panels disable conflicting operations while the other engine is busy; navigation, theme, and language remain available.
+
+VideosView code-behind only hosts SaveFileDialog (CreateTestFile=false, MP4 only). The existing native picker and drop area remain unchanged. Both languages have complete video keys; paths/codecs use literal identifiers and LTR where necessary. Audio and Documents remain Coming Soon.
+
+Services/Media contains ProcessRunner and FfmpegLocator. ProcessRunner uses ProcessStartInfo.ArgumentList, no shell, bounded captured output, asynchronous pipes, startup/runtime/inactivity timeouts, process-tree termination and a Windows kill-on-close job object. Job creation/configuration failure prevents process startup. Assignment checks the native boolean result and captures its Win32 error: if the child is still running, failure immediately enters the existing bounded termination path and returns StartFailed (never success). A failed assignment is harmless only after the child's exit is observed. StartFailed maps to the existing ToolsUnavailable video error; unconfirmed termination still maps to ProcessTerminationFailed/cleanup warning. Kill-on-close protection begins after confirmed assignment, not atomically with Process.Start. Stops have bounded grace periods; a process-creation call that blocks cannot be forcibly aborted by managed code, so a continuation attempts to kill a late-started process. This exceptional case can leave temporary files and is not represented as confirmed cleanup.
+
+Services/Video contains immutable options/results, FFprobe JSON parsing and limits, FFmpeg argument construction, and VideoConversionService. It holds the source read-only, serializes video operations, restricts protocols and demuxers, reserves one owned temporary file, runs H.264/AAC encoding, probes and fully decodes the candidate, and moves with overwrite:false only after validation. Cancellation is checked again before finalization. It deletes only its own temporary file and reports cleanup failures. No engine binary is downloaded at runtime.
+
+Real process/integration tests exercise FFmpeg, including codec/container fixtures, quality/SSIM, rotation, streams, progress, cancellation, finalization races, corruption, and Unicode paths. View-model tests separately cover presentation and cancellation waiting; an STA WPF layout/binding test loads actual resources and all sections in both languages at minimum/default/large sizes. See phase-3-video-validation.md for measured results and boundaries; this is not an OS media sandbox.

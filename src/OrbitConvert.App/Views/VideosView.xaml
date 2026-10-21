@@ -1,0 +1,107 @@
+<UserControl x:Class="OrbitConvert.App.Views.VideosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:video="clr-namespace:OrbitConvert.App.Services.Video"
+             HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
+        <StackPanel MaxWidth="980">
+            <TextBlock Style="{StaticResource EyebrowTextStyle}" Text="{Binding Localization[VideoEyebrow]}" />
+            <TextBlock Margin="0,8,0,0" Style="{StaticResource PageTitleTextStyle}" Text="{Binding Localization[VideoTitle]}" />
+            <TextBlock Margin="0,7,0,22" Style="{StaticResource BodyTextStyle}" Text="{Binding Localization[VideoDescription]}" />
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[VideoSelectSource]}" />
+                    <TextBlock Margin="0,6,0,12" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoSelectionHelp]}" />
+                    <ComboBox ItemsSource="{Binding FileIntake.SelectedFiles}" Style="{StaticResource ImageSourceComboBoxStyle}"
+                              SelectedItem="{Binding VideoConversion.SelectedFile, Mode=TwoWay}" IsEnabled="{Binding VideoConversion.IsIdle}"
+                              FlowDirection="LeftToRight" MinHeight="36" MaxDropDownHeight="240"
+                              AutomationProperties.Name="{Binding Localization[VideoSelectSource]}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate><TextBlock Text="{Binding FileName}" TextTrimming="CharacterEllipsis" /></DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Margin="0,12,0,0" HorizontalAlignment="Left" Style="{StaticResource SecondaryButtonStyle}"
+                            Content="{Binding Localization[VideoInspect]}" Command="{Binding VideoConversion.InspectCommand}" />
+                    <UniformGrid Columns="2" Margin="0,18,0,0">
+                        <StackPanel Margin="0,0,10,12">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoContainer]}" />
+                            <TextBlock Margin="0,5,0,0" Text="{Binding VideoConversion.Container}" FlowDirection="LeftToRight" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[Dimensions]}" />
+                            <TextBlock Margin="0,5,0,0" Text="{Binding VideoConversion.Dimensions}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,10,12">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoDuration]}" />
+                            <TextBlock Margin="0,5,0,0" Text="{Binding VideoConversion.Duration}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoSize]}" />
+                            <TextBlock Margin="0,5,0,0" Text="{Binding VideoConversion.SourceSize}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoCodec]}" />
+                            <TextBlock Margin="0,5,0,0" Text="{Binding VideoConversion.VideoCodec}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoAudioCodec]}" />
+                            <TextBlock Margin="0,5,0,0" Text="{Binding VideoConversion.AudioCodec}" />
+                        </StackPanel>
+                    </UniformGrid>
+                    <TextBlock Margin="0,14,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding VideoConversion.Streams}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,18,0,0">
+                <StackPanel IsEnabled="{Binding VideoConversion.CanEditSettings}">
+                    <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[VideoOutputSettings]}" />
+                    <TextBlock Margin="0,8,0,16" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoOutputHelp]}" />
+                    <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoQuality]}" />
+                    <ComboBox Margin="0,6,0,14" Style="{StaticResource ImageComboBoxStyle}" SelectedValuePath="Tag"
+                              SelectedValue="{Binding VideoConversion.Quality, Mode=TwoWay}" AutomationProperties.Name="{Binding Localization[VideoQuality]}">
+                        <ComboBoxItem Tag="{x:Static video:VideoQuality.High}" Content="{Binding Localization[VideoQualityHigh]}" />
+                        <ComboBoxItem Tag="{x:Static video:VideoQuality.Balanced}" Content="{Binding Localization[VideoQualityBalanced]}" />
+                        <ComboBoxItem Tag="{x:Static video:VideoQuality.Small}" Content="{Binding Localization[VideoQualitySmall]}" />
+                    </ComboBox>
+                    <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoMaxHeight]}" />
+                    <ComboBox Margin="0,6,0,12" Style="{StaticResource ImageComboBoxStyle}" SelectedValuePath="Tag"
+                              SelectedValue="{Binding VideoConversion.MaxHeight, Mode=TwoWay}" AutomationProperties.Name="{Binding Localization[VideoMaxHeight]}">
+                        <ComboBoxItem Content="{Binding Localization[VideoKeepSize]}"><ComboBoxItem.Tag><sys:Int32>0</sys:Int32></ComboBoxItem.Tag></ComboBoxItem>
+                        <ComboBoxItem Content="1080p"><ComboBoxItem.Tag><sys:Int32>1080</sys:Int32></ComboBoxItem.Tag></ComboBoxItem>
+                        <ComboBoxItem Content="720p"><ComboBoxItem.Tag><sys:Int32>720</sys:Int32></ComboBoxItem.Tag></ComboBoxItem>
+                        <ComboBoxItem Content="480p"><ComboBoxItem.Tag><sys:Int32>480</sys:Int32></ComboBoxItem.Tag></ComboBoxItem>
+                    </ComboBox>
+                    <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[ImageExpectedSize]}" />
+                    <TextBlock Margin="0,5,0,0" Text="{Binding VideoConversion.ExpectedDimensions}" FlowDirection="LeftToRight" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,18,0,0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[ImageDestination]}" />
+                    <Button Margin="0,12,0,0" HorizontalAlignment="Left" Click="ChooseDestination_Click" Style="{StaticResource SecondaryButtonStyle}"
+                            Content="{Binding Localization[VideoChooseDestination]}" IsEnabled="{Binding VideoConversion.CanChooseDestination}" />
+                    <TextBlock Margin="0,12,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding VideoConversion.DestinationPath}" FlowDirection="LeftToRight" />
+                    <WrapPanel Margin="0,16,0,0">
+                        <Button Margin="0,0,10,8" Style="{StaticResource PrimaryButtonStyle}" Content="{Binding Localization[VideoConvert]}"
+                                Command="{Binding VideoConversion.ConvertCommand}" />
+                        <Button Margin="0,0,0,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[VideoCancel]}"
+                                Command="{Binding VideoConversion.CancelCommand}" />
+                    </WrapPanel>
+                    <StackPanel Margin="0,8,0,8" Visibility="{Binding VideoConversion.ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding VideoConversion.ProgressText}" />
+                        <ProgressBar Margin="0,8,0,8" Height="8" Minimum="0" Maximum="100" Foreground="{DynamicResource AccentBrush}"
+                                     Value="{Binding VideoConversion.ProgressPercent, Mode=OneWay}" IsIndeterminate="{Binding VideoConversion.IsProgressIndeterminate}"
+                                     AutomationProperties.Name="{Binding Localization[VideoProgress]}" />
+                        <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding VideoConversion.Elapsed}" />
+                    </StackPanel>
+                    <TextBlock Margin="0,12,0,0" Style="{StaticResource BodyTextStyle}" Text="{Binding VideoConversion.StatusMessage}" AutomationProperties.LiveSetting="Polite" />
+                    <TextBlock Margin="0,8,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding VideoConversion.CompletedPath}" FlowDirection="LeftToRight" />
+                    <TextBlock Margin="0,12,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[VideoOriginalSafe]}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

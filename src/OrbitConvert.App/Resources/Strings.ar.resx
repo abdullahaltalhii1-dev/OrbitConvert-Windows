@@ -19,19 +19,19 @@
   <data name="NavSettings" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="NavWorkspaceAutomation" xml:space="preserve"><value>مساحة العمل</value></data>
   <data name="NavImagesAutomation" xml:space="preserve"><value>تحويل الصور</value></data>
-  <data name="NavVideoAutomation" xml:space="preserve"><value>الفيديو، قريبًا</value></data>
+  <data name="NavVideoAutomation" xml:space="preserve"><value>تحويل الفيديو</value></data>
   <data name="NavAudioAutomation" xml:space="preserve"><value>الصوت، قريبًا</value></data>
   <data name="NavDocumentsAutomation" xml:space="preserve"><value>المستندات، قريبًا</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>٤ صيغ</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>قريبًا</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 2D</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>تحويل صورة واحدة</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 3</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>تحويل الصور والفيديو محليًا</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>مساحة العمل</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>حوّل ملفاتك بلا تعقيد.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور لتحويل صورة واحدة مدعومة.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور أو الفيديو لتحويل ملف مدعوم واحد.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>اختر الملفات أو أفلتها هنا.</value></data>
-  <data name="DropZoneDescription" xml:space="preserve"><value>حدد ملفًا أو أكثر. المجلدات غير مدعومة. اختر صورة واحدة في قسم الصور لتحويلها.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>حدد ملفًا أو أكثر. المجلدات غير مدعومة. اختر مصدرًا واحدًا في الصور أو الفيديو.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>استعراض الملفات</value></data>
   <data name="BrowseFilesHelp" xml:space="preserve"><value>فتح منتقي ملفات Windows</value></data>
   <data name="SelectedFiles" xml:space="preserve"><value>الملفات المحددة</value></data>
@@ -42,9 +42,9 @@
   <data name="Remove" xml:space="preserve"><value>إزالة</value></data>
   <data name="RemoveHelp" xml:space="preserve"><value>إزالة هذا الملف من التحديد</value></data>
   <data name="PrivateProcessingTitle" xml:space="preserve"><value>معالجة خاصة</value></data>
-  <data name="PrivateProcessingDescription" xml:space="preserve"><value>تُعالج الصور محليًا. تبقى الملفات الأصلية دون تغيير ولا تُرفع الملفات.</value></data>
+  <data name="PrivateProcessingDescription" xml:space="preserve"><value>تُعالج الصور والفيديو محليًا. تبقى الملفات الأصلية دون تغيير ولا تُرفع الملفات.</value></data>
   <data name="MultipleFormatsTitle" xml:space="preserve"><value>صيغ متعددة</value></data>
-  <data name="MultipleFormatsDescription" xml:space="preserve"><value>حوّل صور PNG وJPEG وWebP وBMP مع خيارات الجودة وتغيير الأبعاد.</value></data>
+  <data name="MultipleFormatsDescription" xml:space="preserve"><value>حوّل صور PNG وJPEG وWebP وBMP أو الفيديو المدعوم إلى MP4.</value></data>
   <data name="FileDialogTitle" xml:space="preserve"><value>اختر ملفات لـ OrbitConvert</value></data>
   <data name="FileDialogFilter" xml:space="preserve"><value>كل الملفات (*.*)|*.*</value></data>
   <data name="FileCountNone" xml:space="preserve"><value>لم يتم تحديد ملفات</value></data>
@@ -78,8 +78,8 @@
   <data name="Dimensions" xml:space="preserve"><value>الأبعاد</value></data>
   <data name="ComingSoon" xml:space="preserve"><value>قريبًا</value></data>
   <data name="VideoEyebrow" xml:space="preserve"><value>الفيديو</value></data>
-  <data name="VideoTitle" xml:space="preserve"><value>أدوات الفيديو في الطريق.</value></data>
-  <data name="VideoDescription" xml:space="preserve"><value>توضح هذه الصفحة الاتجاه المخطط له من دون تفعيل وظائف غير مكتملة.</value></data>
+  <data name="VideoTitle" xml:space="preserve"><value>فيديوك. بصيغة أبسط.</value></data>
+  <data name="VideoDescription" xml:space="preserve"><value>حوّل فيديو محليًا واحدًا إلى MP4. اختر التوازن بين الجودة والحجم.</value></data>
   <data name="VideoFormatsHeading" xml:space="preserve"><value>صيغ الفيديو المخطط لها</value></data>
   <data name="VideoInformationalText" xml:space="preserve"><value>للمعلومات فقط · لا يتم فتح الوسائط أو معالجتها</value></data>
   <data name="AudioEyebrow" xml:space="preserve"><value>الصوت</value></data>
@@ -154,4 +154,60 @@
   <data name="ImageResizeHelp" xml:space="preserve"><value>تُناسب الصورة العرض والارتفاع دون قص. ألغِ الحفاظ على النسبة فقط لطلب أبعاد مطابقة قد تمدد الصورة.</value></data>
   <data name="ImageExpectedSize" xml:space="preserve"><value>أبعاد الإخراج المتوقعة</value></data>
   <data name="ImageErrorInvalidSettings" xml:space="preserve"><value>استخدم جودة من ١ إلى ١٠٠ وأبعادًا موجبة، بحد أقصى ٨١٩٢ لكل جانب و١٦ مليون بكسل.</value></data>
+  <data name="VideoSelectSource" xml:space="preserve"><value>الفيديو المصدر</value></data>
+  <data name="VideoSelectionHelp" xml:space="preserve"><value>أضف فيديو محليًا من مساحة العمل، ثم اختره وافحصه هنا. ملف واحد لكل عملية.</value></data>
+  <data name="VideoInspect" xml:space="preserve"><value>فحص الفيديو</value></data>
+  <data name="VideoContainer" xml:space="preserve"><value>الحاوية</value></data>
+  <data name="VideoDuration" xml:space="preserve"><value>المدة</value></data>
+  <data name="VideoSize" xml:space="preserve"><value>حجم الملف</value></data>
+  <data name="VideoCodec" xml:space="preserve"><value>ترميز الفيديو</value></data>
+  <data name="VideoAudioCodec" xml:space="preserve"><value>ترميز الصوت</value></data>
+  <data name="VideoNoAudio" xml:space="preserve"><value>بدون صوت</value></data>
+  <data name="VideoUnknown" xml:space="preserve"><value>غير معروف</value></data>
+  <data name="VideoStreamCounts" xml:space="preserve"><value>المسارات: {0} فيديو · {1} صوت · {2} أخرى</value></data>
+  <data name="VideoOutputSettings" xml:space="preserve"><value>إعدادات إخراج MP4</value></data>
+  <data name="VideoOutputHelp" xml:space="preserve"><value>فيديو H.264 وصوت AAC عند وجوده. تؤثر الجودة في الضغط والحجم؛ لا يُضمن حجم أصغر. لا تُزاد الدقة.</value></data>
+  <data name="VideoQuality" xml:space="preserve"><value>الجودة / الضغط</value></data>
+  <data name="VideoQualityHigh" xml:space="preserve"><value>جودة عالية · ملف أكبر</value></data>
+  <data name="VideoQualityBalanced" xml:space="preserve"><value>متوازن · موصى به</value></data>
+  <data name="VideoQualitySmall" xml:space="preserve"><value>ملف أصغر · جودة أقل</value></data>
+  <data name="VideoMaxHeight" xml:space="preserve"><value>أقصى ارتفاع للإخراج</value></data>
+  <data name="VideoKeepSize" xml:space="preserve"><value>الاحتفاظ بدقة المصدر</value></data>
+  <data name="VideoChooseDestination" xml:space="preserve"><value>اختيار موقع MP4 جديد</value></data>
+  <data name="VideoConvert" xml:space="preserve"><value>تحويل الفيديو</value></data>
+  <data name="VideoCancel" xml:space="preserve"><value>إلغاء العملية</value></data>
+  <data name="VideoProgress" xml:space="preserve"><value>تقدم عملية الفيديو</value></data>
+  <data name="VideoEncoding" xml:space="preserve"><value>جارٍ الترميز</value></data>
+  <data name="VideoVerifying" xml:space="preserve"><value>جارٍ التحقق من الناتج</value></data>
+  <data name="VideoStarting" xml:space="preserve"><value>جارٍ تجهيز عملية الفيديو…</value></data>
+  <data name="VideoElapsed" xml:space="preserve"><value>الوقت المنقضي: {0}</value></data>
+  <data name="VideoIdle" xml:space="preserve"><value>اختر فيديو واحدًا وافحصه للبدء.</value></data>
+  <data name="VideoInspecting" xml:space="preserve"><value>جارٍ فحص الفيديو المحلي…</value></data>
+  <data name="VideoReady" xml:space="preserve"><value>اختر الإعدادات وموقعًا جديدًا لملف MP4.</value></data>
+  <data name="VideoConverting" xml:space="preserve"><value>جارٍ التحويل والتحقق. سيبقى الأصل دون تغيير.</value></data>
+  <data name="VideoCancelling" xml:space="preserve"><value>جارٍ الإلغاء… ننتظر انتهاء العملية وتنظيف الملف المؤقت.</value></data>
+  <data name="VideoSuccess" xml:space="preserve"><value>تم حفظ الفيديو والتحقق منه بنجاح.</value></data>
+  <data name="VideoOriginalSafe" xml:space="preserve"><value>المعالجة محلية فقط. لا يُستبدل الملف الأصلي أو الملفات الموجودة. لا يوجد تحويل دفعات.</value></data>
+  <data name="VideoCancelToClose" xml:space="preserve"><value>توجد عملية فيديو قيد التشغيل. هل تريد إلغاءها والإغلاق بعد التنظيف؟ اختر «لا» للمتابعة والانتظار.</value></data>
+  <data name="VideoCleanupFailed" xml:space="preserve"><value>تعذر تأكيد إنهاء العملية أو تنظيف الملف المؤقت. افحص مجلد الإخراج بحثًا عن ‎.orbitconvert-*.tmp قبل المحاولة مجددًا.</value></data>
+  <data name="VideoUnexpectedError" xml:space="preserve"><value>تعذر إكمال عملية الفيديو. يرجى المحاولة مجددًا.</value></data>
+  <data name="VideoErrorToolsUnavailable" xml:space="preserve"><value>تعذر تشغيل FFmpeg/FFprobe. للتطوير، اضبط مجلد الأدوات المتحقق منها؛ التطبيق لا ينزّل الأدوات.</value></data>
+  <data name="VideoErrorToolsUnsupported" xml:space="preserve"><value>بنية FFmpeg هذه لا توفر مرمّزَي H.264 وAAC المطلوبين.</value></data>
+  <data name="VideoErrorEmptyInput" xml:space="preserve"><value>ملف الفيديو فارغ.</value></data>
+  <data name="VideoErrorUnreadableInput" xml:space="preserve"><value>تعذرت قراءة المصدر. تحقق من وجوده وإمكانية الوصول إليه.</value></data>
+  <data name="VideoErrorUnsupportedFormat" xml:space="preserve"><value>هذه الحاوية غير مدعومة. استخدم MP4 أو MOV أو MKV أو WebM أو AVI بترميز مدعوم.</value></data>
+  <data name="VideoErrorUnsupportedCodec" xml:space="preserve"><value>ترميز الفيديو أو الصوت غير مدعوم بعد.</value></data>
+  <data name="VideoErrorNoVideoStream" xml:space="preserve"><value>الملف لا يحتوي على مسار فيديو قابل للاستخدام.</value></data>
+  <data name="VideoErrorInvalidOrCorruptVideo" xml:space="preserve"><value>الملف ليس فيديو مدعومًا قابلًا للقراءة أو أن محتواه تالف.</value></data>
+  <data name="VideoErrorTooLarge" xml:space="preserve"><value>يتجاوز الفيديو حد الأمان: 32 GiB أو 12 ساعة أو 8192 بكسل لكل ضلع أو ‎8192 × 4320 بكسل أو 32 مسارًا.</value></data>
+  <data name="VideoErrorInvalidSettings" xml:space="preserve"><value>اختر جودة وارتفاع إخراج مدعومين.</value></data>
+  <data name="VideoErrorSamePath" xml:space="preserve"><value>اختر موقع إخراج مختلفًا عن الملف الأصلي.</value></data>
+  <data name="VideoErrorDestinationExists" xml:space="preserve"><value>يوجد ملف بهذا الاسم في الوجهة. اختر اسمًا جديدًا؛ لم يُستبدل أي ملف.</value></data>
+  <data name="VideoErrorInvalidDestination" xml:space="preserve"><value>اختر اسمًا جديدًا بامتداد ‎.mp4 داخل مجلد موجود قابل للكتابة.</value></data>
+  <data name="VideoErrorConversionFailed" xml:space="preserve"><value>تعذر تحويل الفيديو. لم يُحفظ ملف نهائي في الوجهة.</value></data>
+  <data name="VideoErrorTimedOut" xml:space="preserve"><value>توقفت أداة الفيديو عن الاستجابة أو تجاوزت المهلة. لم يُحفظ ملف نهائي.</value></data>
+  <data name="VideoErrorCancelled" xml:space="preserve"><value>أُلغيت عملية الفيديو. لم يُحفظ ملف نهائي.</value></data>
+  <data name="VideoErrorOutputFailure" xml:space="preserve"><value>تعذر حفظ الناتج. تحقق من أذونات المجلد والمساحة المتاحة.</value></data>
+  <data name="VideoErrorOutputValidationFailed" xml:space="preserve"><value>تعذر التحقق من الناتج. لم يُحفظ ملف نهائي.</value></data>
+  <data name="VideoErrorProcessTerminationFailed" xml:space="preserve"><value>لم تؤكد أداة الفيديو توقفها. لم يُحفظ ملف نهائي؛ انتظر وتحقق من الملفات المؤقتة قبل المحاولة مجددًا.</value></data>
 </root>

@@ -12,6 +12,7 @@ on:
 jobs:
     build-and-test:
         runs-on: windows-latest
+        timeout-minutes: 45
 
         steps:
             - name: Check out repository
@@ -22,6 +23,16 @@ jobs:
               with:
                   dotnet-version: 10.0.x
 
+            # Pinned, owner-approved FFmpeg development build (size and SHA-256 verified by the script).
+            # Real FFmpeg tests must run here: ORBITCONVERT_REQUIRE_FFMPEG makes them fail instead of skipping.
+            - name: Fetch pinned FFmpeg for real video tests
+              shell: pwsh
+              run: |
+                  $bin = ./tools/Get-FFmpeg.ps1 -Destination "$env:RUNNER_TEMP\orbitconvert-tools"
+                  & "$bin\ffmpeg.exe" -hide_banner -version | Select-Object -First 1
+                  "ORBITCONVERT_FFMPEG_DIR=$bin" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+                  "ORBITCONVERT_REQUIRE_FFMPEG=1" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
             - name: Restore
               run: dotnet restore OrbitConvert.slnx
 
@@ -29,4 +40,4 @@ jobs:
               run: dotnet build OrbitConvert.slnx --configuration Release --no-restore
 
             - name: Test
-              run: dotnet test OrbitConvert.slnx --configuration Release --no-build
+              run: dotnet test OrbitConvert.slnx --configuration Release --no-build --blame-hang-timeout 10m --blame-hang-dump-type none
