@@ -4,6 +4,45 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 
 ---
 
+## 2026-10-21 — Codex: Phase 3 complete, awaiting owner review
+
+### Live state and ownership
+
+- Existing branch: `feature/phase-3-video-ffmpeg`; existing **Draft PR #10**: https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/pull/10. Do not merge or start Phase 4 without owner authorization.
+- Claude's `4aed00d` backend and `9c7b732` handoff are preserved. Codex backend fix: `da77e8688fce44070fb1e5be301218ecbf635fbe`; completed UI/code checkpoint: **`929eaa9a32c30fd171266435f72f84dc86683f0c`**. This entry is delivered by a subsequent documentation/evidence commit; resolve current branch HEAD on GitHub before acting.
+- Codex stopped after validation/delivery. No other assistant was delegated work. Resume only the owner's requested review/fix, not a new phase automatically.
+- Pre-existing untracked `src/OrbitConvert.App/OrbitConvert.App_dcgdz3wr_wpftmp.csproj` was left untouched. No user changes were discarded. Local generated GUI videos are under ignored `artifacts/phase3-gui`; not uploaded or bundled.
+
+### Changes since Claude's handoff
+
+- Reproduced the original playlist failure locally. FFprobe says nonstandard m3u8 extension, `moov atom not found`, `Invalid data found when processing input`. Changed only the test expectation to InvalidOrCorruptVideo, keeping all security whitelists.
+- Replaced the flaky global FFmpeg process count with a retained handle to the operation-owned encoder; cancellation asserts exit, absence of destination/temporary output, and confirmed cleanup.
+- Propagated unconfirmed termination explicitly (ProcessTerminationFailed/CleanupFailed). Late starts remain best-effort terminated by the runner continuation. Pre-cancelled requests never start processes; last-moment cancellation is checked before finalization. Added duration-overflow and destination/cancellation finalization-race tests.
+- Added VideoConversionViewModel, VideosView XAML and native SaveFileDialog boundary. Reuses intake, displays real metadata, MP4 settings/quality/max-height, real encoding/verification progress, cancel, localized status and cleanup warnings. No automatic/batch conversion.
+- Added English/Arabic resources and live RTL/LTR behavior. Video navigation no longer says Coming Soon. Image/video panels disable conflicting operations. Closing video work offers cancel-and-wait or keep-waiting; images retain their previous wait-only behavior.
+- Added 9 focused VM tests plus actual STA WPF layout/binding checks in both languages at minimum/default/large sizes. No new NuGet packages or architecture rewrite.
+- README, architecture and `docs/phase-3-video-validation.md` now document setup, limits, exact formats/presets, binary checksum, licensing boundary, measurements and honest GUI results. Original roadmap/AGENTS rules unchanged.
+
+### Verification actually completed
+
+- Standard final `dotnet restore OrbitConvert.slnx`, Release build (`--no-restore`), tests (`--no-build --blame-hang-timeout 90s --blame-hang-dump-type none`), `dotnet format OrbitConvert.slnx --verify-no-changes`, and `git diff --check` passed. Build **0 warnings/errors**; **307 passed, 0 failed, 0 skipped**, 27 s locally. Earlier builds also passed using UseSharedCompilation=false and -m:1.
+- Both UI checkpoint CI runs **passed** at 929eaa9: push **39532826362**, PR **39532829911**, 307 tests with actual pinned FFmpeg (push duration 32 s). Backend fix checkpoint also passed both workflows at da77e86, 293 tests. Final documentation commit triggers the unchanged gate again; inspect its checks before reviewing/merging.
+- Actual GUI: Unicode/Arabic filename with spaces and &, explicit metadata inspection, native Save (no precreated output), MP4 success, Arabic dark/English light and live language/theme switching, navigation, source/quality combo boxes, real progress, cancellation, source/settings busy protection, default/maximized rendering and normal close.
+- Actual cancel-and-close: generated 20-minute video, running encoder PID 14584, dialog captured at 19%; confirmation exited app PID 40224 and encoder, **no destination or temporary files**. Keep-waiting was separately verified. Shorter preliminary attempts finished before confirmation and are not cancellation proof.
+- Manual image regression: PNG→JPEG in existing Images page saved/verified; original source hashes unchanged. Full previous image/intake/localization tests green. No binding errors captured by the WPF test.
+- Actual screenshots: `docs/screenshots/23-phase3-arabic-dark-success.png`, `24-phase3-english-light-success.png`, `25-phase3-real-progress.png`, `26-phase3-cancel-to-close.png`.
+- Measured both encoder quality orders with SSIM/time/bytes; exact one-run figures and methodology in validation document. Do not generalize them to real-world compression guarantees or hardware benchmarks.
+
+### Known limitations / next authorized step
+
+- Await technical review and owner approval. **No code work remains identified in the approved Phase 3 scope; no Phase 4 work was started.** Keep PR Draft/unmerged.
+- Visual 125%/150% DPI and actual minimum-size resizing not completed. Automated min/default/large layout passed, real default/maximized observed. Border-drag attempt did not resize and is not a pass.
+- No suspended-process hang reproduced in successful bounded runs; Norton remains an unconfirmed historical hypothesis. One build collided with the running test app's apphost lock and passed after normal close. No antivirus/security exclusions or setting changes.
+- Final distribution licensing is still owner-controlled: development FFmpeg 9.0.2 Essentials is GPL-enabled. App-local/offline engine resolution exists, but no installer or approved redistributable bundle was implemented. See official FFmpeg licensing link and options in validation doc; do not silently choose a license strategy.
+- Not a hostile-media sandbox or universal corrupt-input detector; time/metadata limits are not hard memory/CPU caps. Forced shutdown or unconfirmed late-start termination may leave owned temporary files; warnings document that risk.
+
+---
+
 ## 2026-10-21 — Claude → Codex: Phase 3 WIP handoff (FFmpeg video engine)
 
 The owner transferred active Phase 3 development to Codex. Claude has stopped and will not write to this branch.

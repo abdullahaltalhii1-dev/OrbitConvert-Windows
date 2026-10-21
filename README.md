@@ -71,7 +71,7 @@ See [image-engine-decision.md](docs/image-engine-decision.md) for the pinned dep
 
 MP4/MOV, MKV/WebM, and AVI inputs are accepted only with explicitly supported codecs. Output is one H.264 stream and AAC audio when present; extra audio streams, subtitles, attachments, chapters, and metadata are not preserved. Quality changes compression, not a guaranteed target size. See [Phase 3 validation](docs/phase-3-video-validation.md) for exact formats, limits, licensing considerations, measurements, tests, and known limitations.
 
-Actual application screenshots: [Arabic dark success](docs/screenshots/23-phase3-arabic-dark-success.png), [English light success](docs/screenshots/24-phase3-english-light-success.png), [real progress](docs/screenshots/25-phase3-real-progress.png).
+Actual application screenshots: [Arabic dark success](docs/screenshots/23-phase3-arabic-dark-success.png), [English light success](docs/screenshots/24-phase3-english-light-success.png), [real progress](docs/screenshots/25-phase3-real-progress.png), [cancel before closing](docs/screenshots/26-phase3-cancel-to-close.png).
 
 ## Phase 2D screenshots
 

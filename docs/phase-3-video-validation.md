@@ -10,7 +10,7 @@ Continues Claude's implementation on `feature/phase-3-video-ffmpeg`, Draft PR #1
 - Unconfirmed process termination now surfaces explicitly rather than looking like clean cancellation or timeout. Late process creation is marked unconfirmed; its continuation still attempts termination. No destination is finalized in that state. Owned temporary cleanup remains best effort and is reported honestly.
 - Restore and Release build succeeded locally (0 warnings/errors), using `-p:UseSharedCompilation=false -m:1` for the build.
 - Full local suite: **293 passed, 0 failed, 0 skipped**, 26 seconds, including actual FFmpeg integration tests. `--blame-hang-timeout 90s --blame-hang-dump-type none` was enabled. No local freeze occurred in this run. This does not establish the cause of earlier stalls.
-- UI completion, GUI checks, performance observations, and final CI evidence follow below when actually performed.
+- UI completion, GUI checks, performance observations, and final CI evidence are recorded below.
 
 ## Tools and distribution boundary
 
@@ -45,7 +45,8 @@ These are process-level guardrails, **not a sandbox or hard CPU/memory budget**.
 - View-model tests: 9 passed (Unicode source/options, duplicates/busy guards, cancellation/cleanup waiting, stale progress, bilingual errors, unknown duration/no audio, invalid settings/inspection and complete error-resource coverage).
 - Actual WPF resource/layout/binding test: English and Arabic, every section, 900×620, 1120×720 and 1920×1080; **no binding errors** captured. This is automated layout validation, not a substitute for real DPI/visual testing.
 - Format verification and `git diff --check` passed.
-- Backend checkpoint CI at `da77e86`: both push and PR workflows green; 293 tests passed (push run 39530991661, PR run 39530996018). Final UI CI results will be recorded after pushing.
+- Backend checkpoint CI at `da77e86`: both push and PR workflows green; 293 tests passed (push run 39530991661, PR run 39530996018).
+- UI checkpoint `929eaa9a32c30fd171266435f72f84dc86683f0c`: both push (39532826362) and PR (39532829911) CI workflows **passed**, 307 tests, zero failed/skipped (push test duration 32 s). Final standard local restore/build/test/format gate also passed: 307 tests in 27 s, build zero warnings/errors, no extra build properties required on that final run.
 
 ## Measured quality/performance sample
 
@@ -70,12 +71,14 @@ Actual WPF application, not mockups:
 - Native MP4 Save dialog created **no file** before Convert. Conversion succeeded, displayed the localized verified-success message, and left the original intact (304,721 bytes; output 149,849 bytes). Integration tests additionally compare original hashes.
 - Arabic dark and English light, live language/theme changes, navigation and retained completed state were visually verified. Default window and native maximized layout rendered without overlap/crash.
 - A generated 5-minute 1280×720 source displayed real percentage/elapsed progress with source/settings disabled. Cancel terminated the observed FFmpeg process (PID 49732), restored idle controls, and left no completed destination or owned temporary file.
-- Closing while busy displayed the native yes/no prompt. Choosing No kept the app running; the conversion subsequently finished. Idle close exited normally. The cancel-and-close path still needs a focused actual GUI run; service cancellation and wait-for-cleanup behavior are already tested separately.
+- Closing while busy displayed the native yes/no prompt. Choosing No kept the app running; the conversion subsequently finished. Idle close exited normally.
+- A dedicated cancel-and-close run used a generated 20-minute source so it could not finish before the confirmation. Actual FFmpeg PID 14584 was running; the dialog was captured at 19% encoding. Choosing Yes exited both the app (PID 40224) and the encoder. The expected `close-20min_converted.mp4` **did not exist** afterward; owned temporary-file count was **zero**. Earlier five-minute attempts completed before confirmation and are not counted as cancellation evidence.
 - Source/quality combo boxes, native picker/save dialogs and keyboard shortcuts were exercised. Native modal accessibility snapshots sometimes lagged; screenshots and keyboard interaction confirmed actual state.
-- Visual checks at 125%/150% DPI and actual minimum-size resizing have **not** been performed. Automated minimum/default/large layout checks passed. Image regression is covered by the full existing automated suite; a new manual image conversion is still pending.
+- Manual image regression: existing Images page inspected a 96×64 PNG and successfully converted it to JPEG through the native destination dialog, displaying its original verified-success status. Source SHA-256 matched the original fixture; the video GUI source hash also matched its original fixture after conversion. Full existing image automation remained green.
+- Visual checks at 125%/150% DPI and actual minimum-size resizing have **not** been performed. An attempted border drag did not resize the native window and is not claimed as a passed check. Automated minimum/default/large layout checks passed; default and maximized GUI were observed.
 - One build attempted while the test app was running failed on the expected apphost file lock. After normal close, Release build succeeded. This is distinct from Claude's earlier unexplained suspended-process stalls; those were not reproduced in the successful bounded runs here. No antivirus or OS security settings were changed.
 
-Actual captures: `docs/screenshots/23-phase3-arabic-dark-success.png`, `24-phase3-english-light-success.png`, `25-phase3-real-progress.png`.
+Actual captures: `docs/screenshots/23-phase3-arabic-dark-success.png`, `24-phase3-english-light-success.png`, `25-phase3-real-progress.png`, `26-phase3-cancel-to-close.png`.
 
 ## Deferred / release considerations
 
