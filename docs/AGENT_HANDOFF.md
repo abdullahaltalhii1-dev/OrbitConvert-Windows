@@ -4,6 +4,19 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 
 ---
 
+## 2026-10-21 — Codex: final review fix for failed Windows job assignment
+
+- Branch remains `feature/phase-3-video-ffmpeg`; existing **Draft PR #10**, https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/pull/10. Reviewed base: `f7aac1ed6ed9490ca3c9ae0f4e1195d5ca40851d`; implementation commit: **`d83c0f00e45cff87da4aa9353b91480b93ca2115`**. This handoff is a following documentation-only commit; verify live HEAD/checks before acting.
+- Reproduced a real FALSE/error return from AssignProcessToJobObject by passing an invalid job handle while an owned FFmpeg child was running. Native error was ERROR_INVALID_HANDLE (6). With the old unchecked behavior plus only a native-call test seam, the new regression failed (expected StartFailed, actual TimedOut); the already-exited case passed.
+- Assignment now checks the boolean result and captures the native error. A live child that cannot be assigned immediately enters the existing bounded kill/wait path and returns StartFailed, never a successful managed run. An already-observed exit remains harmless. Job creation/configuration failure now prevents starting a child rather than silently running without a job. Normal cancellation, timeouts, termination confirmation and cleanup mappings are unchanged.
+- Added three regressions: real live-child assignment failure/owned-process exit; failed assignment after observed exit; real encoder-assignment failure with source hash preservation and no completed/temporary output. Existing architecture, public API, dependencies and UI remain unchanged. The internal constructor gained only a native-call test seam.
+- Actual validation: restore and standard Release build passed, zero warnings/errors; **11 focused tests passed**; full suite **310 passed, 0 failed, 0 skipped**, 28 s with actual FFmpeg required. Format verification and diff checks passed. No manual GUI rerun for this backend-only change; actual WPF binding/layout and all prior automated regressions passed in the full suite.
+- Updated architecture and phase-3-video-validation documentation, including Microsoft API reference and the boundary that kill-on-close starts after assignment, not atomically with Process.Start. No OS job-restriction/security settings were changed to provoke failures; native failure is injected deterministically at the syscall boundary.
+- Both final GitHub workflows must be verified on the pushed handoff HEAD; their results will be included in PR #10's follow-up report. No known code work remains for this review concern after passing those checks. Prior DPI, packaging/licensing and non-sandbox limitations still apply as documented below.
+- Pre-existing untracked `src/OrbitConvert.App/OrbitConvert.App_dcgdz3wr_wpftmp.csproj` remains untouched. No new packages, branch, PR, Phase 4 work, or merge. Codex stops after final delivery for owner review; no other writer was delegated.
+
+---
+
 ## 2026-10-21 — Codex: Phase 3 complete, awaiting owner review
 
 ### Live state and ownership
