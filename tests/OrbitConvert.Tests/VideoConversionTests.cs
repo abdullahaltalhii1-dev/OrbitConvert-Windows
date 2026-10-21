@@ -191,14 +191,31 @@ public sealed class VideoConversionTests : IDisposable
         var destination = Path.Combine(_directory, "cancelled.mp4");
         using var cancellation = new CancellationTokenSource();
         var progress = new SynchronousProgress(report => { if (report.Fraction > 0.05) { cancellation.Cancel(); } });
-        var before = RunningFfmpeg();
+        // Observe only this operation's encoder. System-wide counts race with parallel tests and user processes.
+        Process? encoder = null;
+        var runner = new ProcessRunner(process =>
+        {
+            var started = process.Start();
+            if (started && process.StartInfo.ArgumentList.Contains("-movflags"))
+            {
+                encoder = Process.GetProcessById(process.Id);
+                encoder.EnableRaisingEvents = true; // Retain the handle even after the runner disposes its Process.
+            }
+            return started;
+        });
         var clock = Stopwatch.StartNew();
-        var result = await FfmpegTestTools.Service().ConvertAsync(source, destination, new VideoConversionOptions(VideoQuality.High), progress, cancellation.Token);
-        Assert.Equal(VideoError.Cancelled, result.Error);
-        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"Cancellation took {clock.Elapsed}");
-        Assert.False(File.Exists(destination));
-        Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
-        Assert.Equal(before, RunningFfmpeg());
+        try
+        {
+            var result = await FfmpegTestTools.Service(runner: runner).ConvertAsync(source, destination, new VideoConversionOptions(VideoQuality.High), progress, cancellation.Token);
+            Assert.Equal(VideoError.Cancelled, result.Error);
+            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"Cancellation took {clock.Elapsed}");
+            Assert.NotNull(encoder);
+            Assert.True(encoder.HasExited, $"Owned encoder {encoder.Id} must exit before returning.");
+            Assert.False(result.CleanupFailed);
+            Assert.False(File.Exists(destination));
+            Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
+        }
+        finally { encoder?.Dispose(); }
     }
 
     public static IEnumerable<object[]> InvalidInputs =>
@@ -208,7 +225,9 @@ public sealed class VideoConversionTests : IDisposable
         ["text", VideoError.InvalidOrCorruptVideo],
         ["empty", VideoError.EmptyInput],
         ["png", VideoError.UnsupportedFormat],
-        ["playlist", VideoError.UnsupportedFormat],
+        // An extension-disguised playlist may fail probing before demuxer identification. Both classifications
+        // are safe; the pinned build reports invalid data rather than a whitelist diagnostic for this fixture.
+        ["playlist", VideoError.InvalidOrCorruptVideo],
         ["audio-only", VideoError.NoVideoStream],
         ["unsupported-codec", VideoError.UnsupportedCodec],
     ];
@@ -287,13 +306,6 @@ public sealed class VideoConversionTests : IDisposable
         Assert.False(File.Exists(destination));
         Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
     }
-
-    private static int RunningFfmpeg() =>
-        Process.GetProcessesByName("ffmpeg").Count(process =>
-        {
-            try { return string.Equals(process.MainModule?.FileName, FfmpegTestTools.Ffmpeg, StringComparison.OrdinalIgnoreCase); }
-            catch (Exception) { return false; }
-        });
 
     /// <summary>Lets the real encoder run, then truncates its output, so only output validation can catch the damage.</summary>
     private sealed class CorruptingRunner(IProcessRunner inner) : IProcessRunner

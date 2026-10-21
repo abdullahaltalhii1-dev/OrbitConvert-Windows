@@ -29,7 +29,7 @@ public sealed record ProcessRunRequest(
 public sealed record ProcessRunResult(ProcessOutcome Outcome, int ExitCode, string StandardOutput, string StandardError,
     bool TerminationConfirmed = true)
 {
-    public bool Succeeded => Outcome == ProcessOutcome.Exited && ExitCode == 0;
+    public bool Succeeded => TerminationConfirmed && Outcome == ProcessOutcome.Exited && ExitCode == 0;
 }
 
 public interface IProcessRunner
@@ -85,7 +85,7 @@ public sealed class ProcessRunner : IProcessRunner
         {
             _ = starting.ContinueWith(_ => Abandon(process, job), CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.Default);
             return new(cancellationToken.IsCancellationRequested ? ProcessOutcome.Cancelled : ProcessOutcome.TimedOut, -1, string.Empty,
-                $"The process did not start within {startTimeout.TotalSeconds:0} s.");
+                $"The process did not start within {startTimeout.TotalSeconds:0} s.", TerminationConfirmed: false);
         }
         try
         {

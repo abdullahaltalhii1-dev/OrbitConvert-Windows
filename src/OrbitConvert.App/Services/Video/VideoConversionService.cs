@@ -81,7 +81,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
         using var sourceHandle = OpenSource(source, out var openError);
         if (sourceHandle is null) { return new(openError); }
         var inspected = await ProbeAsync(tools, source, sourceHandle.Length, output: false, cancellationToken).ConfigureAwait(false);
-        if (!inspected.IsSuccess) { return new(inspected.Error); }
+        if (!inspected.IsSuccess) { return new(inspected.Error, CleanupFailed: inspected.Error == VideoError.ProcessTerminationFailed); }
         var input = inspected.Inspection!;
         var cleanupFailed = false;
 
@@ -99,11 +99,11 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
                 FfmpegArguments.Convert(source, candidate, input, options, encoder), VideoLimits.MaximumRunTime, VideoLimits.InactivityTimeout,
                 ProgressSink(VideoStage.Converting, input.Duration, clock, progress)), cancellationToken).ConfigureAwait(false);
             var failure = Failure(conversion);
-            if (failure != VideoError.None) { result = new(failure); }
+            if (failure != VideoError.None) { result = new(failure, CleanupFailed: !conversion.TerminationConfirmed); }
             else
             {
                 var validation = await ValidateAsync(tools, candidate, input, options, clock, progress, cancellationToken).ConfigureAwait(false);
-                if (!validation.IsSuccess) { result = new(validation.Error); }
+                if (!validation.IsSuccess) { result = new(validation.Error, CleanupFailed: validation.Error == VideoError.ProcessTerminationFailed); }
                 else
                 {
                     File.Move(candidate, destination, overwrite: false);
@@ -133,7 +133,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
         var size = new FileInfo(candidate).Length;
         if (size == 0) { return VideoInspectionResult.Failure(VideoError.OutputValidationFailed); }
         var probed = await ProbeAsync(tools, candidate, size, output: true, cancellationToken).ConfigureAwait(false);
-        if (probed.Error is VideoError.Cancelled or VideoError.TimedOut) { return probed; }
+        if (probed.Error is VideoError.Cancelled or VideoError.TimedOut or VideoError.ProcessTerminationFailed) { return probed; }
         if (!probed.IsSuccess) { return VideoInspectionResult.Failure(VideoError.OutputValidationFailed); }
         var output = probed.Inspection!;
         var (width, height) = options.OutputSize(input.Video.DisplayWidth, input.Video.DisplayHeight);
@@ -156,7 +156,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
         return failure switch
         {
             VideoError.None => probed,
-            VideoError.Cancelled or VideoError.TimedOut => VideoInspectionResult.Failure(failure),
+            VideoError.Cancelled or VideoError.TimedOut or VideoError.ProcessTerminationFailed => VideoInspectionResult.Failure(failure),
             _ => VideoInspectionResult.Failure(VideoError.OutputValidationFailed),
         };
     }
@@ -169,6 +169,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
             cancellationToken).ConfigureAwait(false);
         return probe.Outcome switch
         {
+            _ when !probe.TerminationConfirmed => VideoInspectionResult.Failure(VideoError.ProcessTerminationFailed),
             ProcessOutcome.Cancelled => VideoInspectionResult.Failure(VideoError.Cancelled),
             ProcessOutcome.TimedOut => VideoInspectionResult.Failure(VideoError.TimedOut),
             ProcessOutcome.StartFailed => VideoInspectionResult.Failure(VideoError.ToolsUnavailable),
@@ -218,6 +219,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
 
     private static VideoError Failure(ProcessRunResult run) => run.Outcome switch
     {
+        _ when !run.TerminationConfirmed => VideoError.ProcessTerminationFailed,
         ProcessOutcome.Cancelled => VideoError.Cancelled,
         ProcessOutcome.TimedOut => VideoError.TimedOut,
         ProcessOutcome.StartFailed => VideoError.ToolsUnavailable,

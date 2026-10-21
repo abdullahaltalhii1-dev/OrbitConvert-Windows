@@ -28,6 +28,7 @@ public enum VideoError
     Cancelled,
     OutputFailure,
     OutputValidationFailed,
+    ProcessTerminationFailed,
 }
 
 /// <param name="MaxHeight">0 keeps the source resolution; otherwise the video is only ever scaled down.</param>

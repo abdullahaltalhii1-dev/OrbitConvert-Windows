@@ -23,6 +23,7 @@ public sealed class ProcessRunnerTests
         var result = await runner.RunAsync(new("ignored.exe", [], TimeSpan.FromSeconds(30), StartTimeout: TimeSpan.FromMilliseconds(300)), CancellationToken.None);
         release.Set();
         Assert.Equal(ProcessOutcome.TimedOut, result.Outcome);
+        Assert.False(result.TerminationConfirmed);
         Assert.True(clock.Elapsed < TimeSpan.FromSeconds(5), clock.Elapsed.ToString());
     }
 
@@ -35,6 +36,7 @@ public sealed class ProcessRunnerTests
         var result = await runner.RunAsync(new("ignored.exe", [], TimeSpan.FromSeconds(30)), cancellation.Token);
         release.Set();
         Assert.Equal(ProcessOutcome.Cancelled, result.Outcome);
+        Assert.False(result.TerminationConfirmed);
     }
 
     [FfmpegFact]

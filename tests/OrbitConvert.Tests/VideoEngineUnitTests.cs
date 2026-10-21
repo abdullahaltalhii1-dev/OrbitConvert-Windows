@@ -211,6 +211,43 @@ public sealed class VideoEngineUnitTests : IDisposable
         Assert.False(File.Exists(Path.Combine(_directory, "out.mp4")));
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task UnconfirmedTermination_IsNotReportedAsCleanCancellation(bool duringConversion)
+    {
+        await File.WriteAllBytesAsync(Path.Combine(_directory, "ffmpeg.exe"), []);
+        await File.WriteAllBytesAsync(Path.Combine(_directory, "ffprobe.exe"), []);
+        var source = Path.Combine(_directory, "in.mp4");
+        await File.WriteAllBytesAsync(source, [1]);
+        var destination = Path.Combine(_directory, "out.mp4");
+        var service = new VideoConversionService(new FfmpegLocator(_directory, _ => _directory), new UnconfirmedRunner(duringConversion));
+        if (!duringConversion)
+        {
+            Assert.Equal(VideoError.ProcessTerminationFailed, (await service.InspectAsync(source)).Error);
+        }
+        var result = await service.ConvertAsync(source, destination, new());
+        Assert.Equal(VideoError.ProcessTerminationFailed, result.Error);
+        Assert.True(result.CleanupFailed);
+        Assert.False(File.Exists(destination));
+        Assert.Empty(Directory.GetFiles(_directory, ".orbitconvert-*"));
+    }
+
+    private sealed class UnconfirmedRunner(bool duringConversion) : IProcessRunner
+    {
+        public Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken)
+        {
+            var probing = request.Arguments.Contains("-show_streams");
+            if (request.Arguments.Contains("-movflags") || (probing && !duringConversion))
+            {
+                return Task.FromResult(new ProcessRunResult(ProcessOutcome.Cancelled, -1, "", "", TerminationConfirmed: false));
+            }
+            var text = probing ? Probe(Video) : request.Arguments.Contains("-encoders")
+                ? " V....D libx264 encoder\n A....D aac encoder" : "ffmpeg version test";
+            return Task.FromResult(new ProcessRunResult(ProcessOutcome.Exited, 0, text, ""));
+        }
+    }
+
     private sealed class ThrowingRunner : IProcessRunner
     {
         public Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken) =>
