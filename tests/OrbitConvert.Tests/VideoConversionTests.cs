@@ -252,7 +252,13 @@ public sealed class VideoConversionTests : IDisposable
                 var standard = await File.ReadAllBytesAsync(VideoFixtures.Standard());
                 await File.WriteAllBytesAsync(source, standard[..(standard.Length / 3)]);
                 break;
-            case "random": await File.WriteAllBytesAsync(source, RandomNumberGenerator.GetBytes(64 * 1024)); break;
+            case "random":
+                // Fresh noise can accidentally resemble an unsupported demuxer and change the diagnostic.
+                // Keep this regression reproducible rather than asserting one classification for every random byte string.
+                var noise = new byte[64 * 1024];
+                new Random(0x4F524249).NextBytes(noise);
+                await File.WriteAllBytesAsync(source, noise);
+                break;
             case "text": await File.WriteAllTextAsync(source, "this is not a video"); break;
             case "empty": await File.WriteAllBytesAsync(source, []); break;
             case "png":

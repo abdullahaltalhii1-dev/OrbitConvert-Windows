@@ -274,6 +274,24 @@ public sealed class AudioConversionTests(ITestOutputHelper output) : IDisposable
         throw new InvalidDataException("Generated WAV has no PCM data chunk.");
     }
 
+    [FfmpegTheory]
+    [InlineData(AudioFormat.MP3)]
+    [InlineData(AudioFormat.WAV)]
+    [InlineData(AudioFormat.FLAC)]
+    public async Task MeasureRepresentativeStereoConversion(AudioFormat format)
+    {
+        var source = VideoFixtures.Get("phase4-measure-20s-stereo.wav", "-f lavfi -i aevalsrc=0.25*sin(2*PI*440*t)|0.25*sin(2*PI*880*t):s=48000:d=20", "-c:a pcm_s16le");
+        var options = new AudioConversionOptions(format, SampleRate: 44100);
+        var destination = Path.Combine(_directory, "measured" + options.Extension);
+        var watch = Stopwatch.StartNew();
+        var result = await Service().ConvertAsync(source, destination, options);
+        watch.Stop();
+        Assert.True(result.IsSuccess, result.Error.ToString());
+        Assert.Equal(44100, result.Output!.Audio.SampleRate);
+        Assert.Equal(2, result.Output.Audio.Channels);
+        output.WriteLine($"20s stereo PCM16 WAV, 48kHz ({new FileInfo(source).Length} bytes) -> {format}, 44.1kHz, MP3 192kbps / FLAC level 5 / WAV PCM16: {watch.Elapsed.TotalSeconds:F3}s including probe/encode/full-decode validation, {new FileInfo(destination).Length} bytes; FFmpeg 9.0.2 Essentials, output verified.");
+    }
+
     private sealed class AudioOnlyRunner : IProcessRunner
     {
         public async Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken cancellationToken)

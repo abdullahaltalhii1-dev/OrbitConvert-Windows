@@ -23,3 +23,24 @@ Base: merged Phase 3 PR #10, main `d298a144051a886f527c4aa006c91b81dc7dfd8c`. Ac
 The application-local `ffmpeg` resolution and development override are unchanged. Future installer must bundle runtime/engines for offline use, but no installer is in this phase. The existing GPL-enabled development-build redistribution assessment and owner-controlled licensing decision remain as documented in phase-3-video-validation.md. No license selection is made here.
 
 Remaining at the backend checkpoint: real Audio workspace, complete bilingual resources and three-engine UI busy/close protection, ViewModel/layout tests, final safety/format/fidelity coverage, performance observations, actual Windows GUI interaction where available, final quality gate and both GitHub workflows. No Phase 5 or later work.
+
+## UI checkpoint
+
+The real Audio workspace is now wired to the shared intake: explicit inspection, actual stream metadata, MP3/WAV/FLAC selection, format-specific settings and help, native destination dialog (no precreated file), real progress, cancellation and verified-success/errors. English/Arabic resources and RTL/LTR follow the existing shell. Images, Video and Audio disable conflicting UI operations; media services also share the one-operation semaphore. Audio closing uses cancel-and-wait or keep-waiting, while image closing retains its prior behavior.
+
+- Local Release build: zero warnings/errors. **387 tests passed, 0 failed/skipped**, 61 s with real FFmpeg required. Focused VM/localization/actual WPF layout-binding run: **17 passed**. The WPF test covers every section, both languages and min/default/large logical sizes; it is not a manual DPI test.
+- Format verification and diff whitespace checks passed.
+- Backend checkpoint CI: push passed; PR run had one old video random-noise classification failure (InvalidOrCorruptVideo versus UnsupportedFormat). Input was still safely rejected. That regression now uses a seeded reproducible noise fixture; no production security restriction or rejection assertion was relaxed. The focused nine input cases and full local suite pass.
+- Actual Windows GUI checks and final CI are still pending at this checkpoint.
+
+## Measured synthetic sample
+
+Actual FFmpeg 9.0.2 Essentials. One 20-second stereo PCM16 WAV, 48 kHz, 3,840,078 bytes; explicit resampling to 44.1 kHz. Times include probe/encoding/full-decode validation, exclude fixture creation. One measurement each, not a universal performance/quality benchmark or listening test.
+
+| Output | Settings | Seconds | Bytes | Validation |
+| --- | --- | ---: | ---: | --- |
+| MP3 | 192 kbps CBR | 0.900 | 481,488 | correct codec/rate/channels/bitrate and full decode |
+| WAV | PCM signed 16-bit | 0.674 | 3,528,044 | correct PCM/rate/channels and full decode |
+| FLAC | level 5, 16-bit | 0.574 | 1,125,497 | correct precision/rate/channels and full decode |
+
+Separate no-resampling tests compared original WAV data chunks (read without FFmpeg) with every decoded output PCM byte for mono/stereo PCM16 and FLAC PCM24; all matched. MP3 is lossy and no byte-exact/lost-detail-restoration claim is made. Extraction tests select the default audio track and compare lossless output with that selected track, not with another audio stream. Decoder validity was tested; subjective speaker/headphone playback has not been performed.

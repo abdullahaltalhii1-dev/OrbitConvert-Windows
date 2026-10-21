@@ -73,6 +73,15 @@ MP4/MOV, MKV/WebM, and AVI inputs are accepted only with explicitly supported co
 
 Actual application screenshots: [Arabic dark success](docs/screenshots/23-phase3-arabic-dark-success.png), [English light success](docs/screenshots/24-phase3-english-light-success.png), [real progress](docs/screenshots/25-phase3-real-progress.png), [cancel before closing](docs/screenshots/26-phase3-cancel-to-close.png).
 
+## Convert or extract audio (Phase 4)
+
+1. Add an audio file or supported video in Workspace, open Audio, select one source and inspect.
+2. Review actual codec, duration, sample rate, channels, reported bitrate and chosen track. Default audio track wins; otherwise the first audio track is selected.
+3. Choose MP3 (128/192/320 kbps), WAV (signed 16-bit PCM) or FLAC (compression 0–8). Choose preserve rate, 44.1 kHz or 48 kHz. Mono/stereo count is kept; surround is rejected, not silently downmixed.
+4. Choose a new destination and Convert / extract audio. The original and existing files are never overwritten. Cancel stops processing and waits for cleanup; closing offers cancel-and-wait or keep-waiting.
+
+Source tags, cover art and unrelated streams are removed. WAV can reduce higher source precision to 16 bits. FLAC can preserve PCM16/24 exactly without resampling; float PCM/precision above 24 bits is not accepted for FLAC here. Lossy sources never regain lost detail. Audio does not require an H.264 encoder. See [Phase 4 validation](docs/phase-4-audio-validation.md) for tested input formats, output constraints, evidence, performance and limitations. No installer or new NuGet dependency is added.
+
 ## Phase 2D screenshots
 
 - [Close blocked while a conversion runs](docs/screenshots/19-phase-2d-close-blocked-while-busy.jpg)

@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
+using OrbitConvert.App.Services.Audio;
 using OrbitConvert.App.Services.Video;
 
 namespace OrbitConvert.App.ViewModels;
@@ -55,7 +56,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public MainViewModel(
         IFileMetadataProvider metadataProvider,
-        LocalizationService localization)
+        LocalizationService localization,
+        IAudioConversionService? audioService = null)
     {
         Localization = localization ?? throw new ArgumentNullException(nameof(localization));
         Localization.LanguageChanged += (_, _) =>
@@ -67,6 +69,17 @@ public sealed class MainViewModel : INotifyPropertyChanged
         ImageConversion = new ImageConversionViewModel(FileIntake.SelectedFiles,
             new ImageConversionService(new MagickImageEngine()), Localization);
         VideoConversion = new VideoConversionViewModel(FileIntake.SelectedFiles, new VideoConversionService(), Localization);
+        AudioConversion = new AudioConversionViewModel(FileIntake.SelectedFiles, audioService ?? new AudioConversionService(), Localization);
+        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion })
+        {
+            conversion.PropertyChanged += (_, args) =>
+            {
+                if (args.PropertyName != "IsBusy") { return; }
+                OnPropertyChanged(nameof(CanUseImages));
+                OnPropertyChanged(nameof(CanUseVideo));
+                OnPropertyChanged(nameof(CanUseAudio));
+            };
+        }
 
         NavigateCommand = new RelayCommand(parameter =>
         {
@@ -170,6 +183,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ImageConversionViewModel ImageConversion { get; }
 
     public VideoConversionViewModel VideoConversion { get; }
+
+    public AudioConversionViewModel AudioConversion { get; }
+    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle;
+    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle;
+    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle;
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 
