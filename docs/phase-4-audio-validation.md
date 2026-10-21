@@ -1,6 +1,6 @@
-# Phase 4 — audio conversion and extraction (in progress)
+# Phase 4 — audio conversion and extraction
 
-Base: merged Phase 3 PR #10, main `d298a144051a886f527c4aa006c91b81dc7dfd8c`. Active developer: Codex. Dedicated branch: `feature/phase-4-audio-ffmpeg`. This document records checkpoints; it is not a completion claim until the final gate and GUI evidence are recorded.
+Base: merged Phase 3 PR #10, main `d298a144051a886f527c4aa006c91b81dc7dfd8c`. Active developer: Codex, per the owner's subsequent ownership clarification. Dedicated branch: `feature/phase-4-audio-ffmpeg`; Draft PR #11. Earlier checkpoints below are historical evidence; final verification is recorded separately.
 
 ## Backend checkpoint
 
@@ -30,8 +30,8 @@ The real Audio workspace is now wired to the shared intake: explicit inspection,
 
 - Local Release build: zero warnings/errors. **387 tests passed, 0 failed/skipped**, 61 s with real FFmpeg required. Focused VM/localization/actual WPF layout-binding run: **17 passed**. The WPF test covers every section, both languages and min/default/large logical sizes; it is not a manual DPI test.
 - Format verification and diff whitespace checks passed.
-- Backend checkpoint CI: push passed; PR run had one old video random-noise classification failure (InvalidOrCorruptVideo versus UnsupportedFormat). Input was still safely rejected. That regression now uses a seeded reproducible noise fixture; no production security restriction or rejection assertion was relaxed. The focused nine input cases and full local suite pass.
-- Actual Windows GUI checks and final CI are still pending at this checkpoint.
+- Backend checkpoint CI: push passed; PR run had one old video random-noise classification failure (InvalidOrCorruptVideo versus UnsupportedFormat). Input was still safely rejected. That regression now uses a seeded reproducible noise fixture; no production security restriction or rejection assertion was relaxed. The focused input cases and full local suite pass.
+- Both push and PR CI passed on UI checkpoint `2bb7c43b1ae38a69fa03ffe12d24e0d223c1b0b1` (runs 39539849112 and 39539854270). Final verification follows below.
 
 ## Measured synthetic sample
 
@@ -44,3 +44,46 @@ Actual FFmpeg 9.0.2 Essentials. One 20-second stereo PCM16 WAV, 48 kHz, 3,840,07
 | FLAC | level 5, 16-bit | 0.574 | 1,125,497 | correct precision/rate/channels and full decode |
 
 Separate no-resampling tests compared original WAV data chunks (read without FFmpeg) with every decoded output PCM byte for mono/stereo PCM16 and FLAC PCM24; all matched. MP3 is lossy and no byte-exact/lost-detail-restoration claim is made. Extraction tests select the default audio track and compare lossless output with that selected track, not with another audio stream. Decoder validity was tested; subjective speaker/headphone playback has not been performed.
+
+## Actual Windows GUI verification — 2026-10-21
+
+The local Windows desktop was available; these were real interactions with the Release executable, not cloud/Linux or generated mockups. The computer-use skill was used for native dialogs and app interaction. App-specific screenshots contain only generated, non-sensitive test samples.
+
+- Launched the application, selected generated WAV/video samples through the native file picker, including Arabic names, spaces and `&`.
+- English / dark: inspected a 20-second stereo PCM16 WAV at 48 kHz, chose a new MP3 destination through SaveFileDialog and converted at 192 kbps. The save dialog did not create the destination before conversion. Actual saved-and-verified success appeared.
+- Selected that existing destination again. Conversion reported DestinationExists; SHA-256 of the existing output stayed `EDDCCCF42736D0DECD62712A8B841E522445720DEFDD1A74176FFDF476200124`.
+- Switched language to Arabic and theme to light at runtime. Inspected a three-second H.264/AAC video, displayed selected audio stream #1, mono/44.1 kHz and extraction mode, then extracted to FLAC with actual Arabic saved-and-verified success.
+- Inspected plain text named invalid.mp3. Displayed a nontechnical Arabic invalid/unsupported/corrupt error; settings and conversion stayed disabled.
+- Converted a generated two-hour stereo PCM16 WAV. Observed advancing actual FFmpeg encoding percentage, elapsed time, disabled settings/destination/repeated conversion, and an enabled Cancel button. Cancel returned to idle with an explicit no-final-file message. Owned encoder PID 24052 exited; final output was absent and owned temporary-file count was zero.
+- Started again, navigated to Video while audio was active and verified the Video panel was disabled. Alt+F4 displayed the Arabic audio cancel-and-close prompt. Confirming Yes waited for cleanup and closed the application. App PID 47936 and owned encoder PID 17916 exited; no final output or owned temporary files remained.
+- The long original's SHA-256 before and after both cancellation paths was identical: `BCE20313CC908E3387F56991968D615A56BF155BBD08688A51DD9DD80719699F`.
+
+Screenshots in docs/screenshots:
+
+- `27-phase4-english-dark-mp3.png` — MP3 saved and verified.
+- `28-phase4-arabic-light-extraction.png` — FLAC extraction saved and verified.
+- `29-phase4-progress-cancel.png` — actual progress and busy controls.
+- `30-phase4-cancel-to-close.png` — native close-while-busy prompt, with Video disabled behind it.
+
+Manual limits: not a complete screen-reader audit, not a 100/125/150% OS DPI matrix, and no new manual min/max-size sweep or idle-close repetition. Keyboard/tab/native-dialog/close interactions and normal process exit after cancel-and-close were exercised. Automated STA WPF tests cover both languages and minimum/default/large logical sizes, with binding-error collection; these are not manual DPI results. WAV GUI conversion and additional codec/bitrate combinations were covered by real automated integration tests, not manually clicked individually.
+
+## Remaining limitations
+
+- One source at a time; default/first audio track only, no manual track picker, surround downmix, batch queue, editor or audio preview/player.
+- FFprobe metadata inspection is not a complete source decode. Strict encoding and full candidate decode reject detected damage; no claim of detecting every possible corruption or of OS-level sandboxing.
+- Direct real fixtures verify MP3, WAV, FLAC, AAC/M4A and Ogg/Vorbis inputs plus existing video extraction fixtures. The codec allowlist is a safety boundary, not a promise of support for every possible stream/container combination or every installed FFmpeg build.
+- Float PCM / integer depth above 24 bits is not supported for FLAC. WAV output quantizes to 16 bits. No restoration of lost quality or broad metadata preservation.
+- Existing startup/kill grace limitations and fail-closed job-assignment behavior remain unchanged. Unconfirmed process termination is reported as ProcessTerminationFailed with a cleanup warning, not successful cancellation.
+- GPL/version3 development build and final redistribution approval remain pending owner decision. No runtime/tool auto-download, packaging, new dependencies, security-setting changes, or Phase 5+ functionality.
+
+## Final local quality gate
+
+After GUI testing and closing the application, all required commands passed using the installed `C:\Program Files\dotnet\dotnet.exe` (dotnet is not on this shell's PATH):
+
+- `dotnet restore OrbitConvert.slnx` — passed, dependencies current.
+- `dotnet build OrbitConvert.slnx -c Release --no-restore` — passed, zero warnings/errors, 3.66 s.
+- `dotnet test OrbitConvert.slnx -c Release --no-build` — **387 passed, 0 failed, 0 skipped**, 1 min 3 s. Pinned real FFmpeg required via ORBITCONVERT_REQUIRE_FFMPEG=1; all previous image/video/native-process regressions included.
+- `dotnet format OrbitConvert.slnx --verify-no-changes` — exit 0.
+- `git diff --check` — exit 0. Git's LF-to-CRLF notice is informational, not a whitespace defect.
+
+The final evidence/handoff commit is documentation and screenshots only; final push and pull-request CI results are reported on Draft PR #11 after pushing it. No merge or next phase is authorized by this document.

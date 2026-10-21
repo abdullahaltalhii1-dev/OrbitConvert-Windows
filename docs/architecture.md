@@ -4,7 +4,7 @@ OrbitConvert is a small .NET 10 WPF application using MVVM. The existing shell, 
 
 ## Presentation
 
-MainWindow composes UserControls and binds its title to MainViewModel.AppTitle. MainViewModel owns navigation, session theme/accent, localization, FileIntakeViewModel, ImageConversionViewModel, and VideoConversionViewModel.
+MainWindow composes UserControls and binds its title to MainViewModel.AppTitle. MainViewModel owns navigation, session theme/accent, localization, FileIntakeViewModel, ImageConversionViewModel, VideoConversionViewModel and AudioConversionViewModel.
 
 FileIntakeViewModel retains the observable collection, case-insensitive duplicate prevention, metadata-only intake, remove/clear actions, and localized statuses. Intake does not automatically decode or convert files.
 
