@@ -20,18 +20,18 @@
   <data name="NavWorkspaceAutomation" xml:space="preserve"><value>Workspace</value></data>
   <data name="NavImagesAutomation" xml:space="preserve"><value>Image conversion</value></data>
   <data name="NavVideoAutomation" xml:space="preserve"><value>Video conversion</value></data>
-  <data name="NavAudioAutomation" xml:space="preserve"><value>Audio coming soon</value></data>
+  <data name="NavAudioAutomation" xml:space="preserve"><value>Audio conversion and extraction</value></data>
   <data name="NavDocumentsAutomation" xml:space="preserve"><value>Documents coming soon</value></data>
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>4 FORMATS</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 3</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>Local image and video conversion</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 4</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Local image, video and audio conversion</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
-  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images or Video to convert one supported file.</value></data>
+  <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images, Video or Audio to process one supported file.</value></data>
   <data name="DropZoneTitle" xml:space="preserve"><value>Choose files or drop them here.</value></data>
-  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose a single source in Images or Video.</value></data>
+  <data name="DropZoneDescription" xml:space="preserve"><value>Select one or more files. Folders are not supported. Choose one source in Images, Video or Audio.</value></data>
   <data name="BrowseFiles" xml:space="preserve"><value>Browse Files</value></data>
   <data name="BrowseFilesHelp" xml:space="preserve"><value>Open the Windows file picker</value></data>
   <data name="SelectedFiles" xml:space="preserve"><value>Selected files</value></data>
@@ -84,7 +84,7 @@
   <data name="VideoInformationalText" xml:space="preserve"><value>Informational only · No media is opened or processed</value></data>
   <data name="AudioEyebrow" xml:space="preserve"><value>AUDIO</value></data>
   <data name="AudioTitle" xml:space="preserve"><value>A quieter way to handle audio.</value></data>
-  <data name="AudioDescription" xml:space="preserve"><value>Audio conversion is planned for a later approved phase and is not active here.</value></data>
+  <data name="AudioDescription" xml:space="preserve"><value>Convert one audio file or extract a video's audio to MP3, WAV or FLAC. Offline, without changing the original.</value></data>
   <data name="AudioFormatsHeading" xml:space="preserve"><value>Planned audio formats</value></data>
   <data name="AudioInformationalText" xml:space="preserve"><value>Informational only · No audio is opened or processed</value></data>
   <data name="DocumentsEyebrow" xml:space="preserve"><value>DOCUMENTS</value></data>
@@ -211,4 +211,67 @@
   <data name="VideoErrorOutputFailure" xml:space="preserve"><value>The output could not be saved. Check the folder permissions and free space.</value></data>
   <data name="VideoErrorOutputValidationFailed" xml:space="preserve"><value>The output could not be verified. No completed destination was saved.</value></data>
   <data name="VideoErrorProcessTerminationFailed" xml:space="preserve"><value>The video tool did not confirm stopping. No final file was saved; wait and check for temporary files before retrying.</value></data>
+  <data name="AudioSelectSource" xml:space="preserve"><value>Source audio or video</value></data>
+  <data name="AudioSelectionHelp" xml:space="preserve"><value>Add files in Workspace, select one source here, then inspect. Audio is never processed automatically.</value></data>
+  <data name="AudioInspect" xml:space="preserve"><value>Inspect audio</value></data>
+  <data name="AudioContainer" xml:space="preserve"><value>Container</value></data>
+  <data name="AudioCodec" xml:space="preserve"><value>Audio codec</value></data>
+  <data name="AudioDuration" xml:space="preserve"><value>Duration</value></data>
+  <data name="AudioSampleRate" xml:space="preserve"><value>Source sample rate</value></data>
+  <data name="AudioChannels" xml:space="preserve"><value>Channels</value></data>
+  <data name="AudioBitrate" xml:space="preserve"><value>Reported stream bitrate</value></data>
+  <data name="AudioUnknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="AudioChannelCount" xml:space="preserve"><value>{0} channel(s)</value></data>
+  <data name="AudioStreamSummary" xml:space="preserve"><value>Selected stream #{0} · {1} audio track(s) · {2} video stream(s)</value></data>
+  <data name="AudioExtractMode" xml:space="preserve"><value>Extract audio from video</value></data>
+  <data name="AudioConvertMode" xml:space="preserve"><value>Single-file audio conversion</value></data>
+  <data name="AudioOutputSettings" xml:space="preserve"><value>Audio output settings</value></data>
+  <data name="AudioOutputFormat" xml:space="preserve"><value>Output format</value></data>
+  <data name="AudioMp3Bitrate" xml:space="preserve"><value>MP3 bitrate</value></data>
+  <data name="AudioFlacLevel" xml:space="preserve"><value>FLAC compression level (0–8)</value></data>
+  <data name="AudioOutputRate" xml:space="preserve"><value>Output sample rate</value></data>
+  <data name="AudioPreserveRate" xml:space="preserve"><value>Preserve source rate</value></data>
+  <data name="AudioHelpMP3" xml:space="preserve"><value>MP3 is lossy. Higher bitrate usually needs more space. These presets require 32, 44.1 or 48 kHz; choose an explicit rate if the source differs.</value></data>
+  <data name="AudioHelpWAV" xml:space="preserve"><value>WAV uses signed 16-bit PCM, without lossy compression. Higher-precision or floating-point sources are reduced to 16 bits. Resampling changes samples.</value></data>
+  <data name="AudioHelpFLAC" xml:space="preserve"><value>FLAC compression changes size and processing cost, not intentional audio quality. PCM16/24 can stay exact without resampling. Float PCM and precision above 24 bits are not supported here. Lossy sources do not regain detail.</value></data>
+  <data name="AudioMetadataPolicy" xml:space="preserve"><value>Source tags, cover art, chapters and other streams are removed. Only the selected audio track is encoded. Mono/stereo channels are retained.</value></data>
+  <data name="AudioChooseDestination" xml:space="preserve"><value>Choose new audio location</value></data>
+  <data name="AudioConvert" xml:space="preserve"><value>Convert / extract audio</value></data>
+  <data name="AudioCancel" xml:space="preserve"><value>Cancel operation</value></data>
+  <data name="AudioProgress" xml:space="preserve"><value>Audio operation progress</value></data>
+  <data name="AudioEncoding" xml:space="preserve"><value>Encoding</value></data>
+  <data name="AudioVerifying" xml:space="preserve"><value>Verifying output</value></data>
+  <data name="AudioStarting" xml:space="preserve"><value>Preparing audio operation…</value></data>
+  <data name="AudioElapsed" xml:space="preserve"><value>Elapsed: {0}</value></data>
+  <data name="AudioIdle" xml:space="preserve"><value>Select and inspect one audio or video file to begin.</value></data>
+  <data name="AudioInspecting" xml:space="preserve"><value>Inspecting actual audio streams…</value></data>
+  <data name="AudioReady" xml:space="preserve"><value>Choose the output settings and a new destination.</value></data>
+  <data name="AudioConverting" xml:space="preserve"><value>Encoding and verifying audio. The original stays unchanged.</value></data>
+  <data name="AudioCancelling" xml:space="preserve"><value>Cancelling… waiting for process termination and temporary-file cleanup.</value></data>
+  <data name="AudioSuccess" xml:space="preserve"><value>Audio saved and verified successfully.</value></data>
+  <data name="AudioOriginalSafe" xml:space="preserve"><value>Offline, one file at a time. Originals and existing destinations are never overwritten.</value></data>
+  <data name="AudioCancelToClose" xml:space="preserve"><value>An audio operation is running. Cancel it and close after cleanup? Choose No to keep waiting.</value></data>
+  <data name="AudioCleanupFailed" xml:space="preserve"><value>Termination or temporary-file cleanup could not be confirmed. Wait and check the output folder for .orbitconvert-*.tmp before retrying.</value></data>
+  <data name="AudioUnexpectedError" xml:space="preserve"><value>The audio operation could not be completed. Please try again.</value></data>
+  <data name="AudioErrorToolsUnavailable" xml:space="preserve"><value>FFmpeg/FFprobe could not start safely. Check the configured development tools or installed application files.</value></data>
+  <data name="AudioErrorToolsUnsupported" xml:space="preserve"><value>This FFmpeg build does not include the selected audio encoder.</value></data>
+  <data name="AudioErrorEmptyInput" xml:space="preserve"><value>This file is empty.</value></data>
+  <data name="AudioErrorUnreadableInput" xml:space="preserve"><value>The source could not be read. Check that it exists and is accessible.</value></data>
+  <data name="AudioErrorUnsupportedFormat" xml:space="preserve"><value>This container or sample rate is not supported.</value></data>
+  <data name="AudioErrorUnsupportedCodec" xml:space="preserve"><value>The selected stream uses an unsupported codec.</value></data>
+  <data name="AudioErrorNoAudioStream" xml:space="preserve"><value>No audio stream was found. A silent video cannot provide audio to extract.</value></data>
+  <data name="AudioErrorUnsupportedChannels" xml:space="preserve"><value>Only mono and stereo are supported. No automatic surround downmix is performed.</value></data>
+  <data name="AudioErrorUnsupportedPrecision" xml:space="preserve"><value>FLAC currently accepts integer PCM up to 24 bits, or decoded lossy sources. Float PCM and higher precision are not supported.</value></data>
+  <data name="AudioErrorInvalidOrCorruptAudio" xml:space="preserve"><value>This media is unreadable, unsupported, or damaged.</value></data>
+  <data name="AudioErrorTooLarge" xml:space="preserve"><value>Media exceeds a safety limit: 32 GiB, 12 hours, 32 streams, or the supported video dimensions.</value></data>
+  <data name="AudioErrorInvalidSettings" xml:space="preserve"><value>Choose valid settings. MP3 presets require 32, 44.1 or 48 kHz; select 44.1/48 kHz if preserving the source rate is incompatible.</value></data>
+  <data name="AudioErrorSamePath" xml:space="preserve"><value>Choose a different path from the original.</value></data>
+  <data name="AudioErrorDestinationExists" xml:space="preserve"><value>The destination already exists. Choose a new name; nothing was overwritten.</value></data>
+  <data name="AudioErrorInvalidDestination" xml:space="preserve"><value>Choose a new filename with the selected format's extension in an existing folder.</value></data>
+  <data name="AudioErrorConversionFailed" xml:space="preserve"><value>Audio processing failed. No completed destination was saved.</value></data>
+  <data name="AudioErrorTimedOut" xml:space="preserve"><value>The audio tool stopped responding or exceeded its time limit. No completed destination was saved.</value></data>
+  <data name="AudioErrorCancelled" xml:space="preserve"><value>Audio operation cancelled. No completed destination was saved.</value></data>
+  <data name="AudioErrorOutputFailure" xml:space="preserve"><value>The output could not be saved. Check folder permissions and free space.</value></data>
+  <data name="AudioErrorOutputValidationFailed" xml:space="preserve"><value>The audio output could not be verified. No completed destination was saved.</value></data>
+  <data name="AudioErrorProcessTerminationFailed" xml:space="preserve"><value>The audio tool did not confirm stopping. No final file was saved. Wait before retrying and check for temporary files.</value></data>
 </root>

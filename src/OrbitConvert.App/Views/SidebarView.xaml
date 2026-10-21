@@ -129,8 +129,8 @@
                         <TextBlock Grid.Column="2"
                                    VerticalAlignment="Center"
                                    FontSize="9"
-                                   Foreground="{DynamicResource MutedTextBrush}"
-                                   Text="{Binding Localization[BadgeSoon]}" />
+                                   Foreground="{DynamicResource AccentBrush}"
+                                   Text="MP3" />
                     </Grid>
                 </RadioButton>
 

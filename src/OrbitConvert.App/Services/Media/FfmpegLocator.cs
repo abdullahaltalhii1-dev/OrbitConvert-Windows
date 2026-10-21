@@ -18,7 +18,8 @@ public enum H264Encoder
     MediaFoundation,
 }
 
-public sealed record FfmpegCapabilities(string Version, bool HasLibX264, bool HasMediaFoundationH264, bool HasAacEncoder)
+public sealed record FfmpegCapabilities(string Version, bool HasLibX264, bool HasMediaFoundationH264, bool HasAacEncoder,
+    bool HasMp3Encoder = false, bool HasPcm16Encoder = false, bool HasFlacEncoder = false)
 {
     /// <summary>libx264 (CRF control) when present; otherwise the Windows Media Foundation encoder (LGPL-friendly builds).</summary>
     public H264Encoder PreferredH264Encoder => HasLibX264 ? H264Encoder.LibX264
@@ -93,6 +94,7 @@ public sealed class FfmpegLocator(string applicationDirectory, Func<string, stri
             var parts = line.Trim().Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length >= 2 && parts[0].Length == 6 && !parts[1].Contains('=')) { names.Add(parts[1]); }
         }
-        return new(version, names.Contains("libx264"), names.Contains("h264_mf"), names.Contains("aac"));
+        return new(version, names.Contains("libx264"), names.Contains("h264_mf"), names.Contains("aac"),
+            names.Contains("libmp3lame"), names.Contains("pcm_s16le"), names.Contains("flac"));
     }
 }

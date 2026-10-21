@@ -1,6 +1,6 @@
 # OrbitConvert
 
-OrbitConvert is a bilingual Windows desktop application for local file conversion. It converts single PNG, JPEG, WebP, and BMP images and supported videos to MP4 (H.264/AAC). It includes safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
+OrbitConvert is a bilingual Windows desktop application for local file conversion. It converts single PNG, JPEG, WebP, and BMP images, supported videos to MP4 (H.264/AAC), and audio to MP3, WAV or FLAC, including audio extraction from supported videos. It includes safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
 
 ## Requirements
 
@@ -19,14 +19,14 @@ dotnet test OrbitConvert.slnx -c Release --no-build
 dotnet format OrbitConvert.slnx --verify-no-changes
 ```
 
-For real video tests and local video development, acquire the pinned verified tools first:
+For real audio/video tests and local media development, acquire the pinned verified tools first:
 
 ```powershell
 $env:ORBITCONVERT_FFMPEG_DIR = ./tools/Get-FFmpeg.ps1
 $env:ORBITCONVERT_REQUIRE_FFMPEG = '1'
 ```
 
-Without tools, video integration tests explicitly skip; CI requires them. No tools are installed system-wide. Runtime uses the bundled application-local `ffmpeg` folder first, or the absolute development override above; it never downloads anything or searches PATH. A future offline installer will bundle engines and the .NET runtime, but packaging and distribution-license approval remain deferred.
+Without tools, media integration tests explicitly skip; CI requires them. No tools are installed system-wide. Runtime uses the bundled application-local `ffmpeg` folder first, or the absolute development override above; it never downloads anything or searches PATH. A future offline installer will bundle engines and the .NET runtime, but packaging and distribution-license approval remain deferred.
 
 ## Run
 
@@ -73,6 +73,17 @@ MP4/MOV, MKV/WebM, and AVI inputs are accepted only with explicitly supported co
 
 Actual application screenshots: [Arabic dark success](docs/screenshots/23-phase3-arabic-dark-success.png), [English light success](docs/screenshots/24-phase3-english-light-success.png), [real progress](docs/screenshots/25-phase3-real-progress.png), [cancel before closing](docs/screenshots/26-phase3-cancel-to-close.png).
 
+## Convert or extract audio (Phase 4)
+
+1. Add an audio file or supported video in Workspace, open Audio, select one source and inspect.
+2. Review actual codec, duration, sample rate, channels, reported bitrate and chosen track. Default audio track wins; otherwise the first audio track is selected.
+3. Choose MP3 (128/192/320 kbps), WAV (signed 16-bit PCM) or FLAC (compression 0–8). Choose preserve rate, 44.1 kHz or 48 kHz. Mono/stereo count is kept; surround is rejected, not silently downmixed.
+4. Choose a new destination and Convert / extract audio. The original and existing files are never overwritten. Cancel stops processing and waits for cleanup; closing offers cancel-and-wait or keep-waiting.
+
+Source tags, cover art and unrelated streams are removed. WAV can reduce higher source precision to 16 bits. FLAC can preserve PCM16/24 exactly without resampling; float PCM/precision above 24 bits is not accepted for FLAC here. Lossy sources never regain lost detail. Audio does not require an H.264 encoder. See [Phase 4 validation](docs/phase-4-audio-validation.md) for tested input formats, output constraints, evidence, performance and limitations. No installer or new NuGet dependency is added.
+
+Actual application screenshots: [English dark MP3 success](docs/screenshots/27-phase4-english-dark-mp3.png), [Arabic light extraction success](docs/screenshots/28-phase4-arabic-light-extraction.png), [real audio progress](docs/screenshots/29-phase4-progress-cancel.png), [cancel before closing](docs/screenshots/30-phase4-cancel-to-close.png).
+
 ## Phase 2D screenshots
 
 - [Close blocked while a conversion runs](docs/screenshots/19-phase-2d-close-blocked-while-busy.jpg)
@@ -109,4 +120,4 @@ Actual application screenshots: [Arabic dark success](docs/screenshots/23-phase3
 
 ## Scope
 
-The app processes one image or one video at a time through its UI. Image operations cannot be cancelled once started (see phase-2d-validation.md); closing is blocked until they finish. Video operations support cancellation and bounded process timeouts. Intake can contain multiple files, but conversion is never automatic or batched. HEIC/AVIF, audio-only conversion, documents, color management, metadata preservation, Explorer integration, and installers remain unavailable. Magick.NET-Q8-AnyCPU stays pinned to 15.0.0; Phase 3 adds external FFmpeg/FFprobe executables, not a new NuGet dependency.
+The app processes one image, video or audio file at a time through its UI. Image operations cannot be cancelled once started (see phase-2d-validation.md); closing is blocked until they finish. Video and audio operations support cancellation and bounded process timeouts. Intake can contain multiple files, but conversion is never automatic or batched. HEIC/AVIF, documents, general color management/metadata preservation, Explorer integration, and installers remain unavailable. Magick.NET-Q8-AnyCPU stays pinned to 15.0.0; Phase 4 reuses the Phase 3 external FFmpeg/FFprobe executables, without a new NuGet dependency.

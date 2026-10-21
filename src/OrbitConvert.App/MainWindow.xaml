@@ -45,22 +45,13 @@
 
             <Grid Grid.Column="1">
                 <views:WorkspaceView Visibility="{Binding IsWorkspaceSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <views:ImagesView IsEnabled="{Binding VideoConversion.IsIdle}"
+                <views:ImagesView IsEnabled="{Binding CanUseImages}"
                                   Visibility="{Binding IsImagesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <views:VideosView IsEnabled="{Binding ImageConversion.IsIdle}"
+                <views:VideosView IsEnabled="{Binding CanUseVideo}"
                                   Visibility="{Binding IsVideoSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <views:ComingSoonView Eyebrow="{Binding Localization[AudioEyebrow]}"
-                                      Title="{Binding Localization[AudioTitle]}"
-                                      Description="{Binding Localization[AudioDescription]}"
-                                      IconData="M8,5 V43 A10,10 0 1 1 2,34 H8 V10 L48,3 V36 A10,10 0 1 1 42,27 V8 Z"
-                                      IconWidth="62"
-                                      IconHeight="62"
-                                      IconFill="{DynamicResource AccentSoftBrush}"
-                                      FormatsHeading="{Binding Localization[AudioFormatsHeading]}"
-                                      Formats="MP3|WAV|FLAC|M4A"
-                                      InformationalText="{Binding Localization[AudioInformationalText]}"
-                                      Visibility="{Binding IsAudioSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <views:AudiosView IsEnabled="{Binding CanUseAudio}"
+                                  Visibility="{Binding IsAudioSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <views:ComingSoonView Eyebrow="{Binding Localization[DocumentsEyebrow]}"
                                       Title="{Binding Localization[DocumentsTitle]}"

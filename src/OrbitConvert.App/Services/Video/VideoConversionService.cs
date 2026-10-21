@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Security;
 using OrbitConvert.App.Services.Media;
@@ -23,7 +22,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
     : IVideoConversionService
 {
     public const string OutputExtension = ".mp4";
-    private static readonly SemaphoreSlim OperationGate = new(1, 1);
+    private static SemaphoreSlim OperationGate => MediaOperationGate.Instance;
     private (string Path, FfmpegCapabilities Capabilities)? _capabilities;
 
     public VideoConversionService()
@@ -197,26 +196,7 @@ public sealed class VideoConversionService(FfmpegLocator locator, IProcessRunner
 
     /// <summary>Turns FFmpeg <c>-progress</c> key/value lines into real progress reports.</summary>
     internal static Action<string> ProgressSink(VideoStage stage, TimeSpan? total, Stopwatch clock, IProgress<VideoProgress>? progress)
-    {
-        var processed = TimeSpan.Zero;
-        return line =>
-        {
-            if (progress is null) { return; }
-            if (line.StartsWith("out_time_us=", StringComparison.Ordinal) &&
-                long.TryParse(line.AsSpan("out_time_us=".Length), NumberStyles.Integer, CultureInfo.InvariantCulture, out var microseconds) &&
-                microseconds >= 0)
-            {
-                processed = TimeSpan.FromTicks(microseconds * 10);
-            }
-            else if (line.StartsWith("progress=", StringComparison.Ordinal))
-            {
-                var done = line == "progress=end";
-                double? fraction = total is { TotalSeconds: > 0 } duration
-                    ? (done ? 1.0 : Math.Clamp(processed.TotalSeconds / duration.TotalSeconds, 0, 0.999)) : null;
-                progress.Report(new VideoProgress(stage, processed, total, fraction, clock.Elapsed));
-            }
-        };
-    }
+        => FfmpegProgress.Create(total, clock, (processed, fraction, elapsed) => progress?.Report(new(stage, processed, total, fraction, elapsed)));
 
     private static VideoError Failure(ProcessRunResult run) => run.Outcome switch
     {
