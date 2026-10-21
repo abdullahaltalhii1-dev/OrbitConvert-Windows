@@ -34,7 +34,19 @@ jobs:
                   "ORBITCONVERT_REQUIRE_FFMPEG=1" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
             - name: Restore
+              # Each engine is local to this job; required real tests must fail, not silently skip.
               run: dotnet restore OrbitConvert.slnx
+
+            - name: Fetch pinned Pandoc for real document tests
+              shell: pwsh
+              run: |
+                  $bin = ./tools/Get-Pandoc.ps1 -Destination "$env:RUNNER_TEMP\orbitconvert-tools"
+                  "ORBITCONVERT_PANDOC_DIR=$bin" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+                  "ORBITCONVERT_REQUIRE_PANDOC=1" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+            - name: Verify document engine
+              shell: pwsh
+              run: '& "$env:ORBITCONVERT_PANDOC_DIR\pandoc.exe" --version'
 
             - name: Build
               run: dotnet build OrbitConvert.slnx --configuration Release --no-restore

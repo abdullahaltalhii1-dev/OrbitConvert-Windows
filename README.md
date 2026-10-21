@@ -1,6 +1,6 @@
 # OrbitConvert
 
-OrbitConvert is a bilingual Windows desktop application for local file conversion. It converts single PNG, JPEG, WebP, and BMP images, supported videos to MP4 (H.264/AAC), and audio to MP3, WAV or FLAC, including audio extraction from supported videos. It includes safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
+OrbitConvert is a bilingual Windows desktop application for local file conversion. It converts single PNG, JPEG, WebP, and BMP images, supported videos to MP4 (H.264/AAC), audio to MP3/WAV/FLAC, and verified document/Markdown directions. It includes audio extraction, safe output handling, Arabic/English localization, runtime RTL/LTR, file intake, themes, tests, and Windows CI.
 
 ## Requirements
 
@@ -84,6 +84,16 @@ Source tags, cover art and unrelated streams are removed. WAV can reduce higher 
 
 Actual application screenshots: [English dark MP3 success](docs/screenshots/27-phase4-english-dark-mp3.png), [Arabic light extraction success](docs/screenshots/28-phase4-arabic-light-extraction.png), [real audio progress](docs/screenshots/29-phase4-progress-cancel.png), [cancel before closing](docs/screenshots/30-phase4-cancel-to-close.png).
 
+## Convert documents and Markdown (Phase 5)
+
+Add one source through Workspace, open Documents, inspect it, choose one of the verified output formats, choose a new destination and Convert document. Processing is indeterminate with real inspection/conversion/verification stages, not invented percentages. Cancel and cancel-before-close wait for process cleanup. Existing files and originals are never overwritten; HTML is never opened automatically.
+
+Supported directions: DOCX → ODT/Markdown/TXT; ODT → DOCX/TXT; RTF → DOCX/TXT; Markdown → DOCX/HTML/TXT; HTML → Markdown; UTF-8 TXT → Markdown. Plain-text intent uses .md/.txt/.html extensions plus strict UTF-8 validation; office types are inspected by content. No PDF, spreadsheets, presentations, macros, linked images or exact-layout guarantee. Embedded validated PNG/JPEG may be retained; TXT loses formatting/images.
+
+Development/CI only: `$env:ORBITCONVERT_PANDOC_DIR = ./tools/Get-Pandoc.ps1`; set `ORBITCONVERT_REQUIRE_PANDOC=1` to require real tests. Runtime resolves bundled `pandoc/pandoc.exe` first and never installs/downloads tools or searches PATH. Version 3.12.1 is pinned; no LibreOffice or new NuGet package is required for this matrix. Future packaging/licensing approval remains deferred. See [Phase 5 validation](docs/phase-5-documents-validation.md) for safety boundaries, Arabic direction, tested outputs and limitations.
+
+Actual application screenshots: [Arabic dark Markdown → DOCX](docs/screenshots/31-phase5-arabic-dark-markdown-docx.png), [Arabic light DOCX → ODT](docs/screenshots/32-phase5-arabic-light-docx-odt.png), [English light DOCX → Markdown](docs/screenshots/33-phase5-english-light-docx-markdown.png), [indeterminate processing](docs/screenshots/34-phase5-indeterminate-progress.png). Generated DOCX/ODT were also visually checked in Microsoft Word; manual busy-close/cancel timing and full DPI/accessibility checks remain explicitly unverified.
+
 ## Phase 2D screenshots
 
 - [Close blocked while a conversion runs](docs/screenshots/19-phase-2d-close-blocked-while-busy.jpg)
@@ -120,4 +130,4 @@ Actual application screenshots: [English dark MP3 success](docs/screenshots/27-p
 
 ## Scope
 
-The app processes one image, video or audio file at a time through its UI. Image operations cannot be cancelled once started (see phase-2d-validation.md); closing is blocked until they finish. Video and audio operations support cancellation and bounded process timeouts. Intake can contain multiple files, but conversion is never automatic or batched. HEIC/AVIF, documents, general color management/metadata preservation, Explorer integration, and installers remain unavailable. Magick.NET-Q8-AnyCPU stays pinned to 15.0.0; Phase 4 reuses the Phase 3 external FFmpeg/FFprobe executables, without a new NuGet dependency.
+The app processes one image, video, audio or document file at a time through its UI. Image operations cannot be cancelled once started (see phase-2d-validation.md); closing is blocked until they finish. Media/document operations support cancellation and bounded process timeouts. Intake can contain multiple files, but conversion is never automatic or batched. HEIC/AVIF, PDF, general color management/metadata preservation, Explorer integration, and installers remain unavailable. Magick.NET-Q8-AnyCPU stays pinned to 15.0.0; FFmpeg/FFprobe and Pandoc are external application-local tools, not extra NuGet dependencies.
