@@ -165,6 +165,15 @@
                     </Grid>
                 </RadioButton>
 
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavPdf]}" Command="{Binding NavigateCommand}"
+                             CommandParameter="{x:Static viewModels:AppSection.Pdf}" GroupName="MainNavigation"
+                             IsChecked="{Binding IsPdfSelected, Mode=OneWay}" Style="{StaticResource NavigationRadioStyle}">
+                    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="26" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Path Width="15" Height="17" Data="M2,1 H11 L16,6 V18 H2 Z M10,2 V7 H15 M5,11 H13 M5,14 H11" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" StrokeThickness="1.5" Stretch="Uniform" />
+                        <TextBlock Grid.Column="1" FontSize="13" FontWeight="SemiBold" Text="{Binding Localization[NavPdf]}" />
+                    </Grid>
+                </RadioButton>
+
                 <Border Height="1"
                         Margin="12,13"
                         Background="{DynamicResource BorderBrush}" />

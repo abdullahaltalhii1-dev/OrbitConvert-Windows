@@ -23,7 +23,8 @@ public sealed record ProcessRunRequest(
     TimeSpan Timeout,
     TimeSpan? InactivityTimeout = null,
     Action<string>? StandardOutputLine = null,
-    TimeSpan? StartTimeout = null);
+    TimeSpan? StartTimeout = null,
+    long? MaximumJobMemoryBytes = null);
 
 /// <param name="TerminationConfirmed">False when a stopped process did not finish terminating within the grace period.</param>
 public sealed record ProcessRunResult(ProcessOutcome Outcome, int ExitCode, string StandardOutput, string StandardError,
@@ -81,7 +82,8 @@ public sealed class ProcessRunner : IProcessRunner
         foreach (var argument in request.Arguments) { startInfo.ArgumentList.Add(argument); }
 
         var process = new Process { StartInfo = startInfo };
-        var job = JobObject.TryCreate();
+        if (request.MaximumJobMemoryBytes is <= 0) { process.Dispose(); throw new ArgumentOutOfRangeException(nameof(request)); }
+        var job = JobObject.TryCreate(request.MaximumJobMemoryBytes);
         if (job is null)
         {
             process.Dispose();
@@ -228,11 +230,16 @@ public sealed class ProcessRunner : IProcessRunner
 
         private JobObject(IntPtr handle) => _handle = handle;
 
-        public static JobObject? TryCreate()
+        public static JobObject? TryCreate(long? maximumMemoryBytes)
         {
             var handle = CreateJobObject(IntPtr.Zero, null);
             if (handle == IntPtr.Zero) { return null; }
             var info = new JobObjectExtendedLimitInformation { BasicLimitInformation = { LimitFlags = KillOnJobClose } };
+            if (maximumMemoryBytes is { } memory)
+            {
+                info.BasicLimitInformation.LimitFlags |= 0x200; // JOB_OBJECT_LIMIT_JOB_MEMORY: committed memory across this job.
+                info.JobMemoryLimit = new UIntPtr(checked((ulong)memory));
+            }
             var length = Marshal.SizeOf<JobObjectExtendedLimitInformation>();
             var buffer = Marshal.AllocHGlobal(length);
             try

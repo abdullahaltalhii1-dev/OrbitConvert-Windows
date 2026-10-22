@@ -48,8 +48,23 @@ jobs:
               shell: pwsh
               run: '& "$env:ORBITCONVERT_PANDOC_DIR\pandoc.exe" --version'
 
+            - name: Fetch pinned qpdf for mandatory PDF tests
+              shell: pwsh
+              run: |
+                  $bin = ./tools/Get-Qpdf.ps1 -Destination "$env:RUNNER_TEMP\orbitconvert-tools"
+                  & "$bin\qpdf.exe" --version
+                  "ORBITCONVERT_QPDF_DIR=$bin" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
             - name: Build
               run: dotnet build OrbitConvert.slnx --configuration Release --no-restore
 
             - name: Test
               run: dotnet test OrbitConvert.slnx --configuration Release --no-build --blame-hang-timeout 10m --blame-hang-dump-type none
+
+            - name: Verify Windows PDF worker assets
+              shell: pwsh
+              run: |
+                  $root = 'src/OrbitConvert.App/bin/Release/net10.0-windows'
+                  if (-not (Test-Path "$root/OrbitConvert.App.exe")) { throw 'PDF worker apphost missing.' }
+                  $native = "$root/runtimes/win-x64/native/pdfium.dll"
+                  if ((Get-FileHash $native -Algorithm SHA256).Hash -ne 'AE913F407E8D3F5CDBF08A9869564D647B13E132E01EB376C0A5A33B7A227A45') { throw 'Unexpected PDFium x64 binary.' }

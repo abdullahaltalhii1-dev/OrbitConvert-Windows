@@ -25,8 +25,8 @@
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>4 FORMATS</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 5</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>Private media and document conversion</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 6</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Local conversion and PDF tools</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
   <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images, Video, Audio or Documents to process one supported file.</value></data>
@@ -316,4 +316,77 @@
   <data name="DocumentErrorTimedOut" xml:space="preserve"><value>The document tool exceeded its time limit. No completed destination was saved.</value></data>
   <data name="DocumentErrorProcessTerminationFailed" xml:space="preserve"><value>The document tool did not confirm stopping. No final file was saved; cleanup may be incomplete.</value></data>
   <data name="DocumentErrorOutputFailure" xml:space="preserve"><value>The document output could not be saved. Check permissions and free space.</value></data>
+  <data name="NavPdf" xml:space="preserve"><value>PDF Tools</value></data>
+  <data name="PdfTitle" xml:space="preserve"><value>PDF, precisely arranged.</value></data>
+  <data name="PdfDescription" xml:space="preserve"><value>Merge, split, reorder, render or extract selectable text. Local processing, verified new copies.</value></data>
+  <data name="PdfOperation" xml:space="preserve"><value>PDF operation</value></data>
+  <data name="PdfModeMerge" xml:space="preserve"><value>Merge PDFs</value></data>
+  <data name="PdfModeSplit" xml:space="preserve"><value>Split / extract pages</value></data>
+  <data name="PdfModeReorder" xml:space="preserve"><value>Reorder / select pages</value></data>
+  <data name="PdfModeRender" xml:space="preserve"><value>Pages to PNG images</value></data>
+  <data name="PdfModeText" xml:space="preserve"><value>Extract text to UTF-8</value></data>
+  <data name="PdfSource" xml:space="preserve"><value>Source PDF</value></data>
+  <data name="PdfSourceHelp" xml:space="preserve"><value>Add files in Workspace. Select a source here; for Merge add each PDF in the desired order. Inspect explicitly before processing.</value></data>
+  <data name="PdfAddMerge" xml:space="preserve"><value>Add selected PDF to merge</value></data>
+  <data name="PdfMergeOrder" xml:space="preserve"><value>PDF merge order</value></data>
+  <data name="PdfMoveUp" xml:space="preserve"><value>Move earlier</value></data>
+  <data name="PdfMoveDown" xml:space="preserve"><value>Move later</value></data>
+  <data name="PdfInspect" xml:space="preserve"><value>Inspect PDF inputs</value></data>
+  <data name="PdfPageCount" xml:space="preserve"><value>Verified pages: {0}</value></data>
+  <data name="PdfMetadata" xml:space="preserve"><value>PDF {0} · {1} B · Title: {2} · Author: {3}</value></data>
+  <data name="PdfNotEncrypted" xml:space="preserve"><value>Not encrypted</value></data>
+  <data name="PdfPageInfo" xml:space="preserve"><value>Page {0}: {1} × {2} pt · rotation {3}° · {4}</value></data>
+  <data name="PdfLandscape" xml:space="preserve"><value>Landscape</value></data>
+  <data name="PdfPortrait" xml:space="preserve"><value>Portrait</value></data>
+  <data name="PdfSquare" xml:space="preserve"><value>Square</value></data>
+  <data name="PdfSplitMode" xml:space="preserve"><value>Split method</value></data>
+  <data name="PdfSplitExtract" xml:space="preserve"><value>Extract page / range to one PDF</value></data>
+  <data name="PdfSplitIndividual" xml:space="preserve"><value>One PDF per selected page</value></data>
+  <data name="PdfSplitBoundaries" xml:space="preserve"><value>Split after selected page boundaries</value></data>
+  <data name="PdfPageSelection" xml:space="preserve"><value>Page selection (1-based ASCII numbers)</value></data>
+  <data name="PdfPagesHelp" xml:space="preserve"><value>Pages: 1,3-5. Leave blank for all pages. Use 1-based numbers 0–9; no repeated pages.</value></data>
+  <data name="PdfSequenceHelp" xml:space="preserve"><value>Output sequence, for example 3,1,2 or 4-6,1. Omitted pages are excluded. Blank keeps all pages in order.</value></data>
+  <data name="PdfBoundariesHelp" xml:space="preserve"><value>Split after pages, for example 2,5. Enter increasing boundaries before the last page; the remaining pages form the final part.</value></data>
+  <data name="PdfDpi" xml:space="preserve"><value>PNG resolution (DPI)</value></data>
+  <data name="PdfPolicy" xml:space="preserve"><value>Originals and existing destinations are never replaced. Multiple outputs require a NEW folder and publish together. Encrypted PDFs, active content, forms and signatures are rejected. Text extraction is not OCR; Arabic, tables and columns may have imperfect reading order.</value></data>
+  <data name="PdfDestination" xml:space="preserve"><value>Choose a new output file</value></data>
+  <data name="PdfNewFolder" xml:space="preserve"><value>Name a NEW results folder</value></data>
+  <data name="PdfFolderFilter" xml:space="preserve"><value>New results folder name (not an existing folder)</value></data>
+  <data name="PdfOutputFilter" xml:space="preserve"><value>Verified output</value></data>
+  <data name="PdfStart" xml:space="preserve"><value>Start PDF operation</value></data>
+  <data name="PdfCancel" xml:space="preserve"><value>Cancel operation</value></data>
+  <data name="PdfProgress" xml:space="preserve"><value>PDF processing stage</value></data>
+  <data name="PdfTextPreview" xml:space="preserve"><value>Extracted text preview (up to 4000 characters)</value></data>
+  <data name="PdfIdle" xml:space="preserve"><value>Select and inspect the PDF inputs first.</value></data>
+  <data name="PdfReady" xml:space="preserve"><value>Choose settings and a new destination.</value></data>
+  <data name="PdfWorking" xml:space="preserve"><value>Processing private copies. Originals remain unchanged.</value></data>
+  <data name="PdfCancelling" xml:space="preserve"><value>Stopping the owned process and waiting for cleanup…</value></data>
+  <data name="PdfSuccess" xml:space="preserve"><value>PDF operation completed. New output saved and verified.</value></data>
+  <data name="PdfTextSavedReview" xml:space="preserve"><value>UTF-8 text saved. Review it before use: Arabic reading order may be reversed and table or column text may be joined. File validation does not verify reading order.</value></data>
+  <data name="PdfUnexpectedError" xml:space="preserve"><value>The PDF operation could not be completed. Review the inputs and destination.</value></data>
+  <data name="PdfCleanupFailed" xml:space="preserve"><value>Cleanup or process termination was not confirmed. An operation-owned temporary item may remain.</value></data>
+  <data name="PdfCancelToClose" xml:space="preserve"><value>A PDF operation is running. Cancel, wait for cleanup, then close? Choose No to keep waiting.</value></data>
+  <data name="PdfStageInspecting" xml:space="preserve"><value>Inspecting PDF structure and pages…</value></data>
+  <data name="PdfStageProcessing" xml:space="preserve"><value>Arranging PDF pages…</value></data>
+  <data name="PdfStageRendering" xml:space="preserve"><value>Rendering PDF pages…</value></data>
+  <data name="PdfStageExtracting" xml:space="preserve"><value>Extracting selectable text…</value></data>
+  <data name="PdfStageVerifying" xml:space="preserve"><value>Independently verifying output pages…</value></data>
+  <data name="PdfStageCompleted" xml:space="preserve"><value>Verified output ready.</value></data>
+  <data name="PdfErrorUnreadableInput" xml:space="preserve"><value>The source PDF cannot be read. Check that it exists and is accessible.</value></data>
+  <data name="PdfErrorInvalidPdf" xml:space="preserve"><value>The PDF is damaged, unsupported, or failed strict validation. No completed output was saved.</value></data>
+  <data name="PdfErrorEncrypted" xml:space="preserve"><value>Encrypted or password-protected PDFs are not supported. No password bypass is attempted.</value></data>
+  <data name="PdfErrorUnsafeContent" xml:space="preserve"><value>This PDF contains active content, embedded files, forms or signatures that this workflow does not accept.</value></data>
+  <data name="PdfErrorTooLarge" xml:space="preserve"><value>The PDF operation exceeds supported file, page, pixel, memory or temporary-storage limits.</value></data>
+  <data name="PdfErrorInvalidSelection" xml:space="preserve"><value>Choose valid pages, ranges or boundaries within the verified count. Zero, repeats and out-of-range pages are not allowed.</value></data>
+  <data name="PdfErrorDuplicateInput" xml:space="preserve"><value>The same PDF path was added more than once. Remove the duplicate.</value></data>
+  <data name="PdfErrorToolsUnavailable" xml:space="preserve"><value>A required PDF engine or native component is unavailable. No download or installation was started.</value></data>
+  <data name="PdfErrorToolsIncompatible" xml:space="preserve"><value>The PDF engine version or binary does not match the supported build.</value></data>
+  <data name="PdfErrorDestinationExists" xml:space="preserve"><value>The destination already exists. Choose a new file or folder; nothing was replaced.</value></data>
+  <data name="PdfErrorInvalidDestination" xml:space="preserve"><value>Choose a new destination with the correct extension, separate from the source.</value></data>
+  <data name="PdfErrorNoText" xml:space="preserve"><value>No extractable text was found. This may be an image-only scan; OCR is not provided.</value></data>
+  <data name="PdfErrorOutputValidationFailed" xml:space="preserve"><value>The generated output failed independent format, page-sequence or content verification. It was not finalized.</value></data>
+  <data name="PdfErrorCancelled" xml:space="preserve"><value>PDF operation cancelled. No incomplete destination was finalized.</value></data>
+  <data name="PdfErrorTimedOut" xml:space="preserve"><value>The PDF tool exceeded its time limit. No incomplete destination was finalized.</value></data>
+  <data name="PdfErrorProcessTerminationFailed" xml:space="preserve"><value>The PDF process did not confirm stopping. Cleanup may be incomplete; no new destination was finalized.</value></data>
+  <data name="PdfErrorOutputFailure" xml:space="preserve"><value>The PDF operation could not read or save its files. Check access permissions and free space.</value></data>
 </root>

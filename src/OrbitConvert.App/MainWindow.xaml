@@ -56,6 +56,8 @@
                 <views:DocumentsView IsEnabled="{Binding CanUseDocuments}"
                                      Visibility="{Binding IsDocumentsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
+                <views:PdfView IsEnabled="{Binding CanUsePdf}" Visibility="{Binding IsPdfSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
                 <views:SettingsView Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </Grid>

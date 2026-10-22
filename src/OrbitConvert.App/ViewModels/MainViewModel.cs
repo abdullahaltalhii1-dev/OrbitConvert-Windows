@@ -5,6 +5,7 @@ using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
 using OrbitConvert.App.Services.Audio;
 using OrbitConvert.App.Services.Documents;
+using OrbitConvert.App.Services.Pdf;
 using OrbitConvert.App.Services.Video;
 
 namespace OrbitConvert.App.ViewModels;
@@ -16,6 +17,7 @@ public enum AppSection
     Video,
     Audio,
     Documents,
+    Pdf,
     Settings,
 }
 
@@ -59,7 +61,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         IFileMetadataProvider metadataProvider,
         LocalizationService localization,
         IAudioConversionService? audioService = null,
-        IDocumentConversionService? documentService = null)
+        IDocumentConversionService? documentService = null,
+        IPdfService? pdfService = null)
     {
         Localization = localization ?? throw new ArgumentNullException(nameof(localization));
         Localization.LanguageChanged += (_, _) =>
@@ -73,7 +76,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         VideoConversion = new VideoConversionViewModel(FileIntake.SelectedFiles, new VideoConversionService(), Localization);
         AudioConversion = new AudioConversionViewModel(FileIntake.SelectedFiles, audioService ?? new AudioConversionService(), Localization);
         DocumentConversion = new DocumentConversionViewModel(FileIntake.SelectedFiles, documentService ?? new DocumentConversionService(), Localization);
-        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion, DocumentConversion })
+        Pdf = new PdfViewModel(FileIntake.SelectedFiles, pdfService ?? new PdfService(), Localization);
+        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion, DocumentConversion, Pdf })
         {
             conversion.PropertyChanged += (_, args) =>
             {
@@ -82,6 +86,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 OnPropertyChanged(nameof(CanUseVideo));
                 OnPropertyChanged(nameof(CanUseAudio));
                 OnPropertyChanged(nameof(CanUseDocuments));
+                OnPropertyChanged(nameof(CanUsePdf));
             };
         }
 
@@ -137,6 +142,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsVideoSelected));
             OnPropertyChanged(nameof(IsAudioSelected));
             OnPropertyChanged(nameof(IsDocumentsSelected));
+            OnPropertyChanged(nameof(IsPdfSelected));
             OnPropertyChanged(nameof(IsSettingsSelected));
         }
     }
@@ -190,10 +196,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public AudioConversionViewModel AudioConversion { get; }
     public DocumentConversionViewModel DocumentConversion { get; }
-    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle;
-    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle;
-    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle && DocumentConversion.IsIdle;
-    public bool CanUseDocuments => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle;
+    public PdfViewModel Pdf { get; }
+    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
+    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
+    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
+    public bool CanUseDocuments => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && Pdf.IsIdle;
+    public bool CanUsePdf => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle;
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 
@@ -204,6 +212,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public bool IsAudioSelected => CurrentSection == AppSection.Audio;
 
     public bool IsDocumentsSelected => CurrentSection == AppSection.Documents;
+    public bool IsPdfSelected => CurrentSection == AppSection.Pdf;
 
     public bool IsSettingsSelected => CurrentSection == AppSection.Settings;
 
