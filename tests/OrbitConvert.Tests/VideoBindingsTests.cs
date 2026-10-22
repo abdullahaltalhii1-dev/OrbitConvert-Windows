@@ -36,12 +36,17 @@ public sealed class VideoBindingsTests
                     foreach (var section in Enum.GetValues<AppSection>())
                     {
                         model.NavigateCommand.Execute(section);
-                        foreach (var size in new[] { new Size(900, 620), new Size(1120, 720), new Size(1920, 1080) })
+                        foreach (var pdfMode in section == AppSection.Pdf ? Enumerable.Range(0, 5) : [model.Pdf.ModeIndex])
                         {
-                            root.Measure(size);
-                            root.Arrange(new Rect(size));
-                            root.UpdateLayout();
-                            Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                            model.Pdf.ModeIndex = pdfMode;
+                            foreach (var size in new[] { new Size(900, 620), new Size(1120, 720), new Size(1920, 1080) })
+                            {
+                                root.Measure(size);
+                                root.Arrange(new Rect(size));
+                                root.UpdateLayout();
+                                Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                                Assert.Equal(pdfMode, model.Pdf.ModeIndex);
+                            }
                         }
                     }
                 }

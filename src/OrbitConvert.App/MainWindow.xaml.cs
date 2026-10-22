@@ -33,6 +33,18 @@ public partial class MainWindow : Window
                 e.Cancel = true;
                 MessageBox.Show(this, model.Localization["ImageWaitToClose"], model.AppTitle);
             }
+            else if (DataContext is MainViewModel pdfModel && pdfModel.Pdf.IsBusy)
+            {
+                e.Cancel = true;
+                if (MessageBox.Show(this, pdfModel.Localization["PdfCancelToClose"], pdfModel.AppTitle,
+                    MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) { return; }
+                _closingAfterCancellation = true;
+                pdfModel.Pdf.RequestCancellation();
+                await pdfModel.Pdf.WaitForIdleAsync();
+                _closingAfterCancellation = false;
+                if (pdfModel.Pdf.HasCleanupWarning) { MessageBox.Show(this, pdfModel.Pdf.StatusMessage, pdfModel.AppTitle); return; }
+                Close();
+            }
             else if (DataContext is MainViewModel documentModel && documentModel.DocumentConversion.IsBusy)
             {
                 e.Cancel = true;

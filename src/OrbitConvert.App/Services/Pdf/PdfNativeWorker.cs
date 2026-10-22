@@ -61,6 +61,8 @@ internal static class PdfNativeWorker
                 if (native is null || native.__Instance == IntPtr.Zero) { throw new PdfRejected(PdfError.InvalidPdf); }
                 try
                 {
+                    // Readiness is diagnostic only: cancellation still terminates and awaits this owned child.
+                    Console.WriteLine("pdf-worker-ready");
                     if (fpdfview.FPDF_GetPageCount(native) != document.NumberOfPages) { throw new PdfRejected(PdfError.InvalidPdf); }
                     var info = new List<PdfPageInfo>();
                     long pixels = 0;
@@ -158,6 +160,7 @@ internal static class PdfNativeWorker
     {
         if (RuntimeInformation.ProcessArchitecture != Architecture.X64) { throw new PdfRejected(PdfError.ToolsUnavailable); }
         var path = Path.Combine(AppContext.BaseDirectory, "runtimes", "win-x64", "native", "pdfium.dll");
+        if (!File.Exists(path)) { throw new PdfRejected(PdfError.ToolsUnavailable); }
         using var input = File.OpenRead(path);
         if (Convert.ToHexString(SHA256.HashData(input)) != "AE913F407E8D3F5CDBF08A9869564D647B13E132E01EB376C0A5A33B7A227A45")
         { throw new PdfRejected(PdfError.ToolsIncompatible); }

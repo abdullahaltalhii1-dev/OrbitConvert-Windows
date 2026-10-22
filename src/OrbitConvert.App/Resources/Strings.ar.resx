@@ -25,8 +25,8 @@
   <data name="NavSettingsAutomation" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>٤ صيغ</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>قريبًا</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 5</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>تحويل الوسائط والمستندات محليًا</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 6</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>تحويل محلي وأدوات PDF</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>مساحة العمل</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>حوّل ملفاتك بلا تعقيد.</value></data>
   <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور أو الفيديو أو الصوت أو المستندات لمعالجة ملف مدعوم واحد.</value></data>
@@ -315,4 +315,76 @@
   <data name="DocumentErrorTimedOut" xml:space="preserve"><value>تجاوزت أداة المستندات المدة المحددة. لم يُحفظ ملف نهائي.</value></data>
   <data name="DocumentErrorProcessTerminationFailed" xml:space="preserve"><value>لم تؤكد أداة المستندات توقفها. لم يُحفظ ملف نهائي وقد لا يكون التنظيف مكتملًا.</value></data>
   <data name="DocumentErrorOutputFailure" xml:space="preserve"><value>تعذر حفظ المستند. تحقق من الأذونات والمساحة المتاحة.</value></data>
+  <data name="NavPdf" xml:space="preserve"><value>أدوات PDF</value></data>
+  <data name="PdfTitle" xml:space="preserve"><value>صفحاتك، بترتيب أدق.</value></data>
+  <data name="PdfDescription" xml:space="preserve"><value>ادمج ملفات PDF أو قسّمها ورتّبها، وارسم الصفحات أو استخرج النص. معالجة محلية ونسخ جديدة متحقق منها.</value></data>
+  <data name="PdfOperation" xml:space="preserve"><value>عملية PDF</value></data>
+  <data name="PdfModeMerge" xml:space="preserve"><value>دمج ملفات PDF</value></data>
+  <data name="PdfModeSplit" xml:space="preserve"><value>تقسيم الصفحات واستخراجها</value></data>
+  <data name="PdfModeReorder" xml:space="preserve"><value>ترتيب الصفحات واختيارها</value></data>
+  <data name="PdfModeRender" xml:space="preserve"><value>تحويل الصفحات إلى صور PNG</value></data>
+  <data name="PdfModeText" xml:space="preserve"><value>استخراج النص بترميز UTF-8</value></data>
+  <data name="PdfSource" xml:space="preserve"><value>ملف PDF المصدر</value></data>
+  <data name="PdfSourceHelp" xml:space="preserve"><value>أضف الملفات في مساحة العمل، ثم اختر المصدر هنا. للدمج أضف كل ملف بالترتيب المطلوب، وافحص الملفات قبل المعالجة.</value></data>
+  <data name="PdfAddMerge" xml:space="preserve"><value>إضافة الملف المحدد إلى الدمج</value></data>
+  <data name="PdfMergeOrder" xml:space="preserve"><value>ترتيب ملفات الدمج</value></data>
+  <data name="PdfMoveUp" xml:space="preserve"><value>تقديم الملف</value></data>
+  <data name="PdfMoveDown" xml:space="preserve"><value>تأخير الملف</value></data>
+  <data name="PdfInspect" xml:space="preserve"><value>فحص ملفات PDF</value></data>
+  <data name="PdfPageCount" xml:space="preserve"><value>الصفحات المتحقق منها: {0}</value></data>
+  <data name="PdfMetadata" xml:space="preserve"><value>PDF {0} · الحجم {1} B · العنوان: {2} · المؤلف: {3}</value></data>
+  <data name="PdfNotEncrypted" xml:space="preserve"><value>غير مشفر</value></data>
+  <data name="PdfPageInfo" xml:space="preserve"><value>الصفحة {0}: {1} × {2} pt · الدوران {3}° · {4}</value></data>
+  <data name="PdfLandscape" xml:space="preserve"><value>أفقي</value></data>
+  <data name="PdfPortrait" xml:space="preserve"><value>عمودي</value></data>
+  <data name="PdfSquare" xml:space="preserve"><value>مربع</value></data>
+  <data name="PdfSplitMode" xml:space="preserve"><value>طريقة التقسيم</value></data>
+  <data name="PdfSplitExtract" xml:space="preserve"><value>استخراج صفحة أو نطاق إلى ملف واحد</value></data>
+  <data name="PdfSplitIndividual" xml:space="preserve"><value>ملف PDF لكل صفحة محددة</value></data>
+  <data name="PdfSplitBoundaries" xml:space="preserve"><value>التقسيم بعد حدود صفحات محددة</value></data>
+  <data name="PdfPageSelection" xml:space="preserve"><value>اختيار الصفحات بأرقام 0–9 ابتداءً من 1</value></data>
+  <data name="PdfPagesHelp" xml:space="preserve"><value>الصفحات مثل 1,3-5. اترك الحقل فارغًا لجميع الصفحات. استخدم أرقام 0–9 ابتداءً من 1، دون تكرار.</value></data>
+  <data name="PdfSequenceHelp" xml:space="preserve"><value>ترتيب المخرج مثل 3,1,2 أو 4-6,1. تُستبعد الصفحات غير المذكورة، والحقل الفارغ يبقي الترتيب الأصلي كاملًا.</value></data>
+  <data name="PdfBoundariesHelp" xml:space="preserve"><value>قسّم بعد الصفحات مثل 2,5. أدخل حدودًا تصاعدية قبل الصفحة الأخيرة؛ وتشكل الصفحات المتبقية الجزء الأخير.</value></data>
+  <data name="PdfDpi" xml:space="preserve"><value>دقة صور PNG بوحدة DPI</value></data>
+  <data name="PdfPolicy" xml:space="preserve"><value>لا تُستبدل الأصول أو الوجهات الموجودة. تتطلب المخرجات المتعددة مجلدًا جديدًا وتُنشر معًا. تُرفض الملفات المشفرة والمحتويات النشطة والنماذج والتوقيعات. استخراج النص ليس OCR، وقد يختلف ترتيب العربية والجداول والأعمدة.</value></data>
+  <data name="PdfDestination" xml:space="preserve"><value>اختيار ملف مخرج جديد</value></data>
+  <data name="PdfNewFolder" xml:space="preserve"><value>تسمية مجلد نتائج جديد</value></data>
+  <data name="PdfFolderFilter" xml:space="preserve"><value>اسم مجلد نتائج جديد وليس مجلدًا موجودًا</value></data>
+  <data name="PdfOutputFilter" xml:space="preserve"><value>المخرج المتحقق منه</value></data>
+  <data name="PdfStart" xml:space="preserve"><value>بدء عملية PDF</value></data>
+  <data name="PdfCancel" xml:space="preserve"><value>إلغاء العملية</value></data>
+  <data name="PdfProgress" xml:space="preserve"><value>مرحلة معالجة PDF</value></data>
+  <data name="PdfTextPreview" xml:space="preserve"><value>معاينة النص المستخرج، حتى 4000 حرف</value></data>
+  <data name="PdfIdle" xml:space="preserve"><value>اختر ملفات PDF وافحصها أولًا.</value></data>
+  <data name="PdfReady" xml:space="preserve"><value>اختر الإعدادات ووجهة جديدة.</value></data>
+  <data name="PdfWorking" xml:space="preserve"><value>تجري معالجة نسخ خاصة، وتبقى الأصول دون تغيير.</value></data>
+  <data name="PdfCancelling" xml:space="preserve"><value>جارٍ إيقاف العملية التابعة وانتظار التنظيف…</value></data>
+  <data name="PdfSuccess" xml:space="preserve"><value>اكتملت عملية PDF، وحُفظ المخرج الجديد وتم التحقق منه.</value></data>
+  <data name="PdfUnexpectedError" xml:space="preserve"><value>تعذر إكمال عملية PDF. راجع المصادر والوجهة.</value></data>
+  <data name="PdfCleanupFailed" xml:space="preserve"><value>لم يتأكد التنظيف أو توقف العملية. قد يبقى عنصر مؤقت تابع للعملية.</value></data>
+  <data name="PdfCancelToClose" xml:space="preserve"><value>تجري عملية PDF. هل تريد إلغاءها وانتظار التنظيف ثم الإغلاق؟ اختر «لا» لمواصلة الانتظار.</value></data>
+  <data name="PdfStageInspecting" xml:space="preserve"><value>جارٍ فحص بنية PDF وصفحاته…</value></data>
+  <data name="PdfStageProcessing" xml:space="preserve"><value>جارٍ ترتيب صفحات PDF…</value></data>
+  <data name="PdfStageRendering" xml:space="preserve"><value>جارٍ رسم صفحات PDF…</value></data>
+  <data name="PdfStageExtracting" xml:space="preserve"><value>جارٍ استخراج النص القابل للاختيار…</value></data>
+  <data name="PdfStageVerifying" xml:space="preserve"><value>جارٍ التحقق المستقل من صفحات المخرج…</value></data>
+  <data name="PdfStageCompleted" xml:space="preserve"><value>المخرج المتحقق منه جاهز.</value></data>
+  <data name="PdfErrorUnreadableInput" xml:space="preserve"><value>تعذرت قراءة ملف PDF المصدر. تحقق من وجوده وإمكانية الوصول إليه.</value></data>
+  <data name="PdfErrorInvalidPdf" xml:space="preserve"><value>ملف PDF تالف أو غير مدعوم أو لم يجتز الفحص الصارم. لم يُحفظ مخرج نهائي.</value></data>
+  <data name="PdfErrorEncrypted" xml:space="preserve"><value>لا تُدعم ملفات PDF المشفرة أو المحمية بكلمة مرور. لا نحاول تجاوز الحماية.</value></data>
+  <data name="PdfErrorUnsafeContent" xml:space="preserve"><value>يحتوي الملف على محتوى نشط أو ملفات مضمنة أو نماذج أو توقيعات لا تقبلها هذه العمليات.</value></data>
+  <data name="PdfErrorTooLarge" xml:space="preserve"><value>تتجاوز العملية حدود حجم الملفات أو الصفحات أو البكسلات أو الذاكرة أو التخزين المؤقت.</value></data>
+  <data name="PdfErrorInvalidSelection" xml:space="preserve"><value>اختر صفحات أو نطاقات أو حدودًا صحيحة ضمن العدد المتحقق منه. لا يُقبل الصفر أو التكرار أو تجاوز النطاق.</value></data>
+  <data name="PdfErrorDuplicateInput" xml:space="preserve"><value>أُضيف مسار ملف PDF نفسه أكثر من مرة. أزل التكرار.</value></data>
+  <data name="PdfErrorToolsUnavailable" xml:space="preserve"><value>أحد محركات PDF أو مكوناته الأصلية غير متاح. لم يبدأ أي تنزيل أو تثبيت.</value></data>
+  <data name="PdfErrorToolsIncompatible" xml:space="preserve"><value>لا يتطابق إصدار محرك PDF أو ملفه مع الإصدار المدعوم.</value></data>
+  <data name="PdfErrorDestinationExists" xml:space="preserve"><value>الوجهة موجودة بالفعل. اختر ملفًا أو مجلدًا جديدًا؛ لم يُستبدل شيء.</value></data>
+  <data name="PdfErrorInvalidDestination" xml:space="preserve"><value>اختر وجهة جديدة بالامتداد الصحيح ومختلفة عن المصدر.</value></data>
+  <data name="PdfErrorNoText" xml:space="preserve"><value>لم يُعثر على نص قابل للاستخراج. قد يكون الملف صورًا ممسوحة فقط؛ لا يتوفر OCR.</value></data>
+  <data name="PdfErrorOutputValidationFailed" xml:space="preserve"><value>لم يجتز المخرج التحقق المستقل من الصيغة أو ترتيب الصفحات أو المحتوى، فلم يُحفظ نهائيًا.</value></data>
+  <data name="PdfErrorCancelled" xml:space="preserve"><value>أُلغيت عملية PDF. لم يُعتمد مخرج غير مكتمل.</value></data>
+  <data name="PdfErrorTimedOut" xml:space="preserve"><value>تجاوزت أداة PDF المهلة المحددة. لم يُعتمد مخرج غير مكتمل.</value></data>
+  <data name="PdfErrorProcessTerminationFailed" xml:space="preserve"><value>لم يتأكد توقف عملية PDF. قد يكون التنظيف غير مكتمل؛ لم تُعتمد وجهة جديدة.</value></data>
+  <data name="PdfErrorOutputFailure" xml:space="preserve"><value>تعذرت قراءة ملفات العملية أو حفظها. تحقق من صلاحيات الوصول والمساحة الحرة.</value></data>
 </root>

@@ -288,9 +288,13 @@ public sealed class PdfService(QpdfLocator locator, IProcessRunner runner) : IPd
     }
     private static FileStream OpenSource(string path)
     {
-        var input = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-        if (input.Length > PdfLimits.InputBytes) { input.Dispose(); throw new PdfRejected(PdfError.TooLarge); }
-        return input;
+        try
+        {
+            var input = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            if (input.Length > PdfLimits.InputBytes) { input.Dispose(); throw new PdfRejected(PdfError.TooLarge); }
+            return input;
+        }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException) { throw new PdfRejected(PdfError.UnreadableInput); }
     }
     private static async Task<string> CopyAsync(FileStream source, string workspace, int index, CancellationToken token)
     {
