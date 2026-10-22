@@ -3,6 +3,7 @@
     <Project Path="src/OrbitConvert.App/OrbitConvert.App.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/OrbitConvert.MagickRuntimeProbe/OrbitConvert.MagickRuntimeProbe.csproj" />
     <Project Path="tests/OrbitConvert.Tests/OrbitConvert.Tests.csproj" />
   </Folder>
 </Solution>

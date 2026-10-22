@@ -1,6 +1,5 @@
 using System.IO;
 using ImageMagick;
-using ImageMagick.Configuration;
 using OrbitConvert.App.Models;
 
 namespace OrbitConvert.App.Services;
@@ -8,7 +7,6 @@ namespace OrbitConvert.App.Services;
 public sealed class MagickImageEngine : IImageEngine
 {
     private static readonly object NativeLock = new();
-    private static bool _initialized;
 
     public ImageInspectionResult Inspect(Stream input) => Process(input, null, null, false);
 
@@ -40,21 +38,7 @@ public sealed class MagickImageEngine : IImageEngine
             var format = ImageInputGuard.Check(data);
             lock (NativeLock)
             {
-                if (!_initialized)
-                {
-                    var configuration = ConfigurationFiles.Default;
-                    configuration.Policy.Data = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "ImageMagick", "policy.xml"));
-                    var configurationDirectory = MagickNET.Initialize(configuration);
-                    ResourceLimits.MaxProfileSize = 1024 * 1024;
-                    ResourceLimits.MaxMemoryRequest = 128ul * 1024 * 1024;
-                    AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-                    {
-                        try { Directory.Delete(configurationDirectory, recursive: true); }
-                        catch (IOException) { }
-                        catch (UnauthorizedAccessException) { }
-                    };
-                    _initialized = true;
-                }
+                MagickRuntime.EnsureInitialized();
                 // Native decoders can recover damaged pixels and report only a warning, not an exception.
                 var corruptWarning = 0;
                 void TrackWarning(object? sender, WarningEventArgs warning)
@@ -128,6 +112,10 @@ public sealed class MagickImageEngine : IImageEngine
         catch (ImageInputException error)
         {
             return ImageInspectionResult.Failure(error.Error);
+        }
+        catch (MagickInitializationException)
+        {
+            return ImageInspectionResult.Failure(ImageInspectionError.ResourceLimit);
         }
         catch (MagickResourceLimitErrorException)
         {

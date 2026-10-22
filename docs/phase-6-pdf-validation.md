@@ -131,3 +131,42 @@ Final local TRX: ignored `artifacts/phase-6-pdf/test-results/phase6-acceptance-f
 Manual **125%/150% DPI remains deferred to Phase 9 by the owner**, not passed and not alone a Phase 6 blocker. No display/security settings were changed. Outstanding owner checks: optional trusted interactive PDF-viewer pass, manual minimum-size/accessibility expansion and review of documented complex-text/native/non-sandbox/redistribution boundaries. Existing encrypted/active/form/signature rejection, exact owned cleanup and no-overwrite guarantees are unchanged. No universal hostile-document containment, OS disk quota, licensing sign-off or final installer is promised.
 
 Against the approved v3.0 stage count: **8 of 15 stages merged** (0, 1.1, 1.2, 1.3, 2, 3, 4, 5), confirmed against merged PRs #1–#13. Phase 2 sub-checkpoints count as one roadmap stage; Phase 5 reflects the approved tested Pandoc matrix, not a claim that every planned LibreOffice/PDF pipeline exists. **Phase 6 is in review, not counted complete until owner review/merge.** Phases 7–12 are future work; 10–11 are optional/separately authorized. The 8/15 (~53%) count is a planning indicator, not an effort estimate. No Phase 7, batch queue, installer, rename, shell/radial integration or public release was begun. PR #14 remains Draft and must not be auto-merged.
+
+## Native policy initialization-order correction (2026-10-22)
+
+### Confirmed defect and bounded correction
+
+Read the full [Claude diagnosis](https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/pull/14#issuecomment-6346587992) before implementing the explicitly owner-authorized fix. At `b519ba1064063fcd61050feaf59172dd25320b9c`, [Push CI](https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/actions/runs/39815885494) built with zero warnings/errors but failed one of 476 tests (475 passed, 1 failed, zero skipped): `ImageConversionTests.NativePolicy_BlocksOtherCodersAndEnforcesConfiguredLimits`, Disk expected 0 versus actual 9223372036854775807. [PR CI](https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/actions/runs/39815888242) passed 476/0/0. Those contradictory results are historical evidence, not acceptance for this fix.
+
+PDF rendered-page verification previously constructed a native image without the image engine's lazy policy initialization. A new **real PDF-first fresh-process regression failed before production changes**, with the identical unlimited Disk value; its image-first counterpart passed. This reproduces the order defect independently of the suite's randomized class order. No test parallelization was disabled and the existing security test/expected values were not edited.
+
+`MagickRuntime.EnsureInitialized()` now owns a process-wide `Lazy<bool>` with ExecutionAndPublication. Both image processing and PDF rendered-page validation call the gate **before native access**. It loads the same policy, retains 1 MiB profile / 128 MiB single-request limits, verifies all fourteen approved XML rules in order, verifies effective Disk=0, Memory=256 MiB, Width/Height=8192, ListLength=8, Time=30, Thread=1–2 and profile/allocation limits, then probes native **GIF reading and writing must throw policy exceptions**. The PDF reader is explicitly PNG, not content-sniffed. All wildcard coder, delegate/filter, BMP/BMP3 and zero-map restrictions in `ImageMagick/policy.xml` remain unchanged. No package version, engine, workflow or dependency changed.
+
+Missing/invalid policy, native initialization errors, incorrect effective limits or allowed forbidden coder operations poison the gate permanently for that process. It does not try to repair individual getters while coder policy may be absent. Image operations return existing ResourceLimit / OutputValidationFailed results; PDF rendering returns OutputValidationFailed, performs existing owned cleanup and never publishes a candidate. Restart is required after correcting the underlying cause. Source originals and existing no-overwrite staging remain unchanged. The API exposes no effective map/delegate/filter policy getters, so these are preserved by exact loaded XML validation; GIF probes and available getters are **not** a claim of exhaustive native-policy introspection or every-coder security testing.
+
+Sources: pinned [Magick.NET 15.0.0 initialization implementation](https://github.com/dlemstra/Magick.NET/blob/15.0.0/src/Magick.NET/MagickNET.cs), [resource API](https://github.com/dlemstra/Magick.NET/blob/15.0.0/src/Magick.NET/ResourceLimits.cs), [initialization guidance](https://github.com/dlemstra/Magick.NET/blob/15.0.0/docs/Initialization.md). No startup-only/module initializer masks test callers.
+
+### Actual regression coverage and quality gate
+
+The small **test-only**, no-new-packages `OrbitConvert.MagickRuntimeProbe` executable is built/copied by the existing solution/test project. The production application never invokes it. Each scenario starts a new process through the existing contained ProcessRunner and uses an owned generated PDF and managed PNG fixture. It clears inherited MAGICK_CONFIGURE_PATH only in the disposable child before native access: otherwise the secured parent can export its temporary policy and falsely make an ungated first access appear safe. No machine/user environment, installed policy or Windows security setting is changed.
+
+Nine actual child scenarios now pass:
+
+- PDF render first, then image inspection; image inspection first, then PDF render; gate before reading resource limits; simultaneous gate/image/PDF first callers.
+- Deliberately ungated native image first and native resource getter first both cause the later gate to reject unsafe state.
+- Deliberately ungated resources set to the expected values **without coder policy** still fail the independent coder probe.
+- Absent and non-approved policy fail safely. Only test-owned files/base-directory state in the disposable child are affected.
+
+All five unsafe cases assert the same cached initialization exception, failed inspection/conversion/output validation, zero encoded output, failed real PDF rendered-page verification with no destination, successful cleanup and unchanged source bytes. A source guard confines native constructors/API access to the three approved gated production files; the actual PDF rendering test additionally asserts zero Disk and forbidden GIF output. These ten new tests supplement, not replace, the unchanged 476-test baseline. The existing ImageMagick policy security test remains untouched.
+
+| Command | Actual local result |
+|---|---|
+| `dotnet restore OrbitConvert.slnx` | Passed |
+| `dotnet build OrbitConvert.slnx -c Release --no-restore` | Passed; 0 warnings / 0 errors |
+| `dotnet test OrbitConvert.slnx -c Release --no-build` | **486 passed / 0 failed / 0 skipped**, 56 s |
+| `dotnet format OrbitConvert.slnx --verify-no-changes` | Passed |
+| `git diff --check` | Passed |
+
+Real pinned qpdf/PDFium/FFmpeg/Pandoc were available; FFmpeg/Pandoc required-test flags enabled. Ignored TRX: `artifacts/phase-6-pdf/test-results/phase6-magick-runtime.trx`. Initial helper compilation needed its explicit IO using; an initial production self-test hit the intentionally forbidden XC coder, corrected by importing tiny owned raw pixels instead of weakening policy. Child inheritance initially masked deliberate unsafe scenarios; the isolated environment correction made those scenarios meaningful. Scoped formatting fixed new-file line endings. No failures were omitted from the final full run.
+
+No additional manual GUI test or DPI claim in this fix; real native PDF/image operations and existing automated WPF checks ran. Prior UI/Arabic/cancel evidence and outstanding manual limits remain unchanged. Final pushed SHA and **both** GitHub Actions outcomes must be read live and reported separately; the failed historical Push must not be substituted, ignored or described as green. PR #14 stays Draft and unmerged. CI success alone is not final Phase 6 owner acceptance; Phase 7 remains unauthorized and untouched.

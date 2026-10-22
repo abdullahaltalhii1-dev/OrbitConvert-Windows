@@ -22,7 +22,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OrbitConvert.App\OrbitConvert.App.csproj" />
+    <ProjectReference Include="..\OrbitConvert.MagickRuntimeProbe\OrbitConvert.MagickRuntimeProbe.csproj" ReferenceOutputAssembly="false" />
     <None Update="TestData\Pdf\arabic-layout.pdf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <Target Name="CopyMagickRuntimeProbe" AfterTargets="Build">
+    <ItemGroup>
+      <ProbeFiles Include="..\OrbitConvert.MagickRuntimeProbe\bin\$(Configuration)\net10.0-windows\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ProbeFiles)" DestinationFiles="@(ProbeFiles->'$(OutDir)MagickRuntimeProbe\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>

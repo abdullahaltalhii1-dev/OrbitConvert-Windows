@@ -107,7 +107,8 @@ public sealed class PdfService(QpdfLocator locator, IProcessRunner runner) : IPd
                     {
                         var name = $"page-{page:D4}.png";
                         var candidate = Path.Combine(workspace, name);
-                        using var image = new MagickImage(candidate);
+                        MagickRuntime.EnsureInitialized();
+                        using var image = new MagickImage(candidate, new MagickReadSettings { Format = MagickFormat.Png });
                         var info = inputs[0].Pages[page - 1];
                         var width = (uint)Math.Ceiling(info.Width * request.Dpi / 72.0);
                         var height = (uint)Math.Ceiling(info.Height * request.Dpi / 72.0);
@@ -329,7 +330,7 @@ public sealed class PdfService(QpdfLocator locator, IProcessRunner runner) : IPd
     }
     private static void Check(ProcessRunResult result) { CheckOutcome(result); if (result.ExitCode != 0) { throw new PdfRejected(PdfError.InvalidPdf); } }
     private static bool Expected(Exception error) => error is PdfRejected or IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException or JsonException or InvalidOperationException or OverflowException or OperationCanceledException or MagickException;
-    private static PdfError Error(Exception error) => error switch { PdfRejected rejected => rejected.Error, OperationCanceledException => PdfError.Cancelled, JsonException or MagickException => PdfError.InvalidPdf, _ => PdfError.OutputFailure };
+    private static PdfError Error(Exception error) => error switch { PdfRejected rejected => rejected.Error, MagickInitializationException => PdfError.OutputValidationFailed, OperationCanceledException => PdfError.Cancelled, JsonException or MagickException => PdfError.InvalidPdf, _ => PdfError.OutputFailure };
     [DllImport("kernel32.dll", EntryPoint = "CreateDirectoryW", CharSet = CharSet.Unicode, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool CreateDirectory(string path, IntPtr securityAttributes);

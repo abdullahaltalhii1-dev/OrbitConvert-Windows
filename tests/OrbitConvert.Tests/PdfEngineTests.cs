@@ -46,6 +46,9 @@ public sealed class PdfEngineTests(Xunit.Abstractions.ITestOutputHelper log) : I
         var rendered = await service.ExecuteAsync(new(PdfOperation.Render, [source], PathFor("صور"), "1-2", 150));
         Assert.True(rendered.IsSuccess, rendered.Error.ToString());
         Assert.Equal(2, rendered.Outputs!.Length);
+        Assert.Equal(0ul, ResourceLimits.Disk);
+        using (var verified = new MagickImage(rendered.Outputs[0]))
+        { Assert.Throws<MagickPolicyErrorException>(() => verified.ToByteArray(MagickFormat.Gif)); }
         using var image = new MagickImage(rendered.Outputs[0]);
         Assert.Equal(MagickFormat.Png, image.Format);
         Assert.Equal(417u, image.Width); Assert.Equal(625u, image.Height);
