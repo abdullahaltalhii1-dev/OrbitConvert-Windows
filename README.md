@@ -94,6 +94,10 @@ Development/CI only: `$env:ORBITCONVERT_PANDOC_DIR = ./tools/Get-Pandoc.ps1`; se
 
 Actual application screenshots: [Arabic dark Markdown → DOCX](docs/screenshots/31-phase5-arabic-dark-markdown-docx.png), [Arabic light DOCX → ODT](docs/screenshots/32-phase5-arabic-light-docx-odt.png), [English light DOCX → Markdown](docs/screenshots/33-phase5-english-light-docx-markdown.png), [indeterminate processing](docs/screenshots/34-phase5-indeterminate-progress.png). Generated DOCX/ODT were also visually checked in Microsoft Word; manual busy-close/cancel timing and full DPI/accessibility checks remain explicitly unverified.
 
+## PDF tools (Phase 6 — implementation checkpoint)
+
+The PDF backend is under development; **no PDF workspace is exposed yet**. The checkpoint adds pinned qpdf 12.4.2, PDFiumCore/native PDFium 157.0.8100, and PdfPig 0.1.16. Development/CI: `$env:ORBITCONVERT_QPDF_DIR = ./tools/Get-Qpdf.ps1`. Real PDF integration tests are mandatory and fail rather than skip when tools are absent. Runtime never downloads engines. See [Phase 6 validation](docs/phase-6-pdf-validation.md) for actual implemented backend, strict encryption/active-content policy, resource limits, native isolation, licenses, remaining work and honest verification status. This is not completed Phase 6 or owner merge approval.
+
 ## Phase 2D screenshots
 
 - [Close blocked while a conversion runs](docs/screenshots/19-phase-2d-close-blocked-while-busy.jpg)

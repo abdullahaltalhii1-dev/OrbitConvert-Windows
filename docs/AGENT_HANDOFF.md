@@ -4,6 +4,17 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 
 ---
 
+## 2026-10-22 — Codex: Phase 6 PDF backend checkpoint (NOT complete)
+
+- Verified PR #13 merged as main `6fafd378b1d4941f442b75fe322322e8076dcbe9`; fetched/fast-forwarded and created exact owner-requested `feature/phase-6-pdf-tools`. One writer: Codex, no delegation. This checkpoint opens one Draft PR targeting main; resolve actual commit/PR/checks from this branch. Do not merge or begin Phase 7.
+- Added qpdf 12.4.2 official hash/size-pinned portable acquisition and app-local locator; PdfPig 0.1.16 and PDFiumCore/non-V8 PDFium 157.0.8100 NuGet pins + content-hash lock. Windows x64 native DLL is SHA-256 pinned, package-local and explicitly resolved. No runtime download/global install. Engine licenses/security/packaging boundaries and sources in `docs/phase-6-pdf-validation.md`.
+- Backend implements actual strict inspection/action/encryption screening, native page loading, merge/extract/reorder/splits, 150/300-DPI PNG rendering, selected text extraction, independent page-operation/raster fingerprint verification, source preservation and no-overwrite staging. Multiple files publish as one complete new results-directory rename, not a sequence of partially visible final files. PDFium/PdfPig run as no-window owned children through existing ProcessRunner; optional job committed-memory limit defaults off for previous engines. UI is not enabled/added yet.
+- Actual local restore/Release build passed; full suite **435 passed / 0 failed / 0 skipped**, 1 min 16 s, with pinned real FFmpeg/Pandoc/qpdf configured. This includes all previous 425 tests and 10 new real PDF/grammar cases. Initial worker StartupUri=null failure was reproduced/corrected; subsequent native hash/resolver and full suite passed. NuGet transitive audit found no known vulnerable packages in current source (not proof of native safety). Formatting/diff and CI resolve on pushed checkpoint.
+- Still required for full Phase 6: bilingual PDF ViewModel/view/navigation and five-engine busy/close handling; expanded security/resource/failure/race/cancellation tests; proper Arabic/English/mixed font/table fixtures and text-order evaluation; crop/rotation/300-DPI verification; actual Windows GUI + independent viewer/image review; final docs/screenshots/quality gate and both CI events. **Do not call Phase 6 complete or claim GUI/Arabic verification.** Backend test coverage at this checkpoint is deliberately not the full required acceptance matrix.
+- Preserve pre-existing untracked `src/OrbitConvert.App/OrbitConvert.App_dcgdz3wr_wpftmp.csproj`. Generated/previous test artifacts are ignored and untouched. AGENTS.md/roadmap unchanged. No application rename, OCR, PDF-to-Word, Office-to-PDF, batch queue, installer, security change or release. Continue the existing branch/PR; do not restart or create another Phase 6 PR.
+
+---
+
 ## 2026-10-22 — Codex: final Phase 5 Windows cancellation QA
 
 - Verified PR #12 merged into main **c26f170a46b441d7ca23bd23dde7b1c8742aace3**, fetched and fast-forwarded local main. Tested that merged source, not an unmerged implementation. No confirmed application defect was found; **no production code, dependency, workflow or security setting was changed**. Branch `codex/phase-5-final-qa` contains only this handoff and the appended validation evidence; its documentation-only Draft PR targets main and must remain unmerged. Resolve its commit/PR from this branch rather than the historical Phase 5 PR below.
