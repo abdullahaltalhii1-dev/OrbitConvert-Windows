@@ -361,6 +361,7 @@
   <data name="PdfWorking" xml:space="preserve"><value>تجري معالجة نسخ خاصة، وتبقى الأصول دون تغيير.</value></data>
   <data name="PdfCancelling" xml:space="preserve"><value>جارٍ إيقاف العملية التابعة وانتظار التنظيف…</value></data>
   <data name="PdfSuccess" xml:space="preserve"><value>اكتملت عملية PDF، وحُفظ المخرج الجديد وتم التحقق منه.</value></data>
+  <data name="PdfTextSavedReview" xml:space="preserve"><value>حُفظ النص بترميز UTF-8. راجعه قبل الاستخدام: قد ينعكس ترتيب العربية وتتداخل نصوص الجداول والأعمدة. التحقق من الملف لا يضمن صحة ترتيب القراءة.</value></data>
   <data name="PdfUnexpectedError" xml:space="preserve"><value>تعذر إكمال عملية PDF. راجع المصادر والوجهة.</value></data>
   <data name="PdfCleanupFailed" xml:space="preserve"><value>لم يتأكد التنظيف أو توقف العملية. قد يبقى عنصر مؤقت تابع للعملية.</value></data>
   <data name="PdfCancelToClose" xml:space="preserve"><value>تجري عملية PDF. هل تريد إلغاءها وانتظار التنظيف ثم الإغلاق؟ اختر «لا» لمواصلة الانتظار.</value></data>

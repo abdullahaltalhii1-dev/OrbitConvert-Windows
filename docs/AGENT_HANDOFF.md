@@ -4,6 +4,17 @@ Shared notes between coding assistants (Codex, Claude). **Read the newest entry 
 
 ---
 
+## 2026-10-22 — Codex: preserved PDF QA checkpoint before Arabic correction
+
+- Same `feature/phase-6-pdf-tools` / Draft PR #14. Preserves the previously uncommitted safety tests, bilingual text-review status, WPF selection-binding regression and two actual screenshots. No reset, merge, new PR or Phase 7. Exact checkpoint SHA/checks resolve from GitHub; prior pushed base was `043a29e`.
+- Recovered the completed `artifacts/phase-6-pdf/test-results/phase6-qa-final.trx`: **470 passed / 0 failed / 0 skipped**. All three new safety cases passed (unexpected actual worker exit, locked owned temporary file cleanup warning, real filesystem file-count guard with injected runner). Prior restore/Release build passed with zero warnings/errors; current formatting/diff checks passed. This is local evidence, not new CI evidence until this checkpoint is pushed.
+- Previous actual GUI QA: shaped three-page Arabic/mixed PDF, split pages 1–2, reorder 3,1, 150-DPI PNG export and text extraction. Poppler independently rendered references/reordered output; all corresponding pages/PNGs were visually inspected. Arabic visuals passed, but extracted Unicode was reversed/presentation-form Arabic; generic file success now warns explicitly in both languages. **Arabic correction remains the highest-priority blocker**, not solved by the warning.
+- Actual active-inspection Cancel passed: qpdf 44788 under app 41820 observed running; exact `.orbitconvert-pdf-3c4f31ae918f41fdae27819de9a94873` removed after Cancel. Close No left native worker 27804 running; subsequent Yes closed the app/children and removed `.orbitconvert-pdf-adc3b87a6fe24124a6ef840b3e005729`. Generated dense source SHA-256 stayed `FD6A90AAFC4585290329048C829116DB5EA52BA68843DC7ED56750C47A278E86`. This proves inspection-stage behavior, not every rendering/publishing-stage timing. Earlier too-late Cancel completed normally and is not counted as cancellation success.
+- Browser-viewer GUI interaction ended on the tool's URL-confidence restriction; no bypass or subsequent UI input. Independent interactive viewer check remains owner-verifiable; Poppler render review is separate evidence. Actual screenshots: `docs/screenshots/phase-6-png-ui-success.jpg`, `phase-6-arabic-light-pdf.jpg` (the latter showed a possibly transient blank mode label; actual WPF language-switch selection regression passed, no speculative production fix).
+- Owner now explicitly defers manual **125%/150% DPI to Phase 9**; not passed and not alone a Phase 6 blocker. Do not change system scaling. Manual minimum-size unverified; automated logical-size layout passed. Preserve user untracked `src/OrbitConvert.App/OrbitConvert.App_dcgdz3wr_wpftmp.csproj`. No security settings changed. Next: fix ordinary Arabic extraction using actual Unicode assertions, finish focused validation/full gate and final two CI events on PR #14. Do not claim full acceptance while significant Arabic defects remain.
+
+---
+
 ## 2026-10-22 — Codex: Phase 6 real PDF workspace checkpoint (NOT complete)
 
 - Continue **the same** `feature/phase-6-pdf-tools` / **Draft PR #14** https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/pull/14. Based on backend checkpoint `1eb3f87d65b33df2b997cbb8a1b959cbc1ca39b4`; this entry ships in the next checkpoint, so resolve its exact HEAD/checks from live Git/GitHub. Main remains merged PR #13 `6fafd378b1d4941f442b75fe322322e8076dcbe9`. No delegation, merge, new PR, release or Phase 7.

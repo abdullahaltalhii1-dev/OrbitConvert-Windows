@@ -262,7 +262,7 @@ public static class LocalizationKeys
         "PdfSource", "PdfSourceHelp", "PdfAddMerge", "PdfMergeOrder", "PdfMoveUp", "PdfMoveDown", "PdfInspect", "PdfPageCount", "PdfMetadata", "PdfNotEncrypted",
         "PdfPageInfo", "PdfLandscape", "PdfPortrait", "PdfSquare", "PdfSplitMode", "PdfSplitExtract", "PdfSplitIndividual", "PdfSplitBoundaries", "PdfPageSelection",
         "PdfPagesHelp", "PdfSequenceHelp", "PdfBoundariesHelp", "PdfDpi", "PdfPolicy", "PdfDestination", "PdfNewFolder", "PdfFolderFilter", "PdfOutputFilter",
-        "PdfStart", "PdfCancel", "PdfProgress", "PdfTextPreview", "PdfIdle", "PdfReady", "PdfWorking", "PdfCancelling", "PdfSuccess", "PdfUnexpectedError",
+        "PdfStart", "PdfCancel", "PdfProgress", "PdfTextPreview", "PdfIdle", "PdfReady", "PdfWorking", "PdfCancelling", "PdfSuccess", "PdfTextSavedReview", "PdfUnexpectedError",
         "PdfCleanupFailed", "PdfCancelToClose", "PdfStageInspecting", "PdfStageProcessing", "PdfStageRendering", "PdfStageExtracting", "PdfStageVerifying", "PdfStageCompleted",
         "PdfErrorUnreadableInput", "PdfErrorInvalidPdf", "PdfErrorEncrypted", "PdfErrorUnsafeContent", "PdfErrorTooLarge", "PdfErrorInvalidSelection", "PdfErrorDuplicateInput",
         "PdfErrorToolsUnavailable", "PdfErrorToolsIncompatible", "PdfErrorDestinationExists", "PdfErrorInvalidDestination", "PdfErrorNoText", "PdfErrorOutputValidationFailed",

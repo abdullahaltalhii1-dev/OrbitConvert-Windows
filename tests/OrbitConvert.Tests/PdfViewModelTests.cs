@@ -73,6 +73,19 @@ public sealed class PdfViewModelTests
         foreach (var error in Enum.GetValues<PdfError>().Where(x => x != PdfError.None))
         { Assert.True(localization.HasTranslation("PdfError" + error, AppLanguage.Arabic)); Assert.True(localization.HasTranslation("PdfError" + error, AppLanguage.English)); }
     }
+    [Fact]
+    public async Task TextSaved_DoesNotClaimVerifiedArabicReadingOrder_InEitherLanguage()
+    {
+        var localization = new LocalizationService(new TestLanguagePreferenceStore());
+        var model = Create(new Stub(), localization); model.ModeIndex = 4; model.SelectedFile = First;
+        await model.InspectCommand.ExecuteAsync(); model.SetDestination(@"C:\new.txt"); await model.StartCommand.ExecuteAsync();
+        Assert.NotEmpty(model.CompletedPath);
+        Assert.Contains("may be reversed", model.StatusMessage);
+        Assert.DoesNotContain("saved and verified", model.StatusMessage);
+        localization.ChangeLanguage(AppLanguage.Arabic);
+        Assert.Contains("ينعكس", model.StatusMessage);
+        Assert.Contains("لا يضمن", model.StatusMessage);
+    }
     private static PdfViewModel Create(Stub service, LocalizationService? localization = null) => new(new ObservableCollection<SelectedFileItem> { First, Second }, service, localization ?? new(new TestLanguagePreferenceStore()));
     private sealed class Stub : IPdfService
     {

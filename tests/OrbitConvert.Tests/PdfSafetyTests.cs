@@ -226,6 +226,68 @@ public sealed class PdfSafetyTests(Xunit.Abstractions.ITestOutputHelper log) : I
         Assert.True(runner.Worker!.HasExited); Assert.False(Directory.Exists(runner.Workspace));
         Assert.False(File.Exists(PathFor("timeout.pdf"))); Assert.Equal(before, File.ReadAllBytes(source));
     }
+    [Fact]
+    public async Task UnexpectedOwnedWorkerExit_IsNotSuccess_AndCleansWorkspace()
+    {
+        var source = Fixture(count: 180); var before = File.ReadAllBytes(source);
+        Process? owned = null; string? workspace = null; var ready = false;
+        var runner = new DelegateRunner(async (request, token) =>
+        {
+            if (request.Arguments[0] != "--pdf-worker") { return await new ProcessRunner().RunAsync(request, token); }
+            workspace = Path.GetDirectoryName(request.Arguments[1]);
+            var actual = new ProcessRunner(process => { var started = process.Start(); if (started) { owned = Process.GetProcessById(process.Id); } return started; });
+            return await actual.RunAsync(request with { StandardOutputLine = line => { if (line == "pdf-worker-ready") { ready = true; owned!.Kill(entireProcessTree: true); } } }, token);
+        });
+        try
+        {
+            var result = await new PdfService(new QpdfLocator(), runner).ExecuteAsync(new(PdfOperation.Extract, [source], PathFor("crash.pdf")));
+            Assert.True(ready); Assert.True(owned!.HasExited); Assert.False(result.IsSuccess); Assert.False(result.CleanupFailed);
+            Assert.False(File.Exists(PathFor("crash.pdf"))); Assert.False(Directory.Exists(workspace)); Assert.Equal(before, File.ReadAllBytes(source));
+        }
+        finally { owned?.Dispose(); }
+    }
+    [Fact]
+    public async Task LockedOwnedTemporaryFile_ReportsCleanupFailure_WithoutDeletingUnrelatedFiles()
+    {
+        var source = Fixture(); var before = File.ReadAllBytes(source); var unrelated = PathFor("keep.txt"); File.WriteAllText(unrelated, "user data");
+        FileStream? held = null; string? workspace = null;
+        var runner = new DelegateRunner(async (request, token) =>
+        {
+            var result = await new ProcessRunner().RunAsync(request, token);
+            if (request.Arguments[0] == "--pdf-worker" && result.Succeeded)
+            {
+                workspace = Path.GetDirectoryName(request.Arguments[1]);
+                held = new FileStream(Path.Combine(workspace!, "locked-test.tmp"), FileMode.CreateNew, FileAccess.Write, FileShare.None);
+            }
+            return result;
+        });
+        try
+        {
+            var result = await new PdfService(new QpdfLocator(), runner).InspectAsync(source);
+            Assert.True(result.IsSuccess); Assert.True(result.CleanupFailed); Assert.True(Directory.Exists(workspace));
+            Assert.Equal(before, File.ReadAllBytes(source)); Assert.Equal("user data", File.ReadAllText(unrelated));
+        }
+        finally { held?.Dispose(); if (workspace is not null && Directory.Exists(workspace)) { Directory.Delete(workspace, true); } }
+    }
+    [Fact]
+    public async Task ActualWorkspaceFileCountGuard_StopsAtBudget_AndCleansOwnedData()
+    {
+        var source = Fixture(); var before = File.ReadAllBytes(source); string? workspace = null; var stopped = false;
+        var runner = new DelegateRunner(async (request, token) =>
+        {
+            if (request.Arguments[0] == "--version") { return await new ProcessRunner().RunAsync(request, token); }
+            workspace = Path.GetDirectoryName(request.Arguments[^1]);
+            for (var i = 0; i < 1201; i++) { using var file = File.Create(Path.Combine(workspace!, $"budget-{i:D4}.tmp")); }
+            try { await Task.Delay(TimeSpan.FromSeconds(10), token); }
+            catch (OperationCanceledException) { stopped = true; }
+            return new ProcessRunResult(ProcessOutcome.Cancelled, -1, "", "");
+        });
+        var result = await new PdfService(new QpdfLocator(), runner).ExecuteAsync(new(PdfOperation.Extract, [source], PathFor("budget.pdf")));
+        Assert.True(stopped); Assert.Equal(PdfError.TooLarge, result.Error); Assert.False(result.CleanupFailed);
+        Assert.False(Directory.Exists(workspace)); Assert.False(File.Exists(PathFor("budget.pdf"))); Assert.Equal(before, File.ReadAllBytes(source));
+    }
+    private sealed class DelegateRunner(Func<ProcessRunRequest, CancellationToken, Task<ProcessRunResult>> run) : IProcessRunner
+    { public Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken token) => run(request, token); }
     private sealed class ObservedWorker(CancellationTokenSource? cancel) : IProcessRunner, IDisposable
     {
         public bool NativeReady { get; private set; }

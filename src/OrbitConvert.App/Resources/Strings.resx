@@ -362,6 +362,7 @@
   <data name="PdfWorking" xml:space="preserve"><value>Processing private copies. Originals remain unchanged.</value></data>
   <data name="PdfCancelling" xml:space="preserve"><value>Stopping the owned process and waiting for cleanup…</value></data>
   <data name="PdfSuccess" xml:space="preserve"><value>PDF operation completed. New output saved and verified.</value></data>
+  <data name="PdfTextSavedReview" xml:space="preserve"><value>UTF-8 text saved. Review it before use: Arabic reading order may be reversed and table or column text may be joined. File validation does not verify reading order.</value></data>
   <data name="PdfUnexpectedError" xml:space="preserve"><value>The PDF operation could not be completed. Review the inputs and destination.</value></data>
   <data name="PdfCleanupFailed" xml:space="preserve"><value>Cleanup or process termination was not confirmed. An operation-owned temporary item may remain.</value></data>
   <data name="PdfCancelToClose" xml:space="preserve"><value>A PDF operation is running. Cancel, wait for cleanup, then close? Choose No to keep waiting.</value></data>

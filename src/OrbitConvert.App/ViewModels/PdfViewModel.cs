@@ -143,7 +143,7 @@ public sealed class PdfViewModel : INotifyPropertyChanged
         {
             var progress = new Progress<PdfProgress>(value => { if (operation == _operation && IsBusy) { _stage = value.Stage; Notify(nameof(StageText)); } });
             var result = await _service.ExecuteAsync(request, progress, _cancellation!.Token);
-            _status = result.IsSuccess ? "PdfSuccess" : "PdfError" + result.Error;
+            _status = result.IsSuccess ? request.Operation == PdfOperation.Text ? "PdfTextSavedReview" : "PdfSuccess" : "PdfError" + result.Error;
             _cleanupFailed = result.CleanupFailed; _preview = result.TextPreview;
             _completed = result.IsSuccess ? string.Join(Environment.NewLine, result.Outputs!) : "";
         }
