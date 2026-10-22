@@ -64,6 +64,17 @@ public sealed class VideoBindingsTests
                 Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
                 Assert.Equal(3, operation.SelectedIndex);
                 Assert.Equal(3, model.Pdf.ModeIndex);
+                model.NavigateCommand.Execute(AppSection.Settings);
+                root.UpdateLayout(); Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                model.Localization.ChangeLanguage(AppLanguage.Arabic);
+                Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                model.NavigateCommand.Execute(AppSection.Pdf);
+                root.Measure(new Size(1120, 720)); root.Arrange(new Rect(0, 0, 1120, 720)); root.UpdateLayout();
+                Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                operation = Descendants(root).OfType<ComboBox>().Single(x =>
+                    BindingOperations.GetBindingExpression(x, ComboBox.SelectedIndexProperty)?.ParentBinding.Path.Path == "Pdf.ModeIndex");
+                Assert.Equal(3, operation.SelectedIndex);
+                Assert.NotNull(operation.SelectedItem);
                 window.Close();
                 app.Shutdown();
                 Assert.Empty(listener.Errors);

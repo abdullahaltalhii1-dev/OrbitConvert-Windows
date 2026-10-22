@@ -70,3 +70,64 @@ Manual Cancel during active qpdf inspection removed the exact owned workspace; C
 Actual Arabic RTL/Dark and Light, English LTR/Dark PDF controls, default/maximized sizes and scrolling were observed. Exported actual WPF screenshots: `screenshots/phase-6-png-ui-success.jpg`, `screenshots/phase-6-arabic-light-pdf.jpg`. The apparent blank mode label after language change was not reproduced by the actual WPF binding regression; no speculative fix was made. Manual minimum-size remains unverified. Interactive independent browser viewing was blocked by the computer-use tool's URL-confidence policy; no bypass or alternative UI automation was attempted. Owner can open the ignored generated outputs locally for that remaining check. Independent Poppler rendering and image inspection were completed and are distinct from an interactive viewer pass.
 
 **Owner decision: manual 125% and 150% Windows DPI checks are deferred to Phase 9, not passed and not alone a Phase 6 acceptance blocker.** Do not change system scaling. Arabic paragraph correction, final quality gate and final pushed-SHA CI remain required. PR #14 stays Draft and unmerged.
+
+## Finalization checkpoint — Arabic correction and acceptance evidence (2026-10-22)
+
+This section supersedes earlier pending-Arabic/GUI notes; historical results above are retained. Phase 6 is submitted for technical/owner review, **not counted as merged or formally accepted**. Same branch/Draft PR #14, no Phase 7 or system/security changes.
+
+### Root cause and narrowly scoped fixes
+
+The old PdfPig ContentOrderTextExtractor result already contained reversed Arabic/presentation forms in the saved UTF-8 bytes. It was not caused by WPF rendering or UTF-8 encoding. The PDF's visually ordered glyph stream/ToUnicode/ActualText mapping and extraction order combined to produce the defect. Switching PdfPig UseActualText on alone recovered base Unicode but still reversed words. A real trial of the already bundled PDFium text API also returned inconsistent word order, so it was **not** adopted as a misleading fallback.
+
+`PdfTextReadingOrder` uses PdfPig's official ActualText support only during text extraction, reconstructs horizontal visual lines from glyph baselines, then uses the supported Windows ICU **inverse bidi index map** on atomic glyph replacements. It does not reverse arbitrary strings or split lam-alef/combining/surrogate sequences. PdfPig's zero-advance ActualText mark plus empty-base placeholder is anchored to that base's baseline. Latin/number runs retain their order; simple wide-gap cells are separately reordered and tab-delimited. Non-Arabic pages retain the existing extractor. Source/inspection fingerprints, qpdf/PDFium policies, no-overwrite publication, worker isolation and quotas are unchanged.
+
+No NuGet dependency changed. This PDF-specific correction uses the **OS-supplied ICU C API available on Windows 11**, loaded from System32 only, not downloaded/bundled or resolved beside an input file. Native handles and buffers are local and released in finally; counts, native errors, maps and text sizes are checked inside the existing memory/deadline-bounded worker. Documentation: [Microsoft Windows ICU](https://learn.microsoft.com/en-us/windows/win32/intl/international-components-for-unicode--icu-), [official ICU bidi API / inverse maps](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ubidi_8h.html), [PdfPig layout/letter-position API](https://github.com/UglyToad/PdfPig). No custom PDF parser, replacement engine, OCR, dependency upgrade or general architecture rewrite.
+
+Actual Windows language switching also confirmed a blank operation label: after Settings changed the language, the unloaded PDF view could retain SelectedIndex while SelectedItem became null. The focused actual WPF regression reproduced this failure before the fix. Stable localized mode/split Choice objects now update labels without replacing ItemsSource; the same regression passes. No speculative unrelated UI refactoring.
+
+### Genuine Arabic regression evidence
+
+Checked-in original test input: `tests/OrbitConvert.Tests/TestData/Pdf/arabic-layout.html` and its 116,653-byte selectable three-page PDF, SHA-256 `357A8D68287C95831DF6D3E468F5E1D2D84241BD7A4CF57C1CAF0B90E92F8BD1`. Provenance/fonts/reproduction and limitations are next to the fixture. It covers multiple fonts, heading, ordinary paragraphs, wrapping, lists, diacritics, Arabic and Western digits, parentheses/question mark, RTL and LTR mixed lines, table cells, and a final English landscape page. All three independent Poppler reference renders were visually inspected; content is properly shaped and readable. Local HTML browser printing only authored the fixture; it is not claimed as interactive PDF-viewer validation or an app conversion feature.
+
+Before correction, the actual worker tests failed on both Arabic pages (English page passed). After correction all six new cases pass: three selected-page Unicode/file/preview cases, one actual five-capability structural/PNG/source/collision case, and two glyph-enumeration-order cases using actual PdfPig glyphs. The tests assert exact logical strings and Unicode code points, not just Arabic presence. Examples actually extracted:
+
+```text
+اختبار الصفحة العربية الأولى
+مرحبا بالعالم. هذه فقرة عربية فعلية لاختبار استخراج النص وترتيب القراءة.
+الأرقام: ١٢٣ و ٤٥٦ و 789، وعلامات الترقيم: (قوسان)، سؤال؟
+مَرْحَبًا بِالْعَالَمِ. لا لإتلاف الملفات؛ نعم للحفاظ على الأصول.
+هذا سطر عربي مع English words ورقم 2026 ورقم ١٢٣.
+English before نص عربي and after 42.
+المنتج<TAB>العدد<TAB>الوصف
+قلم<TAB>3<TAB>Mixed text
+```
+
+`مرحبا` is asserted as U+0645 U+0631 U+062D U+0628 U+0627. Saved output is strict UTF-8; source hashes and owned cleanup are asserted. Rotated Arabic, multi-column reading order, ambiguous line direction, merged/closely spaced tables and missing/incorrect Unicode maps remain **real limitations**, not universally solved. Pure visual PDF data is not uniquely reversible into semantic text. Retained bilingual review warnings explicitly avoid claiming otherwise. No significant ordinary-paragraph reversal remains on the tested fixture; wider real-world PDF coverage still warrants technical review.
+
+### Actual functionality and Windows UI
+
+- Existing actual GUI merge evidence retained: ordered two-source merge, five pages. Earlier actual Arabic GUI Split 1–2, Reorder 3,1, three 150-DPI PNGs and text extraction are retained; the initial text failure is superseded by the corrected run below. New real-engine regression reopens the Arabic split/reorder/merge outputs and checks count/orientation/first-page content, decodes PNGs, preserves originals and refuses a pre-existing destination. Existing safety tests cover invalid/corrupt/encrypted/active input, publish races, no-text, native assets, quotas, cancellation/deadline and cleanup failure.
+- After the owner asked to retry GUI testing, OrbitConvert launched and normal controls worked without changing Norton. Native Browse selected the checked-in fixture; Text mode explicitly inspected three portrait/landscape pages, saved a **new** `artifacts/phase-6-pdf/gui/نص عربي مصحح.txt`, and displayed the corrected Arabic/diacritics/mixed text. The actual saved file matched the logical text above; source SHA-256 stayed identical. Arabic RTL/Dark and Light, English LTR/Light, navigation, warning/status and text scrolling were observed. Actual screenshots: `screenshots/phase-6-arabic-text-corrected-dark.jpg` and `screenshots/phase-6-arabic-text-corrected-light.jpg`. The mode-label defect observed during this switch was subsequently fixed and regression-tested; those text screenshots precede that option-identity-only fix.
+- The app's default-size PDF controls and maximized text preview were used. Existing real WPF binding/layout checks pass at minimum/default/large logical sizes in both languages. **Actual manual minimum-size remains unverified**; do not relabel logical-size tests as manual DPI/accessibility acceptance.
+- Independent native image viewing now **passed**: Microsoft Paint opened actual GUI-exported `صور عربية 150/page-0002.png`, 1240×1754 px, and showed readable connected Arabic, the English paragraph/mixed line and correct table orientation/content. No drawing/save operation was performed. Account information appeared in Paint's chrome, so no Paint screenshot is committed. Independent interactive **PDF browser** viewing remains blocked by the earlier URL-confidence restriction; no bypass or indirect UI workaround was used. PDFs/reordered pages were independently rendered with Poppler and visually inspected. Owner can additionally open `Split Arabic.pdf` / `Reordered Arabic.pdf` in their trusted PDF viewer.
+- Previous manually observed active-inspection Cancel / Close No / Close Yes, source hashes and exact workspace cleanup are preserved in the checkpoint above. Not unnecessarily repeated. Automated real native cancellation/timeout/fault tests passed again. This is not a claim to every rendering/publishing-stage cancellation timing.
+
+### Final local quality gate
+
+With real pinned qpdf, PDFium, FFmpeg and Pandoc present (media/document tests required, not skipped):
+
+| Command | Actual result |
+|---|---|
+| `dotnet restore OrbitConvert.slnx` | Passed |
+| `dotnet build OrbitConvert.slnx -c Release --no-restore` | Passed; 0 warnings, 0 errors |
+| `dotnet test OrbitConvert.slnx -c Release --no-build` | **476 passed / 0 failed / 0 skipped**, 54 s |
+| `dotnet format OrbitConvert.slnx --verify-no-changes` | Passed |
+| `git diff --check` | Passed |
+
+Final local TRX: ignored `artifacts/phase-6-pdf/test-results/phase6-acceptance-final.trx`. Six new Arabic cases plus all 470 preserved regressions passed, including the three fault/temp/cleanup cases and the strengthened actual WPF language-navigation test. An earlier formatting check found LF in the two new C# files; scoped formatting corrected line endings and the final verification passed. The intentionally demonstrated old Arabic/binding failures were fixed; they are not hidden or counted as passing tests. Two final GitHub push/PR CI runs must be checked at the **final pushed SHA**, not inferred from `dc966e3`'s already successful two runs or older 466-test CI.
+
+### Acceptance boundaries and project progress
+
+Manual **125%/150% DPI remains deferred to Phase 9 by the owner**, not passed and not alone a Phase 6 blocker. No display/security settings were changed. Outstanding owner checks: optional trusted interactive PDF-viewer pass, manual minimum-size/accessibility expansion and review of documented complex-text/native/non-sandbox/redistribution boundaries. Existing encrypted/active/form/signature rejection, exact owned cleanup and no-overwrite guarantees are unchanged. No universal hostile-document containment, OS disk quota, licensing sign-off or final installer is promised.
+
+Against the approved v3.0 stage count: **8 of 15 stages merged** (0, 1.1, 1.2, 1.3, 2, 3, 4, 5), confirmed against merged PRs #1–#13. Phase 2 sub-checkpoints count as one roadmap stage; Phase 5 reflects the approved tested Pandoc matrix, not a claim that every planned LibreOffice/PDF pipeline exists. **Phase 6 is in review, not counted complete until owner review/merge.** Phases 7–12 are future work; 10–11 are optional/separately authorized. The 8/15 (~53%) count is a planning indicator, not an effort estimate. No Phase 7, batch queue, installer, rename, shell/radial integration or public release was begun. PR #14 remains Draft and must not be auto-merged.

@@ -69,7 +69,7 @@ public sealed class PdfViewModelTests
         await model.InspectCommand.ExecuteAsync(); model.SetDestination(@"C:\new.txt"); await model.StartCommand.ExecuteAsync();
         Assert.True(model.HasCleanupWarning); localization.ChangeLanguage(AppLanguage.Arabic);
         Assert.Contains("توقف", model.StatusMessage); Assert.Contains("تنظيف", model.StatusMessage);
-        Assert.Contains("دمج", model.ModeLabels[0]);
+        Assert.Contains("دمج", model.ModeOptions[0].Label);
         foreach (var error in Enum.GetValues<PdfError>().Where(x => x != PdfError.None))
         { Assert.True(localization.HasTranslation("PdfError" + error, AppLanguage.Arabic)); Assert.True(localization.HasTranslation("PdfError" + error, AppLanguage.English)); }
     }

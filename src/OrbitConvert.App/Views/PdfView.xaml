@@ -23,7 +23,7 @@
             <TextBlock Margin="0,7,0,20" Style="{StaticResource BodyTextStyle}" Text="{Binding Localization[PdfDescription]}" />
             <Border Style="{StaticResource CardBorderStyle}"><StackPanel>
                 <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[PdfOperation]}" />
-                <ComboBox Margin="0,12,0,12" Style="{StaticResource ImageComboBoxStyle}" ItemsSource="{Binding Pdf.ModeLabels}" SelectedIndex="{Binding Pdf.ModeIndex, Mode=TwoWay}"
+                <ComboBox Margin="0,12,0,12" Style="{StaticResource ImageComboBoxStyle}" ItemsSource="{Binding Pdf.ModeOptions}" DisplayMemberPath="Label" SelectedIndex="{Binding Pdf.ModeIndex, Mode=TwoWay}"
                           IsEnabled="{Binding Pdf.IsIdle}" AutomationProperties.Name="{Binding Localization[PdfOperation]}" />
                 <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[PdfSourceHelp]}" />
                 <ComboBox Margin="0,12,0,0" Style="{StaticResource ImageSourceComboBoxStyle}" ItemsSource="{Binding FileIntake.SelectedFiles}"
@@ -53,7 +53,7 @@
                 </ScrollViewer>
             </StackPanel></Border>
             <Border Margin="0,18,0,0" Style="{StaticResource CardBorderStyle}"><StackPanel>
-                <ComboBox Margin="0,0,0,12" Style="{StaticResource ImageComboBoxStyle}" ItemsSource="{Binding Pdf.SplitLabels}" SelectedIndex="{Binding Pdf.SplitModeIndex, Mode=TwoWay}"
+                <ComboBox Margin="0,0,0,12" Style="{StaticResource ImageComboBoxStyle}" ItemsSource="{Binding Pdf.SplitOptions}" DisplayMemberPath="Label" SelectedIndex="{Binding Pdf.SplitModeIndex, Mode=TwoWay}"
                           IsEnabled="{Binding Pdf.IsIdle}" Visibility="{Binding Pdf.IsSplit, Converter={StaticResource BoolVisibility}}" AutomationProperties.Name="{Binding Localization[PdfSplitMode]}" />
                 <StackPanel IsEnabled="{Binding Pdf.IsIdle}" Visibility="{Binding Pdf.ShowsPages, Converter={StaticResource BoolVisibility}}">
                     <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Pdf.SelectionHelp}" />

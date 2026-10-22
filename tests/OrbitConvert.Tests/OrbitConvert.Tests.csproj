@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OrbitConvert.App\OrbitConvert.App.csproj" />
+    <None Update="TestData\Pdf\arabic-layout.pdf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

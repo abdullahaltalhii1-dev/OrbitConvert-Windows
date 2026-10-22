@@ -8,7 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PDFiumCore;
 using UglyToad.PdfPig;
-using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
 namespace OrbitConvert.App.Services.Pdf;
 
@@ -35,7 +34,7 @@ internal static class PdfNativeWorker
             if (new FileInfo(source).Length > PdfLimits.InputBytes) { throw new PdfRejected(PdfError.TooLarge); }
             if (request.Action is not ("inspect" or "render" or "text")) { throw new PdfRejected(PdfError.InvalidSelection); }
             using var input = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var document = PdfDocument.Open(input, new ParsingOptions { UseLenientParsing = false });
+            using var document = PdfDocument.Open(input, new ParsingOptions { UseLenientParsing = false, UseActualText = request.Action == "text" });
             if (document.IsEncrypted) { throw new PdfRejected(PdfError.Encrypted); }
             if (document.NumberOfPages is < 1 or > PdfLimits.Pages) { throw new PdfRejected(PdfError.TooLarge); }
             if (request.Action == "text")
@@ -43,7 +42,7 @@ internal static class PdfNativeWorker
                 var text = new StringBuilder();
                 foreach (var index in ValidatePages(request.Pages, document.NumberOfPages))
                 {
-                    var pageText = ContentOrderTextExtractor.GetText(document.GetPage(index));
+                    var pageText = PdfTextReadingOrder.Extract(document.GetPage(index));
                     if ((long)text.Length + pageText.Length + 2 > PdfLimits.TextCharacters) { throw new PdfRejected(PdfError.TooLarge); }
                     text.AppendLine(pageText);
                 }

@@ -24,6 +24,8 @@ public sealed class PdfViewModel : INotifyPropertyChanged
     public PdfViewModel(ObservableCollection<SelectedFileItem> files, IPdfService service, LocalizationService localization)
     {
         Files = files; _service = service; _localization = localization;
+        ModeOptions = new[] { "Merge", "Split", "Reorder", "Render", "Text" }.Select(x => new Choice(localization, "PdfMode" + x)).ToArray();
+        SplitOptions = new[] { "Extract", "Individual", "Boundaries" }.Select(x => new Choice(localization, "PdfSplit" + x)).ToArray();
         InspectCommand = new(InspectAsync, () => IsIdle && Sources().Length > 0 && (!IsMerge || MergeFiles.Count >= 2));
         StartCommand = new(StartAsync, () => CanChooseDestination && _destination.Length > 0 && _completed.Length == 0);
         CancelCommand = new(() => { RequestCancellation(); return Task.CompletedTask; }, () => IsBusy && _cancellation is { IsCancellationRequested: false });
@@ -35,7 +37,7 @@ public sealed class PdfViewModel : INotifyPropertyChanged
         RemoveMergeCommand = new(_ => { if (IsIdle && MergeSelection is { } item) { MergeFiles.Remove(item); MergeSelection = MergeFiles.FirstOrDefault(); ChangedInputs(); } });
         MoveUpCommand = new(_ => Move(-1)); MoveDownCommand = new(_ => Move(1));
         files.CollectionChanged += (_, _) => { if (IsIdle) { Reconcile(); } };
-        localization.LanguageChanged += (_, _) => { Notify(nameof(ModeLabels)); Notify(nameof(SplitLabels)); Refresh(); };
+        localization.LanguageChanged += (_, _) => { foreach (var choice in ModeOptions.Concat(SplitOptions)) { choice.Refresh(); } Refresh(); };
     }
     public event PropertyChangedEventHandler? PropertyChanged;
     public ObservableCollection<SelectedFileItem> Files { get; }
@@ -58,8 +60,8 @@ public sealed class PdfViewModel : INotifyPropertyChanged
     public int Dpi { get => _dpi; set { if (IsIdle && value is 150 or 300 && value != _dpi) { _dpi = value; ChangedOptions(); } } }
     public int[] DpiOptions { get; } = [150, 300];
     public string PagesText { get => _pages; set { if (IsIdle && value != _pages) { _pages = value; ChangedOptions(); } } }
-    public string[] ModeLabels => new[] { "Merge", "Split", "Reorder", "Render", "Text" }.Select(x => _localization["PdfMode" + x]).ToArray();
-    public string[] SplitLabels => new[] { "Extract", "Individual", "Boundaries" }.Select(x => _localization["PdfSplit" + x]).ToArray();
+    public IReadOnlyList<Choice> ModeOptions { get; }
+    public IReadOnlyList<Choice> SplitOptions { get; }
     public bool IsMerge => _mode == 0;
     public bool IsSplit => _mode == 1;
     public bool IsRender => _mode == 3;
@@ -173,4 +175,13 @@ public sealed class PdfViewModel : INotifyPropertyChanged
         InspectCommand.NotifyCanExecuteChanged(); StartCommand.NotifyCanExecuteChanged(); CancelCommand.NotifyCanExecuteChanged();
     }
     private void Notify([CallerMemberName] string? name = null) => PropertyChanged?.Invoke(this, new(name));
+
+    // Keep option identities stable while the view is unloaded in Settings. Replacing ItemsSource
+    // during language changes can leave WPF with SelectedIndex set but SelectedItem null.
+    public sealed class Choice(LocalizationService localization, string key) : INotifyPropertyChanged
+    {
+        public string Label => localization[key];
+        public event PropertyChangedEventHandler? PropertyChanged;
+        internal void Refresh() => PropertyChanged?.Invoke(this, new(nameof(Label)));
+    }
 }
