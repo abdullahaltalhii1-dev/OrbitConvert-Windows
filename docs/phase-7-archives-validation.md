@@ -2,6 +2,8 @@
 
 Status: implementation submitted for owner review, **not final acceptance**. Manual active-operation Cancel and Close → No/Yes timing remain unverified; do not infer those passes from automated coverage or green CI. No Phase 8, merge, packaging or system security changes are authorized here.
 
+Delivery: [Draft PR #15](https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/pull/15), implementation `64ce50673165f017b992f3a7ac87b03a0680b802`. This documentation follow-up does not change the tested application. Final-SHA Push and PR CI results are reported on the PR after completion; at writing the initial two runs were still in progress. Keep Draft and do not merge without owner approval.
+
 ## Baseline and package decision
 
 PR #14 was merged as `8f5ef3fec922f75ad4d48aa568e792dc34f31bfe`; its main push run [39839020095](https://github.com/abdullahaltalhii1-dev/OrbitConvert-Windows/actions/runs/39839020095) succeeded. This branch is `feature/phase-7-archives`, one writer. Pre-existing untracked `src/OrbitConvert.App/OrbitConvert.App_dcgdz3wr_wpftmp.csproj` is preserved and excluded from delivery.
