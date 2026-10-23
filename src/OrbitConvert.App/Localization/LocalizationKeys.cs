@@ -267,5 +267,12 @@ public static class LocalizationKeys
         "PdfErrorUnreadableInput", "PdfErrorInvalidPdf", "PdfErrorEncrypted", "PdfErrorUnsafeContent", "PdfErrorTooLarge", "PdfErrorInvalidSelection", "PdfErrorDuplicateInput",
         "PdfErrorToolsUnavailable", "PdfErrorToolsIncompatible", "PdfErrorDestinationExists", "PdfErrorInvalidDestination", "PdfErrorNoText", "PdfErrorOutputValidationFailed",
         "PdfErrorCancelled", "PdfErrorTimedOut", "PdfErrorProcessTerminationFailed", "PdfErrorOutputFailure",
+        "NavArchives", "ArchiveTitle", "ArchiveDescription", "ArchiveOperation", "ArchiveModeExtract", "ArchiveModeCreateZip", "ArchiveModeCreateTar", "ArchiveModeRepackZip",
+        "ArchiveSource", "ArchiveSourceHelp", "ArchiveBrowse", "ArchiveAdd", "ArchiveChooseFolder", "ArchiveCreationFiles", "ArchiveCreationHelp", "ArchiveInspect", "ArchiveContents",
+        "ArchiveDirectory", "ArchiveBytes", "ArchiveSummary", "ArchiveCreationCount", "ArchivePolicy", "ArchiveNewFolder", "ArchiveDestination", "ArchiveFolderFilter", "ArchiveOutputFilter",
+        "ArchiveStart", "ArchiveCancel", "ArchiveProgress", "ArchiveIdle", "ArchiveReady", "ArchiveWorking", "ArchiveCancelling", "ArchiveSuccess", "ArchiveUnexpectedError", "ArchiveCleanupFailed", "ArchiveCancelToClose",
+        "ArchiveStageInspecting", "ArchiveStageCreating", "ArchiveStageExtracting", "ArchiveStageRepacking", "ArchiveStageVerifying", "ArchiveStageCompleted",
+        "ArchiveErrorUnreadableInput", "ArchiveErrorUnsupportedFormat", "ArchiveErrorEncrypted", "ArchiveErrorUnsafePath", "ArchiveErrorLinksNotSupported", "ArchiveErrorDuplicateEntry", "ArchiveErrorTooLarge", "ArchiveErrorInvalidArchive",
+        "ArchiveErrorInvalidSelection", "ArchiveErrorDestinationExists", "ArchiveErrorInvalidDestination", "ArchiveErrorOutputValidationFailed", "ArchiveErrorCancelled", "ArchiveErrorTimedOut", "ArchiveErrorProcessTerminationFailed", "ArchiveErrorOutputFailure",
     ];
 }

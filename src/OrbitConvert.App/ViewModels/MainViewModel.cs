@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
+using OrbitConvert.App.Services.Archives;
 using OrbitConvert.App.Services.Audio;
 using OrbitConvert.App.Services.Documents;
 using OrbitConvert.App.Services.Pdf;
@@ -18,6 +19,7 @@ public enum AppSection
     Audio,
     Documents,
     Pdf,
+    Archives,
     Settings,
 }
 
@@ -62,7 +64,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         LocalizationService localization,
         IAudioConversionService? audioService = null,
         IDocumentConversionService? documentService = null,
-        IPdfService? pdfService = null)
+        IPdfService? pdfService = null,
+        IArchiveService? archiveService = null)
     {
         Localization = localization ?? throw new ArgumentNullException(nameof(localization));
         Localization.LanguageChanged += (_, _) =>
@@ -77,7 +80,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         AudioConversion = new AudioConversionViewModel(FileIntake.SelectedFiles, audioService ?? new AudioConversionService(), Localization);
         DocumentConversion = new DocumentConversionViewModel(FileIntake.SelectedFiles, documentService ?? new DocumentConversionService(), Localization);
         Pdf = new PdfViewModel(FileIntake.SelectedFiles, pdfService ?? new PdfService(), Localization);
-        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion, DocumentConversion, Pdf })
+        Archives = new ArchiveViewModel(FileIntake.SelectedFiles, archiveService ?? new ArchiveService(), Localization);
+        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion, DocumentConversion, Pdf, Archives })
         {
             conversion.PropertyChanged += (_, args) =>
             {
@@ -87,6 +91,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 OnPropertyChanged(nameof(CanUseAudio));
                 OnPropertyChanged(nameof(CanUseDocuments));
                 OnPropertyChanged(nameof(CanUsePdf));
+                OnPropertyChanged(nameof(CanUseArchives));
             };
         }
 
@@ -143,6 +148,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsAudioSelected));
             OnPropertyChanged(nameof(IsDocumentsSelected));
             OnPropertyChanged(nameof(IsPdfSelected));
+            OnPropertyChanged(nameof(IsArchivesSelected));
             OnPropertyChanged(nameof(IsSettingsSelected));
         }
     }
@@ -197,11 +203,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public AudioConversionViewModel AudioConversion { get; }
     public DocumentConversionViewModel DocumentConversion { get; }
     public PdfViewModel Pdf { get; }
-    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
-    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
-    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
-    public bool CanUseDocuments => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && Pdf.IsIdle;
-    public bool CanUsePdf => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle;
+    public ArchiveViewModel Archives { get; }
+    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUseDocuments => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUsePdf => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Archives.IsIdle;
+    public bool CanUseArchives => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 
@@ -213,6 +221,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public bool IsDocumentsSelected => CurrentSection == AppSection.Documents;
     public bool IsPdfSelected => CurrentSection == AppSection.Pdf;
+    public bool IsArchivesSelected => CurrentSection == AppSection.Archives;
 
     public bool IsSettingsSelected => CurrentSection == AppSection.Settings;
 

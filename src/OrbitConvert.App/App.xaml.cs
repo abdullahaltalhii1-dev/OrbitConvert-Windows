@@ -6,6 +6,11 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
+        if (e.Args.Length == 2 && e.Args[0] == "--archive-worker")
+        {
+            Shutdown(Services.Archives.ArchiveWorker.Run(e.Args[1]));
+            return;
+        }
         if (e.Args.Length == 2 && e.Args[0] == "--pdf-worker")
         {
             Shutdown(Services.Pdf.PdfNativeWorker.Run(e.Args[1]));

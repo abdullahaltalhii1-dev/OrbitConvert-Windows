@@ -40,17 +40,20 @@ public sealed class VideoBindingsTests
                     {
                         model.NavigateCommand.Execute(section);
                         foreach (var pdfMode in section == AppSection.Pdf ? Enumerable.Range(0, 5) : [model.Pdf.ModeIndex])
-                        {
-                            model.Pdf.ModeIndex = pdfMode;
-                            foreach (var size in new[] { new Size(900, 620), new Size(1120, 720), new Size(1920, 1080) })
+                            foreach (var archiveMode in section == AppSection.Archives ? Enumerable.Range(0, 4) : [model.Archives.ModeIndex])
                             {
-                                root.Measure(size);
-                                root.Arrange(new Rect(size));
-                                root.UpdateLayout();
-                                Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
-                                Assert.Equal(pdfMode, model.Pdf.ModeIndex);
+                                model.Pdf.ModeIndex = pdfMode;
+                                model.Archives.ModeIndex = archiveMode;
+                                foreach (var size in new[] { new Size(900, 620), new Size(1120, 720), new Size(1920, 1080) })
+                                {
+                                    root.Measure(size);
+                                    root.Arrange(new Rect(size));
+                                    root.UpdateLayout();
+                                    Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                                    Assert.Equal(pdfMode, model.Pdf.ModeIndex);
+                                    Assert.Equal(archiveMode, model.Archives.ModeIndex);
+                                }
                             }
-                        }
                     }
                 }
                 model.NavigateCommand.Execute(AppSection.Pdf);
@@ -75,6 +78,15 @@ public sealed class VideoBindingsTests
                     BindingOperations.GetBindingExpression(x, ComboBox.SelectedIndexProperty)?.ParentBinding.Path.Path == "Pdf.ModeIndex");
                 Assert.Equal(3, operation.SelectedIndex);
                 Assert.NotNull(operation.SelectedItem);
+                model.NavigateCommand.Execute(AppSection.Archives); model.Archives.ModeIndex = 2;
+                root.UpdateLayout(); Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                var archiveChoice = Descendants(root).OfType<ComboBox>().Single(x =>
+                    BindingOperations.GetBindingExpression(x, ComboBox.SelectedIndexProperty)?.ParentBinding.Path.Path == "Archives.ModeIndex");
+                model.NavigateCommand.Execute(AppSection.Settings); model.Localization.ChangeLanguage(AppLanguage.English);
+                model.NavigateCommand.Execute(AppSection.Archives); root.UpdateLayout();
+                Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                Assert.Equal(2, archiveChoice.SelectedIndex); Assert.NotNull(archiveChoice.SelectedItem);
+                Assert.Contains(Descendants(archiveChoice).OfType<TextBlock>(), x => x.Text == model.Archives.ModeOptions[2].Label);
                 window.Close();
                 app.Shutdown();
                 Assert.Empty(listener.Errors);

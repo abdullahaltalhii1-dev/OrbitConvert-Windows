@@ -122,7 +122,9 @@ public sealed class ProcessRunner : IProcessRunner
         string? containmentError = null;
         try { job.Assign(process, _assignToJob); }
         catch (Win32Exception error) { containmentError = error.Message; }
-        process.StandardInput.Close(); // The tools never need interactive input.
+        // EOF releases the archive worker's pre-parser containment barrier. On failure,
+        // keep stdin open until the child is terminated; other tools need no interactive input.
+        if (containmentError is null) { process.StandardInput.Close(); }
 
         var lastActivity = Stopwatch.StartNew();
         var standardOutput = new BoundedText(request.StandardOutputLine is null ? MaximumCapturedChars : 0);

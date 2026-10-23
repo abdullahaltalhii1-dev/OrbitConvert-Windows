@@ -125,8 +125,9 @@ public sealed class VideoConversionViewModel : INotifyPropertyChanged
     public void RequestCancellation()
     {
         if (!IsBusy || _cancellation is not { IsCancellationRequested: false }) { return; }
-        _cancellation.Cancel();
         _statusKey = "VideoCancelling";
+        // Cancellation may complete the operation inline; never overwrite its final status.
+        _cancellation.Cancel();
         Refresh();
     }
 
