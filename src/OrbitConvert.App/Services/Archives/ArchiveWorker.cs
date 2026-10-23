@@ -12,6 +12,11 @@ internal static class ArchiveWorker
 {
     public static int Run(string requestPath)
     {
+        // The parent closes redirected stdin only after successful Windows job assignment.
+        // Do not open even request.json before containment; discard input without buffering it.
+        if (!Console.IsInputRedirected) { return 2; }
+        try { while (Console.In.Read() != -1) { } }
+        catch (IOException) { return 2; }
         string? response = null;
         ArchiveWorkerResponse result;
         var root = Path.GetDirectoryName(Path.GetFullPath(requestPath))!;
@@ -47,6 +52,9 @@ internal static class ArchiveWorker
             result = new(ArchiveError.None, inspection, hash);
         }
         catch (ArchiveRejected error) { result = new(error.Error); }
+        // InsufficientMemoryException derives from OutOfMemoryException. A fatal OS/runtime
+        // failure may still prevent a response; the parent must not infer a memory cause then.
+        catch (OutOfMemoryException) { result = new(ArchiveError.TooLarge); }
         catch (CryptographicException) { result = new(ArchiveError.Encrypted); }
         catch (Exception error) when (error is IOException or ArgumentException or InvalidOperationException or NotSupportedException or CryptographicException or OverflowException or SharpCompress.Common.SharpCompressException)
         { result = new(ArchiveError.InvalidArchive); }

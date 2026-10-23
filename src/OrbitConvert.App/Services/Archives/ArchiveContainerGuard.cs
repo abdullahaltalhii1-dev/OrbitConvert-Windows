@@ -35,7 +35,9 @@ internal static class ArchiveContainerGuard
         if (crc.Value != BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(8))) { throw new ArchiveRejected(ArchiveError.InvalidArchive); }
         var offset = BinaryPrimitives.ReadUInt64LittleEndian(header.AsSpan(12));
         var size = BinaryPrimitives.ReadUInt64LittleEndian(header.AsSpan(20));
-        // GHSA-7jcq-g98g-83v5: reject attacker-selected allocations before SharpCompress sees input.
+        // Bound the OUTER next-header allocation (GHSA-7jcq-g98g-83v5), independently of
+        // upstream's physical-range fix since 0.50.5. Internal encoded-header allocations
+        // are not covered here: parsing starts only after the worker's job quota is active.
         if (size > 1024 * 1024 || offset > (ulong)(input.Length - 32) || size > (ulong)(input.Length - 32) - offset)
         { throw new ArchiveRejected(ArchiveError.TooLarge); }
         if (offset + size != (ulong)(input.Length - 32)) { throw new ArchiveRejected(ArchiveError.InvalidArchive); }
