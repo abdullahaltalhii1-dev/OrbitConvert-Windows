@@ -1,0 +1,57 @@
+<UserControl x:Class="OrbitConvert.App.Views.BatchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer Style="{StaticResource PageScrollViewerStyle}">
+        <StackPanel MaxWidth="1100">
+            <TextBlock Style="{StaticResource EyebrowTextStyle}" Text="{Binding Localization[NavBatch]}" />
+            <TextBlock Margin="0,8,0,8" Style="{StaticResource PageTitleTextStyle}" Text="{Binding Localization[BatchTitle]}" />
+            <TextBlock Margin="0,0,0,20" Style="{StaticResource BodyTextStyle}" Text="{Binding Localization[BatchDescription]}" />
+            <Border Style="{StaticResource CardBorderStyle}"><StackPanel IsEnabled="{Binding Batch.IsIdle}">
+                <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Localization[BatchPreset]}" />
+                <ComboBox Margin="0,12,0,8" Style="{StaticResource ImageComboBoxStyle}" ItemsSource="{Binding Batch.PresetOptions}"
+                          SelectedIndex="{Binding Batch.PresetIndex, Mode=TwoWay}" AutomationProperties.Name="{Binding Localization[BatchPreset]}">
+                    <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Label}" /></DataTemplate></ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[BatchPresetHelp]}" />
+                <WrapPanel Margin="0,12,0,0">
+                    <Button Margin="0,0,8,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[BrowseFiles]}" Click="Browse_Click" />
+                    <Button Margin="0,0,8,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[ClearAll]}" Command="{Binding FileIntake.ClearFilesCommand}" />
+                    <Button Margin="0,0,8,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[BatchChooseFolder]}" Click="ChooseFolder_Click" />
+                </WrapPanel>
+                <TextBlock Margin="0,5,0,10" Style="{StaticResource CaptionTextStyle}" Text="{Binding Batch.DestinationFolder}" FlowDirection="LeftToRight" TextWrapping="Wrap" />
+                <Button HorizontalAlignment="Left" Style="{StaticResource PrimaryButtonStyle}" Content="{Binding Localization[BatchAdd]}" Command="{Binding Batch.AddCommand}" />
+                <TextBlock Margin="0,10,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding FileIntake.SelectedFileCountText}" />
+            </StackPanel></Border>
+            <Border Margin="0,18,0,0" Style="{StaticResource CardBorderStyle}"><StackPanel>
+                <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="{Binding Batch.Summary}" AutomationProperties.LiveSetting="Polite" />
+                <TextBlock Margin="0,8,0,12" Style="{StaticResource CaptionTextStyle}" Text="{Binding Localization[BatchListHelp]}" />
+                <ItemsControl ItemsSource="{Binding Batch.Jobs}"><ItemsControl.ItemTemplate><DataTemplate>
+                    <Border Margin="0,0,0,10" Padding="12" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource SurfaceElevatedBrush}">
+                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Text="{Binding FileName}" TextTrimming="CharacterEllipsis" FlowDirection="LeftToRight" ToolTip="{Binding Request.Source}" />
+                                <WrapPanel Margin="0,4,0,4"><TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding ModeLabel}" /><TextBlock Margin="12,0,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding FileType}" FlowDirection="LeftToRight" /></WrapPanel>
+                                <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding PlannedName}" TextTrimming="CharacterEllipsis" FlowDirection="LeftToRight" ToolTip="{Binding Destination}" />
+                                <TextBlock Margin="0,6,0,4" Foreground="{DynamicResource AccentBrush}" Text="{Binding StateLabel}" />
+                                <ProgressBar Height="6" Maximum="100" Value="{Binding ProgressPercent, Mode=OneWay}" IsIndeterminate="{Binding IsIndeterminate}" Foreground="{DynamicResource AccentBrush}" AutomationProperties.Name="{Binding StateLabel}" />
+                                <TextBlock Margin="0,6,0,0" Style="{StaticResource CaptionTextStyle}" Text="{Binding CancellationText}" />
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding ErrorText}" />
+                                <TextBlock Style="{StaticResource CaptionTextStyle}" Text="{Binding ResultPath}" TextWrapping="Wrap" FlowDirection="LeftToRight" />
+                            </StackPanel>
+                            <Button Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Top" Style="{StaticResource SecondaryButtonStyle}"
+                                    Content="{Binding DataContext.Localization[BatchCancelJob], RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Command="{Binding DataContext.Batch.CancelJobCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" IsEnabled="{Binding CanCancel}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+                <WrapPanel Margin="0,12,0,0">
+                    <Button Margin="0,0,8,8" Style="{StaticResource PrimaryButtonStyle}" Content="{Binding Localization[BatchStart]}" Command="{Binding Batch.StartCommand}" />
+                    <Button Margin="0,0,8,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[BatchCancelQueue]}" Command="{Binding Batch.CancelQueueCommand}" IsEnabled="{Binding Batch.IsBusy}" />
+                    <Button Margin="0,0,8,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[BatchRetry]}" Command="{Binding Batch.RetryCommand}" />
+                    <Button Margin="0,0,8,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[BatchClearCompleted]}" Command="{Binding Batch.ClearCompletedCommand}" />
+                    <Button Margin="0,0,0,8" Style="{StaticResource SecondaryButtonStyle}" Content="{Binding Localization[BatchClearErrors]}" Command="{Binding Batch.ClearErrorsCommand}" />
+                </WrapPanel>
+                <TextBlock Margin="0,10,0,0" Style="{StaticResource BodyTextStyle}" Text="{Binding Batch.StatusMessage}" AutomationProperties.LiveSetting="Polite" />
+            </StackPanel></Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

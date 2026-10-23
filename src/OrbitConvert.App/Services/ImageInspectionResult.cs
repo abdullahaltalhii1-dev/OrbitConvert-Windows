@@ -20,6 +20,7 @@ public enum ImageInspectionError
     OutputFailure,
     OutputValidationFailed,
     InvalidSettings,
+    Cancelled,
 }
 
 public sealed record ImageInspectionResult(ImageInspection? Inspection, ImageInspectionError Error)

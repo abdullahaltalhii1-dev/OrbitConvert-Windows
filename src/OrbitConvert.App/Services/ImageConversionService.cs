@@ -41,18 +41,24 @@ public sealed class ImageConversionService(IImageEngine engine) : IImageConversi
     }
 
     public async Task<ImageConversionResult> ConvertAsync(string sourcePath, string destinationPath, string outputFormat, ImageConversionOptions? options = null)
+        => await ConvertAsync(sourcePath, destinationPath, outputFormat, options, CancellationToken.None);
+
+    // Batch cancellation waits for bounded native calls, then checks before every next stage/publication.
+    // Existing interface/callers remain source compatible.
+    public async Task<ImageConversionResult> ConvertAsync(string sourcePath, string destinationPath, string outputFormat, ImageConversionOptions? options, CancellationToken token)
     {
-        await OperationGate.WaitAsync();
-        try { return await Task.Run(() => ConvertFile(sourcePath, destinationPath, outputFormat, options ?? new())); }
+        await OperationGate.WaitAsync(token);
+        try { return await Task.Run(() => ConvertFile(sourcePath, destinationPath, outputFormat, options ?? new(), token)); }
         finally { OperationGate.Release(); }
     }
 
-    private ImageConversionResult ConvertFile(string sourcePath, string destinationPath, string outputFormat, ImageConversionOptions options)
+    private ImageConversionResult ConvertFile(string sourcePath, string destinationPath, string outputFormat, ImageConversionOptions options, CancellationToken token)
     {
         string? ownedTemporaryPath = null;
         var result = new ImageConversionResult(ImageInspectionError.OutputFailure);
         try
         {
+            token.ThrowIfCancellationRequested();
             if (!options.IsValid) { return new(ImageInspectionError.InvalidSettings); }
             var source = Path.GetFullPath(sourcePath);
             var destination = Path.GetFullPath(destinationPath);
@@ -65,6 +71,7 @@ public sealed class ImageConversionService(IImageEngine engine) : IImageConversi
             using var input = OpenSource(source);
             var inspection = engine.Inspect(input);
             if (!inspection.IsSuccess) { return new(inspection.Error); }
+            token.ThrowIfCancellationRequested();
             input.Position = 0;
             var candidate = Path.Combine(Path.GetDirectoryName(destination)!, $".orbitconvert-{Guid.NewGuid():N}.tmp");
             ImageInspectionResult conversion;
@@ -77,6 +84,7 @@ public sealed class ImageConversionService(IImageEngine engine) : IImageConversi
             if (!conversion.IsSuccess) { result = new(conversion.Error); }
             else
             {
+                token.ThrowIfCancellationRequested();
                 using (var verification = new FileStream(candidate, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var verified = engine.ValidateOutput(verification, conversion.Inspection!);
@@ -84,11 +92,13 @@ public sealed class ImageConversionService(IImageEngine engine) : IImageConversi
                 }
                 if (result.IsSuccess)
                 {
+                    token.ThrowIfCancellationRequested();
                     File.Move(candidate, destination, overwrite: false);
                     ownedTemporaryPath = null;
                 }
             }
         }
+        catch (OperationCanceledException) { result = new(ImageInspectionError.Cancelled); }
         catch (IOException) when (File.Exists(destinationPath) || Directory.Exists(destinationPath))
         {
             result = new(ImageInspectionError.DestinationExists);

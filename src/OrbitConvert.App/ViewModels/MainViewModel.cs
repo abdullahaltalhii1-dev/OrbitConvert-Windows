@@ -5,6 +5,7 @@ using OrbitConvert.App.Localization;
 using OrbitConvert.App.Services;
 using OrbitConvert.App.Services.Archives;
 using OrbitConvert.App.Services.Audio;
+using OrbitConvert.App.Services.Batch;
 using OrbitConvert.App.Services.Documents;
 using OrbitConvert.App.Services.Pdf;
 using OrbitConvert.App.Services.Video;
@@ -20,6 +21,7 @@ public enum AppSection
     Documents,
     Pdf,
     Archives,
+    Batch,
     Settings,
 }
 
@@ -65,7 +67,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         IAudioConversionService? audioService = null,
         IDocumentConversionService? documentService = null,
         IPdfService? pdfService = null,
-        IArchiveService? archiveService = null)
+        IArchiveService? archiveService = null,
+        IBatchExecutor? batchExecutor = null)
     {
         Localization = localization ?? throw new ArgumentNullException(nameof(localization));
         Localization.LanguageChanged += (_, _) =>
@@ -81,17 +84,20 @@ public sealed class MainViewModel : INotifyPropertyChanged
         DocumentConversion = new DocumentConversionViewModel(FileIntake.SelectedFiles, documentService ?? new DocumentConversionService(), Localization);
         Pdf = new PdfViewModel(FileIntake.SelectedFiles, pdfService ?? new PdfService(), Localization);
         Archives = new ArchiveViewModel(FileIntake.SelectedFiles, archiveService ?? new ArchiveService(), Localization);
-        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion, DocumentConversion, Pdf, Archives })
+        Batch = new BatchViewModel(FileIntake.SelectedFiles, batchExecutor ?? new BatchExecutor(), Localization, () => CanUseBatch);
+        foreach (var conversion in new INotifyPropertyChanged[] { ImageConversion, VideoConversion, AudioConversion, DocumentConversion, Pdf, Archives, Batch })
         {
             conversion.PropertyChanged += (_, args) =>
             {
-                if (args.PropertyName != "IsBusy") { return; }
+                if (args.PropertyName != "IsBusy" && !(conversion == Batch && string.IsNullOrEmpty(args.PropertyName))) { return; }
                 OnPropertyChanged(nameof(CanUseImages));
                 OnPropertyChanged(nameof(CanUseVideo));
                 OnPropertyChanged(nameof(CanUseAudio));
                 OnPropertyChanged(nameof(CanUseDocuments));
                 OnPropertyChanged(nameof(CanUsePdf));
                 OnPropertyChanged(nameof(CanUseArchives));
+                OnPropertyChanged(nameof(CanUseBatch));
+                if (conversion != Batch) { Batch.NotifyExternalBusyChanged(); }
             };
         }
 
@@ -149,6 +155,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsDocumentsSelected));
             OnPropertyChanged(nameof(IsPdfSelected));
             OnPropertyChanged(nameof(IsArchivesSelected));
+            OnPropertyChanged(nameof(IsBatchSelected));
             OnPropertyChanged(nameof(IsSettingsSelected));
         }
     }
@@ -204,12 +211,15 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public DocumentConversionViewModel DocumentConversion { get; }
     public PdfViewModel Pdf { get; }
     public ArchiveViewModel Archives { get; }
-    public bool CanUseImages => VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
-    public bool CanUseVideo => ImageConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
-    public bool CanUseAudio => ImageConversion.IsIdle && VideoConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
-    public bool CanUseDocuments => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
-    public bool CanUsePdf => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Archives.IsIdle;
-    public bool CanUseArchives => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
+    public BatchViewModel Batch { get; }
+    private bool IsBatchSafe => Batch.IsIdle && !Batch.HasCleanupWarning;
+    public bool CanUseImages => IsBatchSafe && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUseVideo => IsBatchSafe && ImageConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUseAudio => IsBatchSafe && ImageConversion.IsIdle && VideoConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUseDocuments => IsBatchSafe && ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
+    public bool CanUsePdf => IsBatchSafe && ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Archives.IsIdle;
+    public bool CanUseArchives => IsBatchSafe && ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle;
+    public bool CanUseBatch => ImageConversion.IsIdle && VideoConversion.IsIdle && AudioConversion.IsIdle && DocumentConversion.IsIdle && Pdf.IsIdle && Archives.IsIdle;
 
     public bool IsWorkspaceSelected => CurrentSection == AppSection.Workspace;
 
@@ -222,6 +232,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public bool IsDocumentsSelected => CurrentSection == AppSection.Documents;
     public bool IsPdfSelected => CurrentSection == AppSection.Pdf;
     public bool IsArchivesSelected => CurrentSection == AppSection.Archives;
+    public bool IsBatchSelected => CurrentSection == AppSection.Batch;
 
     public bool IsSettingsSelected => CurrentSection == AppSection.Settings;
 

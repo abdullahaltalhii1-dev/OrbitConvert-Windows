@@ -25,8 +25,8 @@
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>4 FORMATS</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 7</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>Local conversion and safe archives</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 8</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Local conversion, one orderly queue</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
   <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images, Video, Audio or Documents to process one supported file.</value></data>
@@ -448,4 +448,59 @@
   <data name="ArchiveErrorTimedOut" xml:space="preserve"><value>Archive processing exceeded its time limit and was stopped.</value></data>
   <data name="ArchiveErrorProcessTerminationFailed" xml:space="preserve"><value>The worker did not confirm stopping. Cleanup is uncertain; do not treat this operation as successful.</value></data>
   <data name="ArchiveErrorOutputFailure" xml:space="preserve"><value>The operation could not read or save its files. Check access permissions, locks and free space.</value></data>
+  <data name="NavBatch" xml:space="preserve"><value>Batch queue</value></data>
+  <data name="BatchTitle" xml:space="preserve"><value>One queue. Every file accounted for.</value></data>
+  <data name="BatchDescription" xml:space="preserve"><value>Add a compatible selection, review its planned outputs, then start. Add another mode to build a mixed queue. One job runs at a time; PDF and archives keep their individual workspaces.</value></data>
+  <data name="BatchPreset" xml:space="preserve"><value>Conversion preset</value></data>
+  <data name="BatchPresetHelp" xml:space="preserve"><value>Images: quality 90, original dimensions. Video: Balanced, original height. Audio: MP3 192 kbps / WAV 16-bit / FLAC level 5, original sample rate. Documents: existing verified matrix. Settings are fixed per job.</value></data>
+  <data name="BatchChooseFolder" xml:space="preserve"><value>Choose destination folder</value></data>
+  <data name="BatchAdd" xml:space="preserve"><value>Add intake selection to queue</value></data>
+  <data name="BatchListHelp" xml:space="preserve"><value>Outputs use source-orbitconvert.ext. Nothing is overwritten. Cancelling a native image call waits for that bounded call, then prevents publication.</value></data>
+  <data name="BatchStart" xml:space="preserve"><value>Start queue</value></data>
+  <data name="BatchCancelJob" xml:space="preserve"><value>Cancel job</value></data>
+  <data name="BatchCancelQueue" xml:space="preserve"><value>Cancel queue</value></data>
+  <data name="BatchRetry" xml:space="preserve"><value>Retry failed</value></data>
+  <data name="BatchClearCompleted" xml:space="preserve"><value>Clear completed</value></data>
+  <data name="BatchClearErrors" xml:space="preserve"><value>Clear failed / cancelled</value></data>
+  <data name="BatchSummary" xml:space="preserve"><value>Completed {0}/{1} · Active {2} · Pending {3} · Failed {4} · Cancelled {5}</value></data>
+  <data name="BatchIdle" xml:space="preserve"><value>Choose a preset, add files and choose a destination folder.</value></data>
+  <data name="BatchReady" xml:space="preserve"><value>Jobs are ready for review. No processing starts until you choose Start queue.</value></data>
+  <data name="BatchWorking" xml:space="preserve"><value>Processing one job at a time. You can cancel a job or the whole queue.</value></data>
+  <data name="BatchFinished" xml:space="preserve"><value>Queue finished. Review each job's result.</value></data>
+  <data name="BatchStopped" xml:space="preserve"><value>Queue stopped.</value></data>
+  <data name="BatchCleanupWarning" xml:space="preserve"><value>Cleanup or process termination could not be confirmed. Further scheduling and retries are blocked for this session. Review the affected operation before closing.</value></data>
+  <data name="BatchLimit" xml:space="preserve"><value>The queue limit would be exceeded (100 jobs by default). Clear finished jobs first.</value></data>
+  <data name="BatchEmpty" xml:space="preserve"><value>No files were selected.</value></data>
+  <data name="BatchUnsupported" xml:space="preserve"><value>This file/preset combination is not supported. Select compatible files; no jobs from this selection were added.</value></data>
+  <data name="BatchUnreadableInput" xml:space="preserve"><value>A source is missing, inaccessible or uses an unsupported path.</value></data>
+  <data name="BatchInvalidDestination" xml:space="preserve"><value>Choose an existing local destination folder.</value></data>
+  <data name="BatchSamePath" xml:space="preserve"><value>The destination cannot be the original source.</value></data>
+  <data name="BatchSourceChanged" xml:space="preserve"><value>The source changed since it was queued. Explicit Retry rechecks the current file.</value></data>
+  <data name="BatchDestinationExists" xml:space="preserve"><value>The destination already exists. It has not been overwritten.</value></data>
+  <data name="BatchDuplicate" xml:space="preserve"><value>This source and preset are already in the queue. Use Retry for failed jobs.</value></data>
+  <data name="BatchCollision" xml:space="preserve"><value>Two queued paths conflict. Use different source names or destination folders.</value></data>
+  <data name="BatchUnexpected" xml:space="preserve"><value>An unexpected processing failure occurred. Cleanup is uncertain; the queue stopped.</value></data>
+  <data name="BatchCancellationRequested" xml:space="preserve"><value>Cancellation requested; waiting for the engine and cleanup.</value></data>
+  <data name="BatchCancelToClose" xml:space="preserve"><value>Cancel the active batch, cancel pending jobs and wait for cleanup before closing? Choose No to keep the queue running.</value></data>
+  <data name="ImageErrorCancelled" xml:space="preserve"><value>Image conversion was cancelled. No incomplete output was published.</value></data>
+  <data name="BatchStatePending" xml:space="preserve"><value>Pending</value></data>
+  <data name="BatchStateInspecting" xml:space="preserve"><value>Inspecting</value></data>
+  <data name="BatchStateRunning" xml:space="preserve"><value>Running</value></data>
+  <data name="BatchStateVerifying" xml:space="preserve"><value>Verifying</value></data>
+  <data name="BatchStateCompleted" xml:space="preserve"><value>Completed</value></data>
+  <data name="BatchStateFailed" xml:space="preserve"><value>Failed</value></data>
+  <data name="BatchStateCancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="BatchModeImagePNG" xml:space="preserve"><value>Images → PNG</value></data>
+  <data name="BatchModeImageJPEG" xml:space="preserve"><value>Images → JPEG</value></data>
+  <data name="BatchModeImageWebP" xml:space="preserve"><value>Images → WebP</value></data>
+  <data name="BatchModeImageBMP" xml:space="preserve"><value>Images → BMP</value></data>
+  <data name="BatchModeVideoMP4" xml:space="preserve"><value>Video → MP4</value></data>
+  <data name="BatchModeAudioMP3" xml:space="preserve"><value>Audio / extraction → MP3</value></data>
+  <data name="BatchModeAudioWAV" xml:space="preserve"><value>Audio / extraction → WAV</value></data>
+  <data name="BatchModeAudioFLAC" xml:space="preserve"><value>Audio / extraction → FLAC</value></data>
+  <data name="BatchModeDocumentDOCX" xml:space="preserve"><value>Documents → DOCX</value></data>
+  <data name="BatchModeDocumentODT" xml:space="preserve"><value>Documents → ODT</value></data>
+  <data name="BatchModeDocumentTXT" xml:space="preserve"><value>Documents → TXT</value></data>
+  <data name="BatchModeDocumentMarkdown" xml:space="preserve"><value>Documents → Markdown</value></data>
+  <data name="BatchModeDocumentHTML" xml:space="preserve"><value>Documents → HTML</value></data>
 </root>

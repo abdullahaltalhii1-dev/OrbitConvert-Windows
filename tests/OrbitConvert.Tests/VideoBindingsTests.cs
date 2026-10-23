@@ -31,6 +31,13 @@ public sealed class VideoBindingsTests
                 app.InitializeComponent();
                 var window = new MainWindow();
                 var model = new MainViewModel(new FileMetadataProvider(), new LocalizationService(new TestLanguagePreferenceStore()));
+                var batchFixture = Path.Combine(Path.GetTempPath(), "batch-layout-" + Guid.NewGuid().ToString("N") + ".png");
+                File.WriteAllText(batchFixture, "metadata-only layout fixture");
+                try
+                {
+                    model.Batch.SetDestinationFolder(Path.GetTempPath()); model.Batch.AddFiles([batchFixture]);
+                }
+                finally { File.Delete(batchFixture); }
                 window.DataContext = model;
                 var root = (FrameworkElement)window.Content;
                 foreach (var language in new[] { AppLanguage.English, AppLanguage.Arabic })
@@ -87,6 +94,17 @@ public sealed class VideoBindingsTests
                 Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
                 Assert.Equal(2, archiveChoice.SelectedIndex); Assert.NotNull(archiveChoice.SelectedItem);
                 Assert.Contains(Descendants(archiveChoice).OfType<TextBlock>(), x => x.Text == model.Archives.ModeOptions[2].Label);
+                model.NavigateCommand.Execute(AppSection.Batch); model.Batch.PresetIndex = 5;
+                root.UpdateLayout(); Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                var batchChoice = Descendants(root).OfType<ComboBox>().Single(x =>
+                    BindingOperations.GetBindingExpression(x, ComboBox.SelectedIndexProperty)?.ParentBinding.Path.Path == "Batch.PresetIndex");
+                var jobId = model.Batch.Jobs.Single().Id;
+                model.NavigateCommand.Execute(AppSection.Settings); model.Localization.ChangeLanguage(AppLanguage.Arabic);
+                model.NavigateCommand.Execute(AppSection.Batch); root.UpdateLayout();
+                Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                Assert.Equal(5, batchChoice.SelectedIndex); Assert.NotNull(batchChoice.SelectedItem);
+                Assert.Equal(jobId, model.Batch.Jobs.Single().Id);
+                Assert.Contains(Descendants(batchChoice).OfType<TextBlock>(), x => x.Text == model.Batch.PresetOptions[5].Label);
                 window.Close();
                 app.Shutdown();
                 Assert.Empty(listener.Errors);

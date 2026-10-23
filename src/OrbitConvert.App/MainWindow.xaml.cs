@@ -28,7 +28,19 @@ public partial class MainWindow : Window
         Closing += async (_, e) =>
         {
             if (_closingAfterCancellation) { e.Cancel = true; return; }
-            if (DataContext is MainViewModel model && model.ImageConversion.IsBusy)
+            if (DataContext is MainViewModel batchModel && batchModel.Batch.IsBusy)
+            {
+                e.Cancel = true;
+                if (MessageBox.Show(this, batchModel.Localization["BatchCancelToClose"], batchModel.AppTitle,
+                    MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) { return; }
+                _closingAfterCancellation = true;
+                batchModel.Batch.RequestCancellation();
+                await batchModel.Batch.WaitForIdleAsync();
+                _closingAfterCancellation = false;
+                if (batchModel.Batch.HasCleanupWarning) { MessageBox.Show(this, batchModel.Batch.StatusMessage, batchModel.AppTitle); return; }
+                Close();
+            }
+            else if (DataContext is MainViewModel model && model.ImageConversion.IsBusy)
             {
                 e.Cancel = true;
                 MessageBox.Show(this, model.Localization["ImageWaitToClose"], model.AppTitle);
