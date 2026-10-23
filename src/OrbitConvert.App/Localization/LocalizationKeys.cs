@@ -30,6 +30,7 @@ public static class LocalizationKeys
 
     public static IReadOnlyList<string> RequiredKeys { get; } =
     [
+"NavBatch", "BatchTitle", "BatchDescription", "BatchPreset", "BatchPresetHelp", "BatchChooseFolder", "BatchAdd", "BatchListHelp", "BatchStart", "BatchCancelJob", "BatchCancelQueue", "BatchRetry", "BatchClearCompleted", "BatchClearErrors", "BatchSummary", "BatchIdle", "BatchReady", "BatchWorking", "BatchFinished", "BatchStopped", "BatchCleanupWarning", "BatchLimit", "BatchEmpty", "BatchUnsupported", "BatchUnreadableInput", "BatchInvalidDestination", "BatchSamePath", "BatchSourceChanged", "BatchDestinationExists", "BatchDuplicate", "BatchCollision", "BatchUnexpected", "BatchCancellationRequested", "BatchCancelToClose", "ImageErrorCancelled", "BatchStatePending", "BatchStateInspecting", "BatchStateRunning", "BatchStateVerifying", "BatchStateCompleted", "BatchStateFailed", "BatchStateCancelled", "BatchModeImagePNG", "BatchModeImageJPEG", "BatchModeImageWebP", "BatchModeImageBMP", "BatchModeVideoMP4", "BatchModeAudioMP3", "BatchModeAudioWAV", "BatchModeAudioFLAC", "BatchModeDocumentDOCX", "BatchModeDocumentODT", "BatchModeDocumentTXT", "BatchModeDocumentMarkdown", "BatchModeDocumentHTML",
         "HeaderSubtitle", "UiPreview", "ThemeDark", "ThemeLight", "UseDarkTheme", "UseLightTheme",
         "StudioSections", "NavWorkspace", "NavImages", "NavVideo", "NavAudio", "NavDocuments", "NavSettings",
         "NavWorkspaceAutomation", "NavImagesAutomation", "NavVideoAutomation", "NavAudioAutomation",

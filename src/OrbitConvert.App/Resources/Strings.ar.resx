@@ -25,8 +25,8 @@
   <data name="NavSettingsAutomation" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>٤ صيغ</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>قريبًا</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 7</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>تحويل محلي وأرشيفات آمنة</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 8</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>تحويل محلي وطابور منظم</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>مساحة العمل</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>حوّل ملفاتك بلا تعقيد.</value></data>
   <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور أو الفيديو أو الصوت أو المستندات لمعالجة ملف مدعوم واحد.</value></data>
@@ -447,4 +447,59 @@
   <data name="ArchiveErrorTimedOut" xml:space="preserve"><value>تجاوزت معالجة الأرشيف مهلة التشغيل وأُوقفت.</value></data>
   <data name="ArchiveErrorProcessTerminationFailed" xml:space="preserve"><value>لم يتأكد توقف العملية الفرعية. التنظيف غير مؤكد؛ لا تُعد هذه العملية ناجحة.</value></data>
   <data name="ArchiveErrorOutputFailure" xml:space="preserve"><value>تعذرت قراءة الملفات أو حفظها. تحقق من الصلاحيات والأقفال والمساحة المتاحة.</value></data>
+  <data name="NavBatch" xml:space="preserve"><value>طابور التحويل</value></data>
+  <data name="BatchTitle" xml:space="preserve"><value>طابور واحد. وحالة واضحة لكل ملف.</value></data>
+  <data name="BatchDescription" xml:space="preserve"><value>أضف ملفات متوافقة وراجع مخرجاتها، ثم ابدأ. أضف مجموعة بنمط آخر لطابور مختلط. تُنفذ مهمة واحدة في كل مرة؛ تبقى أدوات PDF والأرشيفات في مساحاتها الفردية.</value></data>
+  <data name="BatchPreset" xml:space="preserve"><value>إعداد التحويل</value></data>
+  <data name="BatchPresetHelp" xml:space="preserve"><value>الصور: جودة 90 وأبعاد أصلية. الفيديو: متوازن وارتفاع أصلي. الصوت: MP3 بسرعة 192 كيلوبت/ث أو WAV بعمق 16 بت أو FLAC بمستوى 5، ومعدل عينات أصلي. المستندات: مصفوفة التحويل المعتمدة. تُثبت الإعدادات لكل مهمة.</value></data>
+  <data name="BatchChooseFolder" xml:space="preserve"><value>اختيار مجلد المخرجات</value></data>
+  <data name="BatchAdd" xml:space="preserve"><value>إضافة الملفات المحددة للطابور</value></data>
+  <data name="BatchListHelp" xml:space="preserve"><value>تُسمى المخرجات source-orbitconvert.ext دون استبدال ملفات. إلغاء الصورة ينتظر الاستدعاء الأصلي المحدود ثم يمنع نشر الناتج.</value></data>
+  <data name="BatchStart" xml:space="preserve"><value>بدء الطابور</value></data>
+  <data name="BatchCancelJob" xml:space="preserve"><value>إلغاء المهمة</value></data>
+  <data name="BatchCancelQueue" xml:space="preserve"><value>إلغاء الطابور</value></data>
+  <data name="BatchRetry" xml:space="preserve"><value>إعادة محاولة الفاشلة</value></data>
+  <data name="BatchClearCompleted" xml:space="preserve"><value>مسح المكتملة</value></data>
+  <data name="BatchClearErrors" xml:space="preserve"><value>مسح الفاشلة والملغاة</value></data>
+  <data name="BatchSummary" xml:space="preserve"><value>المكتملة {0}/{1} · النشطة {2} · المنتظرة {3} · الفاشلة {4} · الملغاة {5}</value></data>
+  <data name="BatchIdle" xml:space="preserve"><value>اختر إعدادًا وأضف ملفات وحدد مجلد المخرجات.</value></data>
+  <data name="BatchReady" xml:space="preserve"><value>المهام جاهزة للمراجعة. لا تبدأ المعالجة قبل اختيار بدء الطابور.</value></data>
+  <data name="BatchWorking" xml:space="preserve"><value>تجري معالجة مهمة واحدة في كل مرة. يمكنك إلغاء مهمة أو الطابور كاملًا.</value></data>
+  <data name="BatchFinished" xml:space="preserve"><value>انتهى الطابور. راجع نتيجة كل مهمة.</value></data>
+  <data name="BatchStopped" xml:space="preserve"><value>توقف الطابور.</value></data>
+  <data name="BatchCleanupWarning" xml:space="preserve"><value>تعذر تأكيد التنظيف أو توقف العامل. أُوقف تنفيذ مهام إضافية وإعادة المحاولة لهذه الجلسة. راجع العملية المتأثرة قبل الإغلاق.</value></data>
+  <data name="BatchLimit" xml:space="preserve"><value>ستتجاوز حد الطابور (100 مهمة افتراضيًا). امسح المهام المنتهية أولًا.</value></data>
+  <data name="BatchEmpty" xml:space="preserve"><value>لم تُحدد ملفات.</value></data>
+  <data name="BatchUnsupported" xml:space="preserve"><value>تركيبة الملف والإعداد غير مدعومة. اختر ملفات متوافقة؛ لم تُضف مهام من هذا التحديد.</value></data>
+  <data name="BatchUnreadableInput" xml:space="preserve"><value>المصدر مفقود أو يتعذر الوصول إليه أو يستخدم مسارًا غير مدعوم.</value></data>
+  <data name="BatchInvalidDestination" xml:space="preserve"><value>اختر مجلد مخرجات محليًا موجودًا.</value></data>
+  <data name="BatchSamePath" xml:space="preserve"><value>لا يمكن أن تكون الوجهة هي المصدر الأصلي.</value></data>
+  <data name="BatchSourceChanged" xml:space="preserve"><value>تغير المصدر بعد إضافته. تعيد إعادة المحاولة الصريحة التحقق من الملف الحالي.</value></data>
+  <data name="BatchDestinationExists" xml:space="preserve"><value>الوجهة موجودة مسبقًا ولم تُستبدل.</value></data>
+  <data name="BatchDuplicate" xml:space="preserve"><value>هذا المصدر والإعداد موجودان في الطابور. استخدم إعادة المحاولة للمهام الفاشلة.</value></data>
+  <data name="BatchCollision" xml:space="preserve"><value>يوجد تعارض بين مسارات الطابور. استخدم أسماء مصادر أو مجلدات مخرجات مختلفة.</value></data>
+  <data name="BatchUnexpected" xml:space="preserve"><value>حدث فشل غير متوقع في المعالجة. التنظيف غير مؤكد؛ أُوقف الطابور.</value></data>
+  <data name="BatchCancellationRequested" xml:space="preserve"><value>طُلب الإلغاء؛ جارٍ انتظار المحرك والتنظيف.</value></data>
+  <data name="BatchCancelToClose" xml:space="preserve"><value>هل تريد إلغاء المهمة النشطة والمهام المنتظرة وانتظار التنظيف قبل الإغلاق؟ اختر لا لمتابعة الطابور.</value></data>
+  <data name="ImageErrorCancelled" xml:space="preserve"><value>أُلغي تحويل الصورة. لم يُنشر ناتج غير مكتمل.</value></data>
+  <data name="BatchStatePending" xml:space="preserve"><value>قيد الانتظار</value></data>
+  <data name="BatchStateInspecting" xml:space="preserve"><value>جارٍ الفحص</value></data>
+  <data name="BatchStateRunning" xml:space="preserve"><value>جارٍ التحويل</value></data>
+  <data name="BatchStateVerifying" xml:space="preserve"><value>جارٍ التحقق</value></data>
+  <data name="BatchStateCompleted" xml:space="preserve"><value>مكتملة</value></data>
+  <data name="BatchStateFailed" xml:space="preserve"><value>فاشلة</value></data>
+  <data name="BatchStateCancelled" xml:space="preserve"><value>ملغاة</value></data>
+  <data name="BatchModeImagePNG" xml:space="preserve"><value>الصور ← PNG</value></data>
+  <data name="BatchModeImageJPEG" xml:space="preserve"><value>الصور ← JPEG</value></data>
+  <data name="BatchModeImageWebP" xml:space="preserve"><value>الصور ← WebP</value></data>
+  <data name="BatchModeImageBMP" xml:space="preserve"><value>الصور ← BMP</value></data>
+  <data name="BatchModeVideoMP4" xml:space="preserve"><value>الفيديو ← MP4</value></data>
+  <data name="BatchModeAudioMP3" xml:space="preserve"><value>الصوت أو استخراجه ← MP3</value></data>
+  <data name="BatchModeAudioWAV" xml:space="preserve"><value>الصوت أو استخراجه ← WAV</value></data>
+  <data name="BatchModeAudioFLAC" xml:space="preserve"><value>الصوت أو استخراجه ← FLAC</value></data>
+  <data name="BatchModeDocumentDOCX" xml:space="preserve"><value>المستندات ← DOCX</value></data>
+  <data name="BatchModeDocumentODT" xml:space="preserve"><value>المستندات ← ODT</value></data>
+  <data name="BatchModeDocumentTXT" xml:space="preserve"><value>المستندات ← TXT</value></data>
+  <data name="BatchModeDocumentMarkdown" xml:space="preserve"><value>المستندات ← Markdown</value></data>
+  <data name="BatchModeDocumentHTML" xml:space="preserve"><value>المستندات ← HTML</value></data>
 </root>

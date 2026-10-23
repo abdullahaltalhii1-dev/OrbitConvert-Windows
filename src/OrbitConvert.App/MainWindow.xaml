@@ -58,6 +58,7 @@
 
                 <views:PdfView IsEnabled="{Binding CanUsePdf}" Visibility="{Binding IsPdfSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <views:ArchivesView IsEnabled="{Binding CanUseArchives}" Visibility="{Binding IsArchivesSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <views:BatchView IsEnabled="{Binding CanUseBatch}" Visibility="{Binding IsBatchSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <views:SettingsView Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>

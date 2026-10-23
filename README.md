@@ -36,6 +36,14 @@ dotnet run --project src/OrbitConvert.App/OrbitConvert.App.csproj
 
 The startup window opens the Studio workspace. Browse Files uses the native Windows picker, and individual files can be dropped into the workspace. The selection remains in memory and can be edited or cleared. Settings can switch the entire interface between English and Arabic immediately; the language preference is stored at `%LOCALAPPDATA%\OrbitConvert\language.txt`. Theme and accent choices remain session-only.
 
+## Batch queue (Phase 8)
+
+Open **Batch queue**, choose a preset and an existing local destination folder, Browse Files (or reuse the Workspace intake), then **Add intake selection to queue**. Review the planned names before **Start queue**. Clear intake and add another group/preset to build a mixed queue. Selection alone starts nothing.
+
+The FIFO queue runs one job at a time, with a default limit of 100 retained jobs. It reuses image PNG/JPEG/WebP/BMP, video MP4, audio MP3/WAV/FLAC and the existing document/Markdown matrix. Presets use the displayed fixed defaults; detailed single-file settings and PDF/archive tools remain in their individual panels. Outputs use `source-orbitconvert.ext`; existing files and originals are never silently overwritten.
+
+Cancel a pending or active job, Cancel queue, Retry failed explicitly, or Clear completed/errors. Errors are per file and normal failures allow later jobs to continue. Cleanup/worker-termination uncertainty stops scheduling and blocks retries. Image cancellation waits for the bounded native call before cleanup; it is not instantaneous. Closing a busy queue asks whether to cancel and wait or keep running. Language/theme changes preserve queued jobs. See [Phase 8 validation](docs/phase-8-batch-validation.md) for the exact matrix, limits and actual verification status.
+
 ## Structure
 
 - `src/OrbitConvert.App` — WPF desktop executable and presentation code

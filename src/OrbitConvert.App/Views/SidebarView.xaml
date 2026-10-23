@@ -182,6 +182,14 @@
                         <TextBlock Grid.Column="1" FontSize="13" FontWeight="SemiBold" Text="{Binding Localization[NavArchives]}" />
                     </Grid>
                 </RadioButton>
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavBatch]}" Command="{Binding NavigateCommand}"
+                             CommandParameter="{x:Static viewModels:AppSection.Batch}" GroupName="MainNavigation"
+                             IsChecked="{Binding IsBatchSelected, Mode=OneWay}" Style="{StaticResource NavigationRadioStyle}">
+                    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="26" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Path Width="17" Height="17" Data="M1,2 H17 V6 H1 Z M1,9 H17 M1,13 H17 M1,17 H12" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" StrokeThickness="1.5" Stretch="Uniform" />
+                        <TextBlock Grid.Column="1" FontSize="13" FontWeight="SemiBold" Text="{Binding Localization[NavBatch]}" />
+                    </Grid>
+                </RadioButton>
                 <Border Height="1"
                         Margin="12,13"
                         Background="{DynamicResource BorderBrush}" />
