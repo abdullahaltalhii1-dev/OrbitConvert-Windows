@@ -25,8 +25,8 @@
   <data name="NavSettingsAutomation" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>٤ صيغ</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>قريبًا</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 6</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>تحويل محلي وأدوات PDF</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>المرحلة 7</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>تحويل محلي وأرشيفات آمنة</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>مساحة العمل</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>حوّل ملفاتك بلا تعقيد.</value></data>
   <data name="WorkspaceSubtitle" xml:space="preserve"><value>أضف الملفات، ثم افتح الصور أو الفيديو أو الصوت أو المستندات لمعالجة ملف مدعوم واحد.</value></data>
@@ -388,4 +388,63 @@
   <data name="PdfErrorTimedOut" xml:space="preserve"><value>تجاوزت أداة PDF المهلة المحددة. لم يُعتمد مخرج غير مكتمل.</value></data>
   <data name="PdfErrorProcessTerminationFailed" xml:space="preserve"><value>لم يتأكد توقف عملية PDF. قد يكون التنظيف غير مكتمل؛ لم تُعتمد وجهة جديدة.</value></data>
   <data name="PdfErrorOutputFailure" xml:space="preserve"><value>تعذرت قراءة ملفات العملية أو حفظها. تحقق من صلاحيات الوصول والمساحة الحرة.</value></data>
+  <data name="NavArchives" xml:space="preserve"><value>الأرشيفات</value></data>
+  <data name="ArchiveTitle" xml:space="preserve"><value>اجمع بترتيب. استخرج بأمان.</value></data>
+  <data name="ArchiveDescription" xml:space="preserve"><value>أنشئ ZIP أو TAR، وافحص واستخرج ZIP وTAR و7z، أو أعد تغليف أرشيف إلى ZIP. كل عملية محلية وبأمر صريح منك.</value></data>
+  <data name="ArchiveOperation" xml:space="preserve"><value>عملية الأرشيف</value></data>
+  <data name="ArchiveModeExtract" xml:space="preserve"><value>استخراج إلى مجلد جديد</value></data>
+  <data name="ArchiveModeCreateZip" xml:space="preserve"><value>إنشاء ZIP</value></data>
+  <data name="ArchiveModeCreateTar" xml:space="preserve"><value>إنشاء TAR</value></data>
+  <data name="ArchiveModeRepackZip" xml:space="preserve"><value>إعادة تغليف الأرشيف إلى ZIP</value></data>
+  <data name="ArchiveSource" xml:space="preserve"><value>المصدر المحدد</value></data>
+  <data name="ArchiveSourceHelp" xml:space="preserve"><value>اختر أرشيفًا وافحصه قبل الاستخراج أو إعادة التغليف. تحديد الملفات لا يبدأ المعالجة.</value></data>
+  <data name="ArchiveBrowse" xml:space="preserve"><value>استعراض الملفات</value></data>
+  <data name="ArchiveAdd" xml:space="preserve"><value>إضافة الملف المحدد</value></data>
+  <data name="ArchiveChooseFolder" xml:space="preserve"><value>إضافة مجلد مصدر</value></data>
+  <data name="ArchiveCreationFiles" xml:space="preserve"><value>ملفات إنشاء الأرشيف</value></data>
+  <data name="ArchiveCreationHelp" xml:space="preserve"><value>يضيف الاستعراض الملفات إلى هذه القائمة. يتضمن المجلد المضاف صراحةً مساراته النسبية ومجلداته الفارغة، وتُرفض الروابط. قائمة فارغة دون مجلد تنشئ أرشيفًا فارغًا.</value></data>
+  <data name="ArchiveInspect" xml:space="preserve"><value>فحص محتويات الأرشيف</value></data>
+  <data name="ArchiveContents" xml:space="preserve"><value>محتويات الأرشيف المتحقق منها</value></data>
+  <data name="ArchiveDirectory" xml:space="preserve"><value>مجلد</value></data>
+  <data name="ArchiveBytes" xml:space="preserve"><value>{0} بايت</value></data>
+  <data name="ArchiveSummary" xml:space="preserve"><value>{0} · {1} عنصرًا · {2} بايت للأرشيف · {3} بايت بعد الفك</value></data>
+  <data name="ArchiveCreationCount" xml:space="preserve"><value>{0} ملفات محددة صراحةً</value></data>
+  <data name="ArchivePolicy" xml:space="preserve"><value>مخرجات جديدة فقط والأصول تبقى دون تغيير. تُدعم قراءة ZIP بالتخزين أو Deflate وTAR غير المضغوط و7z ضمن الحدود. لا أرشيفات مشفرة ولا إنشاء RAR أو 7z ولا روابط أو فك متداخل أو تشغيل للمحتويات. يُرفض الإدخال الخطر أو المتجاوز للحدود كاملًا.</value></data>
+  <data name="ArchiveNewFolder" xml:space="preserve"><value>تسمية مجلد استخراج جديد غير موجود</value></data>
+  <data name="ArchiveDestination" xml:space="preserve"><value>اختيار وجهة أرشيف جديدة</value></data>
+  <data name="ArchiveFolderFilter" xml:space="preserve"><value>اسم مجلد جديد يجب ألا يكون موجودًا</value></data>
+  <data name="ArchiveOutputFilter" xml:space="preserve"><value>ملف أرشيف جديد</value></data>
+  <data name="ArchiveStart" xml:space="preserve"><value>بدء عملية الأرشيف</value></data>
+  <data name="ArchiveCancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="ArchiveProgress" xml:space="preserve"><value>معالجة الأرشيف</value></data>
+  <data name="ArchiveIdle" xml:space="preserve"><value>اختر العملية والمصدر. لا تبدأ أي معالجة تلقائيًا.</value></data>
+  <data name="ArchiveReady" xml:space="preserve"><value>جاهز. اختر وجهة جديدة وابدأ العملية صراحةً.</value></data>
+  <data name="ArchiveWorking" xml:space="preserve"><value>تجري المعالجة محليًا ضمن حدود للموارد. انتظر التحقق والتنظيف.</value></data>
+  <data name="ArchiveCancelling" xml:space="preserve"><value>يجري الإلغاء وانتظار توقف المعالجة واكتمال التنظيف…</value></data>
+  <data name="ArchiveSuccess" xml:space="preserve"><value>حُفظت مخرجات الأرشيف وتحققنا منها. لم تتغير الملفات الأصلية.</value></data>
+  <data name="ArchiveUnexpectedError" xml:space="preserve"><value>تعذر إكمال عملية الأرشيف. لم تُنشر وجهة غير مكتملة عمدًا.</value></data>
+  <data name="ArchiveCleanupFailed" xml:space="preserve"><value>تعذرت إزالة بعض البيانات المؤقتة المملوكة للعملية. تحقق من صلاحيات الوصول؛ لم يتأكد اكتمال التنظيف.</value></data>
+  <data name="ArchiveCancelToClose" xml:space="preserve"><value>عملية الأرشيف نشطة. هل تريد إلغاءها وانتظار توقف المعالجة والتنظيف ثم الإغلاق؟ اختر «لا» لإبقاء التطبيق قيد التشغيل.</value></data>
+  <data name="ArchiveStageInspecting" xml:space="preserve"><value>فحص المصادر</value></data>
+  <data name="ArchiveStageCreating" xml:space="preserve"><value>إنشاء الأرشيف والتحقق منه</value></data>
+  <data name="ArchiveStageExtracting" xml:space="preserve"><value>استخراج المحتويات وفحصها</value></data>
+  <data name="ArchiveStageRepacking" xml:space="preserve"><value>إعادة التغليف إلى ZIP والتحقق</value></data>
+  <data name="ArchiveStageVerifying" xml:space="preserve"><value>التحقق من المخرجات المؤقتة قبل النشر</value></data>
+  <data name="ArchiveStageCompleted" xml:space="preserve"><value>اكتملت العملية</value></data>
+  <data name="ArchiveErrorUnreadableInput" xml:space="preserve"><value>أحد المصادر مفقود أو مقفل أو غير قابل للقراءة. تحقق من الصلاحيات وحاول مجددًا.</value></data>
+  <data name="ArchiveErrorUnsupportedFormat" xml:space="preserve"><value>نوع الأرشيف أو نسخته غير مدعوم. استخدم ZIP بالتخزين أو Deflate، أو TAR غير مضغوط، أو 7z مدعومًا.</value></data>
+  <data name="ArchiveErrorEncrypted" xml:space="preserve"><value>الأرشيفات المشفرة غير مدعومة. لم نطلب كلمة مرور ولم نحاول تخمينها.</value></data>
+  <data name="ArchiveErrorUnsafePath" xml:space="preserve"><value>أحد المسارات غير آمن أو طويل أو محجوز أو غير صالح في Windows. رُفضت العملية.</value></data>
+  <data name="ArchiveErrorLinksNotSupported" xml:space="preserve"><value>الروابط ونقاط إعادة التحليل والملفات الخاصة غير مدعومة. لم يجرِ الاستخراج عبرها.</value></data>
+  <data name="ArchiveErrorDuplicateEntry" xml:space="preserve"><value>وُجدت أسماء مكررة أو متصادمة في حالة الأحرف أو Unicode، أو تعارض بين ملف ومجلد.</value></data>
+  <data name="ArchiveErrorTooLarge" xml:space="preserve"><value>تجاوز الإدخال أحد حدود حجم الأرشيف أو البيانات المفكوكة أو نسبة الضغط أو عدد العناصر أو العمق أو الموارد.</value></data>
+  <data name="ArchiveErrorInvalidArchive" xml:space="preserve"><value>الأرشيف تالف أو غير مكتمل أو غير متسق. لم تُعتمد مخرجاته النهائية.</value></data>
+  <data name="ArchiveErrorInvalidSelection" xml:space="preserve"><value>حدد أرشيفًا واحدًا، أو اختر الملفات والمجلد صراحةً للإنشاء.</value></data>
+  <data name="ArchiveErrorDestinationExists" xml:space="preserve"><value>الوجهة موجودة أو أُنشئت أثناء المعالجة. لم تُستبدل.</value></data>
+  <data name="ArchiveErrorInvalidDestination" xml:space="preserve"><value>اختر وجهة محلية جديدة بامتداد صحيح ومجلد أب موجود، وليست أحد المصادر الأصلية.</value></data>
+  <data name="ArchiveErrorOutputValidationFailed" xml:space="preserve"><value>فشل التحقق من المخرجات. لم تُنشر وجهة نهائية.</value></data>
+  <data name="ArchiveErrorCancelled" xml:space="preserve"><value>أُلغيت عملية الأرشيف. لم تُنشر وجهة غير مكتملة.</value></data>
+  <data name="ArchiveErrorTimedOut" xml:space="preserve"><value>تجاوزت معالجة الأرشيف مهلة التشغيل وأُوقفت.</value></data>
+  <data name="ArchiveErrorProcessTerminationFailed" xml:space="preserve"><value>لم يتأكد توقف العملية الفرعية. التنظيف غير مؤكد؛ لا تُعد هذه العملية ناجحة.</value></data>
+  <data name="ArchiveErrorOutputFailure" xml:space="preserve"><value>تعذرت قراءة الملفات أو حفظها. تحقق من الصلاحيات والأقفال والمساحة المتاحة.</value></data>
 </root>

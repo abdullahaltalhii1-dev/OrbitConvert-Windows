@@ -98,6 +98,25 @@ public sealed class VideoConversionViewModelTests
     }
 
     [Fact]
+    public void InlineCancellationCompletion_KeepsFinalStatus()
+    {
+        var previous = SynchronizationContext.Current;
+        try
+        {
+            SynchronizationContext.SetSynchronizationContext(null);
+            var completion = new TaskCompletionSource<VideoInspectionResult>();
+            var model = Create(new ControlledService { Inspect = token => { token.Register(() => completion.SetCanceled(token)); return completion.Task; } });
+            model.SelectedFile = Source;
+            var running = model.InspectCommand.ExecuteAsync();
+            model.RequestCancellation();
+            Assert.True(running.IsCompletedSuccessfully);
+            Assert.True(model.IsIdle);
+            Assert.Contains("cancelled", model.StatusMessage);
+        }
+        finally { SynchronizationContext.SetSynchronizationContext(previous); }
+    }
+
+    [Fact]
     public async Task Progress_UsesRealStageFractionAndIgnoresQueuedReportsAfterCompletion()
     {
         var completion = new TaskCompletionSource<VideoConversionResult>(TaskCreationOptions.RunContinuationsAsynchronously);

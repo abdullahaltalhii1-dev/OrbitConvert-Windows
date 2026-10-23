@@ -18,7 +18,7 @@
                        Style="{StaticResource CaptionTextStyle}"
                        Text="{Binding Localization[StudioSections]}" />
 
-            <StackPanel Grid.Row="1">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><StackPanel>
                 <RadioButton AutomationProperties.Name="{Binding Localization[NavWorkspaceAutomation]}"
                              Command="{Binding NavigateCommand}"
                              CommandParameter="{x:Static viewModels:AppSection.Workspace}"
@@ -174,6 +174,14 @@
                     </Grid>
                 </RadioButton>
 
+                <RadioButton AutomationProperties.Name="{Binding Localization[NavArchives]}" Command="{Binding NavigateCommand}"
+                             CommandParameter="{x:Static viewModels:AppSection.Archives}" GroupName="MainNavigation"
+                             IsChecked="{Binding IsArchivesSelected, Mode=OneWay}" Style="{StaticResource NavigationRadioStyle}">
+                    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="26" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Path Width="16" Height="17" Data="M2,2 H16 V18 H2 Z M2,7 H16 M8,2 V14 H11 V11 H8" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" StrokeThickness="1.5" Stretch="Uniform" />
+                        <TextBlock Grid.Column="1" FontSize="13" FontWeight="SemiBold" Text="{Binding Localization[NavArchives]}" />
+                    </Grid>
+                </RadioButton>
                 <Border Height="1"
                         Margin="12,13"
                         Background="{DynamicResource BorderBrush}" />
@@ -201,7 +209,7 @@
                                    Text="{Binding Localization[NavSettings]}" />
                     </Grid>
                 </RadioButton>
-            </StackPanel>
+            </StackPanel></ScrollViewer>
 
             <Border Grid.Row="2"
                     Padding="12"

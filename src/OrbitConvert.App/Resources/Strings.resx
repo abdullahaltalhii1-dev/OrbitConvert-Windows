@@ -25,8 +25,8 @@
   <data name="NavSettingsAutomation" xml:space="preserve"><value>Settings</value></data>
   <data name="BadgeDemo" xml:space="preserve"><value>4 FORMATS</value></data>
   <data name="BadgeSoon" xml:space="preserve"><value>SOON</value></data>
-  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 6</value></data>
-  <data name="PhaseDescription" xml:space="preserve"><value>Local conversion and PDF tools</value></data>
+  <data name="PhaseLabel" xml:space="preserve"><value>PHASE 7</value></data>
+  <data name="PhaseDescription" xml:space="preserve"><value>Local conversion and safe archives</value></data>
   <data name="WorkspaceEyebrow" xml:space="preserve"><value>WORKSPACE</value></data>
   <data name="WorkspaceTitle" xml:space="preserve"><value>Convert without the clutter.</value></data>
   <data name="WorkspaceSubtitle" xml:space="preserve"><value>Add files, then open Images, Video, Audio or Documents to process one supported file.</value></data>
@@ -389,4 +389,63 @@
   <data name="PdfErrorTimedOut" xml:space="preserve"><value>The PDF tool exceeded its time limit. No incomplete destination was finalized.</value></data>
   <data name="PdfErrorProcessTerminationFailed" xml:space="preserve"><value>The PDF process did not confirm stopping. Cleanup may be incomplete; no new destination was finalized.</value></data>
   <data name="PdfErrorOutputFailure" xml:space="preserve"><value>The PDF operation could not read or save its files. Check access permissions and free space.</value></data>
+  <data name="NavArchives" xml:space="preserve"><value>Archives</value></data>
+  <data name="ArchiveTitle" xml:space="preserve"><value>Pack neatly. Extract safely.</value></data>
+  <data name="ArchiveDescription" xml:space="preserve"><value>Create ZIP or TAR, inspect and extract ZIP / TAR / 7z, or repackage an archive into ZIP. Every operation is explicit and local.</value></data>
+  <data name="ArchiveOperation" xml:space="preserve"><value>Archive operation</value></data>
+  <data name="ArchiveModeExtract" xml:space="preserve"><value>Extract to a new folder</value></data>
+  <data name="ArchiveModeCreateZip" xml:space="preserve"><value>Create ZIP</value></data>
+  <data name="ArchiveModeCreateTar" xml:space="preserve"><value>Create TAR</value></data>
+  <data name="ArchiveModeRepackZip" xml:space="preserve"><value>Repackage archive as ZIP</value></data>
+  <data name="ArchiveSource" xml:space="preserve"><value>Selected source</value></data>
+  <data name="ArchiveSourceHelp" xml:space="preserve"><value>Select an archive and inspect it before extraction or repackaging. Selecting files never starts processing.</value></data>
+  <data name="ArchiveBrowse" xml:space="preserve"><value>Browse files</value></data>
+  <data name="ArchiveAdd" xml:space="preserve"><value>Add selected file</value></data>
+  <data name="ArchiveChooseFolder" xml:space="preserve"><value>Add source folder</value></data>
+  <data name="ArchiveCreationFiles" xml:space="preserve"><value>Files for archive creation</value></data>
+  <data name="ArchiveCreationHelp" xml:space="preserve"><value>Browse adds files to this list. An explicitly added folder includes its relative paths and empty folders; links are refused. An empty list without a folder creates an empty archive.</value></data>
+  <data name="ArchiveInspect" xml:space="preserve"><value>Inspect archive contents</value></data>
+  <data name="ArchiveContents" xml:space="preserve"><value>Verified archive contents</value></data>
+  <data name="ArchiveDirectory" xml:space="preserve"><value>Folder</value></data>
+  <data name="ArchiveBytes" xml:space="preserve"><value>{0} bytes</value></data>
+  <data name="ArchiveSummary" xml:space="preserve"><value>{0} · {1} entries · {2} archive bytes · {3} expanded bytes</value></data>
+  <data name="ArchiveCreationCount" xml:space="preserve"><value>{0} explicitly selected files</value></data>
+  <data name="ArchivePolicy" xml:space="preserve"><value>New outputs only; originals stay unchanged. ZIP Store/Deflate, plain TAR and bounded 7z reading are supported. No encrypted archives, RAR/7z output, links, nested extraction or content execution. Unsafe or excessive input is refused as a whole.</value></data>
+  <data name="ArchiveNewFolder" xml:space="preserve"><value>Name a NEW extraction folder</value></data>
+  <data name="ArchiveDestination" xml:space="preserve"><value>Choose new archive destination</value></data>
+  <data name="ArchiveFolderFilter" xml:space="preserve"><value>New folder name (must not exist)</value></data>
+  <data name="ArchiveOutputFilter" xml:space="preserve"><value>New archive file</value></data>
+  <data name="ArchiveStart" xml:space="preserve"><value>Start archive operation</value></data>
+  <data name="ArchiveCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="ArchiveProgress" xml:space="preserve"><value>Archive processing</value></data>
+  <data name="ArchiveIdle" xml:space="preserve"><value>Choose an operation and source. Nothing runs automatically.</value></data>
+  <data name="ArchiveReady" xml:space="preserve"><value>Ready. Choose a new destination and start explicitly.</value></data>
+  <data name="ArchiveWorking" xml:space="preserve"><value>Processing in a bounded local worker. Wait for verification and cleanup.</value></data>
+  <data name="ArchiveCancelling" xml:space="preserve"><value>Cancelling and waiting for processing to stop and cleanup to finish…</value></data>
+  <data name="ArchiveSuccess" xml:space="preserve"><value>Archive output saved and verified. Original files were not modified.</value></data>
+  <data name="ArchiveUnexpectedError" xml:space="preserve"><value>The archive operation could not finish. No incomplete destination was intentionally published.</value></data>
+  <data name="ArchiveCleanupFailed" xml:space="preserve"><value>Some owned temporary data could not be removed. Check access permissions; cleanup is not confirmed.</value></data>
+  <data name="ArchiveCancelToClose" xml:space="preserve"><value>Archive work is active. Cancel, wait for processing and cleanup, then close? Choose No to keep the application running.</value></data>
+  <data name="ArchiveStageInspecting" xml:space="preserve"><value>Inspecting inputs</value></data>
+  <data name="ArchiveStageCreating" xml:space="preserve"><value>Creating and verifying archive</value></data>
+  <data name="ArchiveStageExtracting" xml:space="preserve"><value>Extracting and checking contents</value></data>
+  <data name="ArchiveStageRepacking" xml:space="preserve"><value>Repackaging and verifying ZIP</value></data>
+  <data name="ArchiveStageVerifying" xml:space="preserve"><value>Verifying staged output before publication</value></data>
+  <data name="ArchiveStageCompleted" xml:space="preserve"><value>Completed</value></data>
+  <data name="ArchiveErrorUnreadableInput" xml:space="preserve"><value>A source is missing, locked or unreadable. Check permissions and try again.</value></data>
+  <data name="ArchiveErrorUnsupportedFormat" xml:space="preserve"><value>This archive format or variant is not supported. Use ZIP Store/Deflate, plain TAR or supported 7z.</value></data>
+  <data name="ArchiveErrorEncrypted" xml:space="preserve"><value>Encrypted archives are not supported. No password was requested or attempted.</value></data>
+  <data name="ArchiveErrorUnsafePath" xml:space="preserve"><value>A path is unsafe, too long, reserved or invalid for Windows. The operation was refused.</value></data>
+  <data name="ArchiveErrorLinksNotSupported" xml:space="preserve"><value>Links, reparse points and special files are not supported. Nothing was extracted through them.</value></data>
+  <data name="ArchiveErrorDuplicateEntry" xml:space="preserve"><value>Duplicate names, case/Unicode collisions or conflicting file/folder paths were found.</value></data>
+  <data name="ArchiveErrorTooLarge" xml:space="preserve"><value>The input exceeded an archive size, expanded-byte, ratio, count, depth or resource limit.</value></data>
+  <data name="ArchiveErrorInvalidArchive" xml:space="preserve"><value>The archive is damaged, incomplete or inconsistent. Its output was not finalized.</value></data>
+  <data name="ArchiveErrorInvalidSelection" xml:space="preserve"><value>Select one archive, or explicitly choose files/folder for creation.</value></data>
+  <data name="ArchiveErrorDestinationExists" xml:space="preserve"><value>The destination already exists or was created during processing. It was not replaced.</value></data>
+  <data name="ArchiveErrorInvalidDestination" xml:space="preserve"><value>Choose a new local destination with an existing parent and the correct extension, not an original source.</value></data>
+  <data name="ArchiveErrorOutputValidationFailed" xml:space="preserve"><value>Output verification failed. No completed destination was published.</value></data>
+  <data name="ArchiveErrorCancelled" xml:space="preserve"><value>Archive operation cancelled. No incomplete destination was published.</value></data>
+  <data name="ArchiveErrorTimedOut" xml:space="preserve"><value>Archive processing exceeded its time limit and was stopped.</value></data>
+  <data name="ArchiveErrorProcessTerminationFailed" xml:space="preserve"><value>The worker did not confirm stopping. Cleanup is uncertain; do not treat this operation as successful.</value></data>
+  <data name="ArchiveErrorOutputFailure" xml:space="preserve"><value>The operation could not read or save its files. Check access permissions, locks and free space.</value></data>
 </root>
